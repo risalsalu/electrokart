@@ -9,69 +9,67 @@ function ProductDetail({ products, addToCart, addToWishlist }) {
   const product = products.find(p => p.id === parseInt(id));
   
   if (!product) {
-    return <div style={{ textAlign: 'center', padding: '40px' }}>Product not found</div>;
+    return <div className="text-center py-10">Product not found</div>;
   }
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
+    <div className="max-w-6xl mx-auto px-4 py-8">
       <button 
-        style={{
-          backgroundColor: 'transparent',
-          border: 'none',
-          color: '#3498db',
-          cursor: 'pointer',
-          marginBottom: '20px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '5px'
-        }}
+        className="flex items-center gap-1 text-blue-500 mb-5 hover:text-blue-600 transition-colors"
         onClick={() => navigate(-1)}
       >
-        ← Back to Products
+        <span>←</span> Back to Products
       </button>
       
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Product Image */}
-        <div style={{ backgroundColor: '#f8f9fa', borderRadius: '12px', height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          Product Image
+        <div className="bg-gray-50 rounded-xl h-96 flex items-center justify-center">
+          {/* Replace with actual image */}
+          <div className="text-gray-400">Product Image</div>
         </div>
         
         {/* Product Details */}
         <div>
-          <h1 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '10px' }}>{product.name}</h1>
-          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-            <div style={{ display: 'flex', marginRight: '15px' }}>
+          <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
+          
+          <div className="flex items-center mb-5">
+            <div className="flex mr-3">
               {[...Array(5)].map((_, i) => (
-                <span key={i} style={{ color: i < Math.floor(product.rating) ? '#f39c12' : '#ddd' }}>★</span>
+                <span 
+                  key={i} 
+                  className={`text-xl ${
+                    i < Math.floor(product.rating) ? 'text-yellow-500' : 'text-gray-300'
+                  }`}
+                >
+                  ★
+                </span>
               ))}
             </div>
-            <span style={{ color: '#7f8c8d' }}>({product.rating})</span>
+            <span className="text-gray-500">({product.rating})</span>
           </div>
           
-          <p style={{ fontSize: '1.5rem', fontWeight: '700', color: '#3498db', marginBottom: '20px' }}>
+          <p className="text-2xl font-bold text-blue-500 mb-5">
             ${product.price.toFixed(2)}
           </p>
           
-          <p style={{ color: '#7f8c8d', marginBottom: '30px' }}>
+          <p className="text-gray-500 mb-8">
             {product.description}
           </p>
           
-          <div style={{ marginBottom: '30px' }}>
-            <p><strong>Category:</strong> {product.category}</p>
-            <p><strong>Availability:</strong> {product.stock > 0 ? 'In Stock' : 'Out of Stock'}</p>
+          <div className="mb-8 space-y-2">
+            <p><strong className="font-medium">Category:</strong> {product.category}</p>
+            <p>
+              <strong className="font-medium">Availability:</strong> 
+              <span className={product.stock > 0 ? 'text-green-600' : 'text-red-600'}>
+                {product.stock > 0 ? ' In Stock' : ' Out of Stock'}
+              </span>
+            </p>
           </div>
           
-          <div style={{ display: 'flex', gap: '15px', marginBottom: '30px' }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div className="flex flex-wrap gap-4 mb-8">
+            <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden">
               <button 
-                style={{
-                  backgroundColor: '#f8f9fa',
-                  border: '1px solid #e0e0e0',
-                  width: '40px',
-                  height: '40px',
-                  fontSize: '1.2rem',
-                  cursor: 'pointer'
-                }}
+                className="bg-gray-50 w-10 h-10 text-xl flex items-center justify-center hover:bg-gray-100 transition-colors"
                 onClick={() => setQuantity(q => Math.max(1, q - 1))}
               >
                 -
@@ -79,25 +77,12 @@ function ProductDetail({ products, addToCart, addToWishlist }) {
               <input
                 type="number"
                 value={quantity}
+                min="1"
                 onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                style={{
-                  width: '60px',
-                  height: '40px',
-                  textAlign: 'center',
-                  border: '1px solid #e0e0e0',
-                  borderLeft: 'none',
-                  borderRight: 'none'
-                }}
+                className="w-16 h-10 text-center border-t border-b border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
               <button 
-                style={{
-                  backgroundColor: '#f8f9fa',
-                  border: '1px solid #e0e0e0',
-                  width: '40px',
-                  height: '40px',
-                  fontSize: '1.2rem',
-                  cursor: 'pointer'
-                }}
+                className="bg-gray-50 w-10 h-10 text-xl flex items-center justify-center hover:bg-gray-100 transition-colors"
                 onClick={() => setQuantity(q => q + 1)}
               >
                 +
@@ -105,40 +90,17 @@ function ProductDetail({ products, addToCart, addToWishlist }) {
             </div>
             
             <button 
-              style={{
-                backgroundColor: '#3498db',
-                color: 'white',
-                border: 'none',
-                padding: '0 25px',
-                borderRadius: '6px',
-                fontSize: '1rem',
-                fontWeight: '600',
-                cursor: 'pointer',
-                transition: 'background-color 0.3s'
-              }}
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
               onClick={() => addToCart(product, quantity)}
-              onMouseOver={(e) => e.target.style.backgroundColor = '#2980b9'}
-              onMouseOut={(e) => e.target.style.backgroundColor = '#3498db'}
             >
               Add to Cart
             </button>
             
             <button 
-              style={{
-                backgroundColor: 'transparent',
-                border: '1px solid #e0e0e0',
-                padding: '0 20px',
-                borderRadius: '6px',
-                fontSize: '1rem',
-                fontWeight: '600',
-                cursor: 'pointer',
-                transition: 'background-color 0.3s'
-              }}
+              className="border border-gray-200 hover:bg-gray-50 font-semibold py-2 px-5 rounded-lg transition-colors"
               onClick={() => addToWishlist(product)}
-              onMouseOver={(e) => e.target.style.backgroundColor = '#f8f9fa'}
-              onMouseOut={(e) => e.target.style.backgroundColor = 'transparent'}
             >
-              ♡ Wishlist
+              <span className="text-red-400">♡</span> Wishlist
             </button>
           </div>
         </div>

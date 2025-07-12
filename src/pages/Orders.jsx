@@ -2,83 +2,72 @@ import React from 'react';
 
 function Orders({ orders }) {
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
-      <h1 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '30px' }}>Your Orders</h1>
+    <div className="max-w-6xl mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8">Your Orders</h1>
       
       {orders.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '40px' }}>
-          <p style={{ fontSize: '1.2rem', marginBottom: '20px' }}>You haven't placed any orders yet</p>
+        <div className="text-center py-10">
+          <p className="text-lg mb-6">You haven't placed any orders yet</p>
           <button 
-            style={{
-              backgroundColor: '#3498db',
-              color: 'white',
-              border: 'none',
-              padding: '12px 30px',
-              borderRadius: '6px',
-              fontWeight: '600',
-              cursor: 'pointer',
-              transition: 'background-color 0.3s'
-            }}
+            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-300"
             onClick={() => window.location.href = '/products'}
-            onMouseOver={(e) => e.target.style.backgroundColor = '#2980b9'}
-            onMouseOut={(e) => e.target.style.backgroundColor = '#3498db'}
           >
             Browse Products
           </button>
         </div>
       ) : (
-        <div>
+        <div className="space-y-6">
           {orders.map(order => (
-            <div key={order.id} style={{ 
-              backgroundColor: 'white', 
-              borderRadius: '12px', 
-              padding: '20px', 
-              marginBottom: '20px',
-              boxShadow: '0 5px 15px rgba(0, 0, 0, 0.05)'
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px', paddingBottom: '15px', borderBottom: '1px solid #eee' }}>
+            <div 
+              key={order.id} 
+              className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div className="flex justify-between items-center pb-4 mb-4 border-b border-gray-100">
                 <div>
-                  <div style={{ fontWeight: '600', fontSize: '1.1rem' }}>Order #{order.id}</div>
-                  <div style={{ color: '#7f8c8d', fontSize: '0.9rem' }}>
+                  <div className="font-semibold text-lg">Order #{order.id}</div>
+                  <div className="text-gray-500 text-sm">
                     Placed on {new Date(order.date).toLocaleDateString()}
                   </div>
                 </div>
                 <div>
-                  <div style={{ 
-                    backgroundColor: 
-                      order.status === 'Delivered' ? '#e8f7f0' : 
-                      order.status === 'Cancelled' ? '#fceae8' : '#f5f8ff',
-                    color: 
-                      order.status === 'Delivered' ? '#2ecc71' : 
-                      order.status === 'Cancelled' ? '#e74c3c' : '#3498db',
-                    padding: '5px 15px',
-                    borderRadius: '30px',
-                    fontWeight: '500'
-                  }}>
+                  <span className={`
+                    inline-block px-4 py-1 rounded-full font-medium
+                    ${
+                      order.status === 'Delivered' ? 'bg-green-50 text-green-600' : 
+                      order.status === 'Cancelled' ? 'bg-red-50 text-red-600' : 
+                      'bg-blue-50 text-blue-600'
+                    }
+                  `}>
                     {order.status}
-                  </div>
+                  </span>
                 </div>
               </div>
               
-              <div style={{ marginBottom: '15px' }}>
-                <div style={{ fontWeight: '500', marginBottom: '10px' }}>Shipping Address:</div>
-                <div style={{ color: '#7f8c8d' }}>{order.shippingAddress}</div>
+              <div className="mb-4">
+                <div className="font-medium mb-2">Shipping Address:</div>
+                <div className="text-gray-500">{order.shippingAddress}</div>
               </div>
               
-              <div style={{ marginBottom: '20px' }}>
+              <div className="mb-6 space-y-4">
                 {order.items.map((item, index) => (
-                  <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '10px 0', borderBottom: '1px solid #f8f9fa' }}>
-                    <div style={{ width: '60px', height: '60px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}></div>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontWeight: '500' }}>{item.name}</div>
-                      <div style={{ color: '#7f8c8d' }}>Qty: {item.quantity}</div>
+                  <div 
+                    key={index} 
+                    className="flex items-center gap-4 py-3 border-b border-gray-50 last:border-0"
+                  >
+                    <div className="w-16 h-16 bg-gray-100 rounded-lg flex-shrink-0">
+                      {/* You can replace this with an actual image */}
+                      {/* <img src={item.image} alt={item.name} className="w-full h-full object-cover rounded-lg" /> */}
                     </div>
-                    <div>${item.price.toFixed(2)}</div>
+                    <div className="flex-1">
+                      <div className="font-medium">{item.name}</div>
+                      <div className="text-gray-500 text-sm">Qty: {item.quantity}</div>
+                    </div>
+                    <div className="font-medium">${item.price.toFixed(2)}</div>
                   </div>
                 ))}
               </div>
               
-              <div style={{ display: 'flex', justifyContent: 'flex-end', fontWeight: '600', fontSize: '1.1rem' }}>
+              <div className="flex justify-end font-bold text-lg">
                 Total: ${order.total.toFixed(2)}
               </div>
             </div>

@@ -2,85 +2,93 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 function Home({ products = [], addToCart = () => {} }) {
-  // Safely handle undefined products
   const featuredProducts = Array.isArray(products) ? products.slice(0, 3) : [];
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Hero Section */}
-      <div style={{
-        backgroundImage: 'url("/images/register-page.jpg")',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        height: '50vh',
-        borderRadius: '12px',
-        padding: '60px 20px',
-        textAlign: 'center',
-        marginBottom: '40px'
-      }}>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: '700', marginBottom: '20px' }}>
-          Welcome to ElectroKart
-        </h1>
-        <p style={{ fontSize: '1.2rem', maxWidth: '700px', margin: '0 auto 30px' }}>
-          Discover the latest electronics at unbeatable prices. 
-          Quality products with fast delivery to your doorstep.
-        </p>
-        <Link 
-          to="/products" 
-          style={{
-            backgroundColor: '#e74c3c',
-            color: 'white',
-            padding: '12px 30px',
-            borderRadius: '30px',
-            textDecoration: 'none',
-            fontWeight: '600',
-            fontSize: '1rem',
-            transition: 'all 0.3s',
-            boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)'
-          }}
-          onMouseOver={(e) => e.target.style.backgroundColor = '#c0392b'}
-          onMouseOut={(e) => e.target.style.backgroundColor = '#e74c3c'}
-        >
-          Shop Now
-        </Link>
+      <div 
+        className="relative rounded-2xl overflow-hidden mb-12 md:mb-16 h-[50vh] min-h-[400px] flex items-center"
+        style={{
+          backgroundImage: 'url("https://images.unsplash.com/photo-1593642632823-8f785ba67e45?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-900/70 to-gray-900/40"></div>
+        
+        <div className="relative max-w-2xl mx-auto px-4 text-center">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+            Welcome to ElectroKart
+          </h1>
+          <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
+            Discover the latest electronics at unbeatable prices. Quality products with fast delivery to your doorstep.
+          </p>
+          <Link 
+            to="/products" 
+            className="inline-block bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg shadow-red-600/30"
+          >
+            Shop Now
+          </Link>
+        </div>
       </div>
       
       {/* Featured Products */}
-      <div style={{ marginBottom: '60px' }}>
-        <h2 style={{ fontSize: '1.8rem', fontWeight: '600', marginBottom: '30px', textAlign: 'center' }}>
-          Featured Products
-        </h2>
+      <div className="mb-16">
+        <div className="text-center mb-10">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
+            Featured Products
+          </h2>
+          <div className="w-20 h-1 bg-blue-600 mx-auto"></div>
+        </div>
         
         {featuredProducts.length > 0 ? (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredProducts.map(product => (
-              <div key={product.id} style={{ backgroundColor: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 5px 15px rgba(0, 0, 0, 0.08)' }}>
-                <div style={{ height: '200px', overflow: 'hidden' }}>
-                  <div style={{ width: '100%', height: '100%', backgroundColor: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    Product Image
+              <div 
+                key={product.id} 
+                className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+              >
+                <div className="h-56 overflow-hidden relative">
+                  <div className="bg-gray-100 w-full h-full flex items-center justify-center">
+                    <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
+                  </div>
+                  {product.stock < 10 && (
+                    <div className="absolute top-4 right-4 bg-red-100 text-red-800 text-xs font-bold px-3 py-1 rounded-full">
+                      Only {product.stock} left
+                    </div>
+                  )}
+                  <div className="absolute bottom-4 left-4 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                    {product.category}
                   </div>
                 </div>
-                <div style={{ padding: '20px' }}>
-                  <h3 style={{ fontSize: '1.2rem', fontWeight: '600', marginBottom: '10px' }}>{product.name}</h3>
-                  <p style={{ color: '#7f8c8d', fontSize: '0.9rem', marginBottom: '15px' }}>{product.description}</p>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '1.2rem', fontWeight: '700', color: '#3498db' }}>${product.price.toFixed(2)}</span>
+                
+                <div className="p-6">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-800 mb-2">{product.name}</h3>
+                      <p className="text-gray-600 text-sm mb-4 line-clamp-2">{product.description}</p>
+                    </div>
+                    
+                    <div className="flex items-center bg-yellow-100 px-2 py-1 rounded">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <span className="text-yellow-800 text-sm font-medium ml-1">{product.rating}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-between items-center mt-4">
+                    <div>
+                      <span className="text-lg font-bold text-blue-600">${product.price.toFixed(2)}</span>
+                    </div>
                     <button 
-                      style={{
-                        backgroundColor: '#3498db',
-                        color: 'white',
-                        border: 'none',
-                        padding: '8px 16px',
-                        borderRadius: '6px',
-                        fontSize: '14px',
-                        fontWeight: '500',
-                        cursor: 'pointer',
-                        transition: 'background-color 0.3s'
-                      }}
+                      className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-300 flex items-center"
                       onClick={() => addToCart(product)}
-                      onMouseOver={(e) => e.target.style.backgroundColor = '#2980b9'}
-                      onMouseOut={(e) => e.target.style.backgroundColor = '#3498db'}
                     >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                      </svg>
                       Add to Cart
                     </button>
                   </div>
@@ -89,8 +97,98 @@ function Home({ products = [], addToCart = () => {} }) {
             ))}
           </div>
         ) : (
-          <p style={{ textAlign: 'center', color: '#7f8c8d' }}>No featured products available</p>
+          <div className="bg-gray-50 rounded-xl py-16 text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-20 w-20 mx-auto text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 7v10c0 1.1.9 2 2 2h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2zm12 0H6v10h12V7zM9 5h6v2H9V5z" />
+            </svg>
+            <p className="text-gray-600 text-lg mt-4">No featured products available</p>
+          </div>
         )}
+      </div>
+      
+      {/* Categories Section */}
+      <div className="mb-16">
+        <div className="text-center mb-10">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
+            Shop By Category
+          </h2>
+          <div className="w-20 h-1 bg-blue-600 mx-auto"></div>
+        </div>
+        
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {[
+            { name: 'Smartphones', icon: '📱' },
+            { name: 'Laptops', icon: '💻' },
+            { name: 'TVs', icon: '📺' },
+            { name: 'Audio', icon: '🎧' }
+          ].map((category, index) => (
+            <Link 
+              key={index} 
+              to="/products"
+              className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300 text-center group"
+            >
+              <div className="text-4xl mb-3 group-hover:text-blue-600 transition-colors">{category.icon}</div>
+              <h3 className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">{category.name}</h3>
+            </Link>
+          ))}
+        </div>
+      </div>
+      
+      {/* Testimonials */}
+      <div className="bg-gradient-to-r from-blue-50 to-gray-50 rounded-2xl p-8 md:p-12 mb-16">
+        <div className="text-center mb-10">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
+            What Our Customers Say
+          </h2>
+          <div className="w-20 h-1 bg-blue-600 mx-auto"></div>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            { 
+              name: 'Sarah Johnson', 
+              role: 'Tech Enthusiast', 
+              comment: 'ElectroKart has the best prices and fastest delivery I\'ve ever experienced. My new laptop arrived in perfect condition just 2 days after ordering!',
+              rating: 5
+            },
+            { 
+              name: 'Michael Chen', 
+              role: 'Gamer', 
+              comment: 'The gaming laptop I bought exceeded my expectations. The performance is incredible, and the customer support was very helpful with my setup questions.',
+              rating: 5
+            },
+            { 
+              name: 'Emma Rodriguez', 
+              role: 'Designer', 
+              comment: 'I was hesitant to buy expensive headphones online, but ElectroKart made the process seamless. The product is authentic and arrived earlier than promised.',
+              rating: 4
+            }
+          ].map((testimonial, index) => (
+            <div key={index} className="bg-white rounded-xl p-6 shadow-sm">
+              <div className="flex items-center mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <svg 
+                    key={i}
+                    xmlns="http://www.w3.org/2000/svg" 
+                    className={`h-5 w-5 ${i < testimonial.rating ? 'text-yellow-500' : 'text-gray-300'}`}
+                    viewBox="0 0 20 20" 
+                    fill="currentColor"
+                  >
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+              </div>
+              <p className="text-gray-600 mb-4 italic">"{testimonial.comment}"</p>
+              <div className="flex items-center">
+                <div className="bg-gray-200 border-2 border-dashed rounded-full w-12 h-12 mr-3"></div>
+                <div>
+                  <div className="font-semibold text-gray-800">{testimonial.name}</div>
+                  <div className="text-sm text-gray-500">{testimonial.role}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

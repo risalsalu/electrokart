@@ -11,23 +11,19 @@ function Products({ products, addToCart, addToWishlist }) {
     : products.filter(p => p.category === categoryFilter);
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
-      <h1 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '30px' }}>Our Products</h1>
+    <div className="max-w-6xl mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8">Our Products</h1>
       
       {/* Category Filter */}
-      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '30px' }}>
+      <div className="flex flex-wrap gap-3 mb-8">
         {categories.map(category => (
           <button
             key={category}
-            style={{
-              backgroundColor: categoryFilter === category ? '#3498db' : '#f8f9fa',
-              color: categoryFilter === category ? 'white' : '#2c3e50',
-              border: 'none',
-              padding: '8px 16px',
-              borderRadius: '30px',
-              cursor: 'pointer',
-              transition: 'all 0.3s'
-            }}
+            className={`px-4 py-2 rounded-full transition-colors ${
+              categoryFilter === category 
+                ? 'bg-blue-500 text-white' 
+                : 'bg-gray-50 text-gray-800 hover:bg-gray-100'
+            }`}
             onClick={() => setCategoryFilter(category)}
           >
             {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -36,57 +32,49 @@ function Products({ products, addToCart, addToWishlist }) {
       </div>
       
       {/* Product Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '30px' }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filteredProducts.map(product => (
-          <div key={product.id} style={{ backgroundColor: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 5px 15px rgba(0, 0, 0, 0.08)' }}>
-            <Link to={`/products/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-              <div style={{ height: '200px', backgroundColor: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                Product Image
+          <div 
+            key={product.id} 
+            className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+          >
+            <Link to={`/products/${product.id}`} className="block">
+              <div className="h-48 bg-gray-100 flex items-center justify-center">
+                {/* Replace with actual image */}
+                <span className="text-gray-400">Product Image</span>
               </div>
             </Link>
-            <div style={{ padding: '20px' }}>
-              <Link to={`/products/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: '600', marginBottom: '10px' }}>{product.name}</h3>
+            
+            <div className="p-5">
+              <Link to={`/products/${product.id}`} className="block">
+                <h3 className="text-lg font-semibold mb-2 hover:text-blue-500 transition-colors">
+                  {product.name}
+                </h3>
               </Link>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
-                <span style={{ fontSize: '1.2rem', fontWeight: '700', color: '#3498db' }}>${product.price.toFixed(2)}</span>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <span style={{ color: '#f39c12', marginRight: '5px' }}>★</span>
+              
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-lg font-bold text-blue-500">
+                  ${product.price.toFixed(2)}
+                </span>
+                <div className="flex items-center">
+                  <span className="text-yellow-500 mr-1">★</span>
                   <span>{product.rating}</span>
                 </div>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px' }}>
+              
+              <div className="flex gap-3">
                 <button 
-                  style={{
-                    flex: 1,
-                    backgroundColor: '#3498db',
-                    color: 'white',
-                    border: 'none',
-                    padding: '8px',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                    transition: 'background-color 0.3s'
-                  }}
+                  className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition-colors"
                   onClick={() => addToCart(product)}
-                  onMouseOver={(e) => e.target.style.backgroundColor = '#2980b9'}
-                  onMouseOut={(e) => e.target.style.backgroundColor = '#3498db'}
                 >
                   Add to Cart
                 </button>
                 <button 
-                  style={{
-                    backgroundColor: 'transparent',
-                    border: '1px solid #e0e0e0',
-                    padding: '8px',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                    transition: 'background-color 0.3s'
-                  }}
+                  className="w-10 flex items-center justify-center border border-gray-200 hover:bg-gray-50 rounded-lg transition-colors"
                   onClick={() => addToWishlist(product)}
-                  onMouseOver={(e) => e.target.style.backgroundColor = '#f8f9fa'}
-                  onMouseOut={(e) => e.target.style.backgroundColor = 'transparent'}
+                  aria-label="Add to wishlist"
                 >
-                  ♡
+                  <span className="text-red-400">♡</span>
                 </button>
               </div>
             </div>

@@ -19,42 +19,35 @@ function Checkout({ cart, placeOrder }) {
   };
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
-      <h1 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '30px' }}>Checkout</h1>
+    <div className="max-w-6xl mx-auto px-5 py-8">
+      <h1 className="text-3xl font-bold text-gray-800 mb-8">Checkout</h1>
       
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '40px' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Checkout Form */}
-        <div>
+        <div className="lg:col-span-2">
           <form onSubmit={handleSubmit}>
             {/* Shipping Address */}
-            <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '25px', marginBottom: '20px' }}>
-              <h2 style={{ fontSize: '1.5rem', fontWeight: '600', marginBottom: '20px' }}>Shipping Address</h2>
+            <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+              <h2 className="text-xl font-semibold text-gray-700 mb-5">Shipping Address</h2>
               
-              <div style={{ marginBottom: '15px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Full Address</label>
+              <div className="mb-4">
+                <label className="block text-gray-700 font-medium mb-2">Full Address</label>
                 <textarea
                   required
                   value={shippingAddress}
                   onChange={(e) => setShippingAddress(e.target.value)}
                   placeholder="Enter your full shipping address"
-                  style={{
-                    width: '100%',
-                    padding: '12px',
-                    border: '1px solid #e0e0e0',
-                    borderRadius: '8px',
-                    minHeight: '100px',
-                    resize: 'vertical'
-                  }}
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition min-h-[100px]"
                 ></textarea>
               </div>
             </div>
             
             {/* Payment Method */}
-            <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '25px', marginBottom: '20px' }}>
-              <h2 style={{ fontSize: '1.5rem', fontWeight: '600', marginBottom: '20px' }}>Payment Method</h2>
+            <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+              <h2 className="text-xl font-semibold text-gray-700 mb-5">Payment Method</h2>
               
-              <div style={{ marginBottom: '15px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+              <div className="space-y-3">
+                <div className="flex items-center">
                   <input
                     type="radio"
                     id="credit_card"
@@ -62,12 +55,14 @@ function Checkout({ cart, placeOrder }) {
                     value="credit_card"
                     checked={paymentMethod === 'credit_card'}
                     onChange={() => setPaymentMethod('credit_card')}
-                    style={{ marginRight: '10px' }}
+                    className="h-5 w-5 text-blue-600 focus:ring-blue-500"
                   />
-                  <label htmlFor="credit_card" style={{ fontWeight: '500' }}>Credit Card</label>
+                  <label htmlFor="credit_card" className="ml-3 block text-gray-700 font-medium">
+                    Credit Card
+                  </label>
                 </div>
                 
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                <div className="flex items-center">
                   <input
                     type="radio"
                     id="paypal"
@@ -75,12 +70,14 @@ function Checkout({ cart, placeOrder }) {
                     value="paypal"
                     checked={paymentMethod === 'paypal'}
                     onChange={() => setPaymentMethod('paypal')}
-                    style={{ marginRight: '10px' }}
+                    className="h-5 w-5 text-blue-600 focus:ring-blue-500"
                   />
-                  <label htmlFor="paypal" style={{ fontWeight: '500' }}>PayPal</label>
+                  <label htmlFor="paypal" className="ml-3 block text-gray-700 font-medium">
+                    PayPal
+                  </label>
                 </div>
                 
-                <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="flex items-center">
                   <input
                     type="radio"
                     id="cod"
@@ -88,30 +85,18 @@ function Checkout({ cart, placeOrder }) {
                     value="cod"
                     checked={paymentMethod === 'cod'}
                     onChange={() => setPaymentMethod('cod')}
-                    style={{ marginRight: '10px' }}
+                    className="h-5 w-5 text-blue-600 focus:ring-blue-500"
                   />
-                  <label htmlFor="cod" style={{ fontWeight: '500' }}>Cash on Delivery</label>
+                  <label htmlFor="cod" className="ml-3 block text-gray-700 font-medium">
+                    Cash on Delivery
+                  </label>
                 </div>
               </div>
             </div>
             
             <button 
               type="submit"
-              style={{
-                width: '100%',
-                backgroundColor: '#3498db',
-                color: 'white',
-                border: 'none',
-                padding: '15px',
-                borderRadius: '8px',
-                fontSize: '1rem',
-                fontWeight: '600',
-                cursor: 'pointer',
-                transition: 'background-color 0.3s',
-                marginTop: '20px'
-              }}
-              onMouseOver={(e) => e.target.style.backgroundColor = '#2980b9'}
-              onMouseOut={(e) => e.target.style.backgroundColor = '#3498db'}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-6 rounded-lg transition duration-200 ease-in-out transform hover:shadow-md"
             >
               Place Order
             </button>
@@ -119,36 +104,36 @@ function Checkout({ cart, placeOrder }) {
         </div>
         
         {/* Order Summary */}
-        <div style={{ backgroundColor: '#f8f9fa', borderRadius: '12px', padding: '25px', height: 'fit-content' }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: '600', marginBottom: '20px' }}>Order Summary</h2>
+        <div className="bg-gray-50 rounded-lg shadow-sm p-6 h-fit">
+          <h2 className="text-xl font-semibold text-gray-700 mb-6">Order Summary</h2>
           
-          <div style={{ marginBottom: '20px' }}>
+          <div className="mb-6 space-y-4">
             {cart.map(item => (
-              <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                <div>
+              <div key={item.id} className="flex justify-between">
+                <div className="text-gray-600">
                   {item.name} × {item.quantity}
                 </div>
-                <div>${(item.price * item.quantity).toFixed(2)}</div>
+                <div className="text-gray-800 font-medium">${(item.price * item.quantity).toFixed(2)}</div>
               </div>
             ))}
           </div>
           
-          <div style={{ marginBottom: '20px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-              <span>Subtotal</span>
-              <span>${cartTotal.toFixed(2)}</span>
+          <div className="space-y-3 mb-6">
+            <div className="flex justify-between">
+              <span className="text-gray-600">Subtotal</span>
+              <span className="text-gray-800">${cartTotal.toFixed(2)}</span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-              <span>Shipping</span>
-              <span>${shippingFee.toFixed(2)}</span>
+            <div className="flex justify-between">
+              <span className="text-gray-600">Shipping</span>
+              <span className="text-gray-800">${shippingFee.toFixed(2)}</span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-              <span>Tax</span>
-              <span>${tax.toFixed(2)}</span>
+            <div className="flex justify-between">
+              <span className="text-gray-600">Tax</span>
+              <span className="text-gray-800">${tax.toFixed(2)}</span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: '600', fontSize: '1.1rem', paddingTop: '15px', borderTop: '1px solid #ddd' }}>
-              <span>Total</span>
-              <span>${grandTotal.toFixed(2)}</span>
+            <div className="flex justify-between font-semibold text-lg pt-4 border-t border-gray-200">
+              <span className="text-gray-700">Total</span>
+              <span className="text-gray-900">${grandTotal.toFixed(2)}</span>
             </div>
           </div>
         </div>

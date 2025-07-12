@@ -4,183 +4,148 @@ import { Link, useNavigate } from 'react-router-dom';
 function Navbar({ user, onLogout, cartItemCount, wishlistItemCount }) {
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // Style objects for consistent styling
-  const styles = {
-    container: {
-      backgroundColor: '#ffffff',
-      boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-      padding: '0 5%',
-      position: 'sticky',
-      top: 0,
-      zIndex: 100,
-      height: '70px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      fontFamily: "'Segoe UI', Roboto, 'Helvetica Neue', sans-serif"
-    },
-    logo: {
-      display: 'flex', 
-      alignItems: 'center', 
-      gap: '10px', 
-      cursor: 'pointer'
-    },
-    logoBox: {
-      width: '36px',
-      height: '36px',
-      backgroundColor: '#3498db',
-      borderRadius: '8px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      color: 'white',
-      fontWeight: 'bold',
-      fontSize: '16px'
-    },
-    logoText: {
-      fontSize: '20px',
-      fontWeight: '600',
-      color: '#2c3e50'
-    },
-    navLink: {
-      textDecoration: 'none',
-      color: '#2c3e50',
-      fontSize: '15px',
-      fontWeight: '500',
-      transition: 'color 0.2s'
-    },
-    iconContainer: {
-      position: 'relative',
-      cursor: 'pointer',
-      display: 'flex',
-      alignItems: 'center'
-    },
-    badge: {
-      position: 'absolute',
-      top: '-8px',
-      right: '-8px',
-      backgroundColor: '#e74c3c',
-      color: 'white',
-      borderRadius: '50%',
-      width: '20px',
-      height: '20px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontSize: '12px',
-      fontWeight: 'bold'
-    },
-    userIcon: {
-      width: '36px',
-      height: '36px',
-      backgroundColor: '#3498db',
-      borderRadius: '50%',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      color: 'white',
-      fontWeight: 'bold'
-    },
-    dropdown: {
-      position: 'absolute',
-      top: '50px',
-      right: '0',
-      backgroundColor: 'white',
-      borderRadius: '8px',
-      boxShadow: '0 5px 15px rgba(0, 0, 0, 0.15)',
-      width: '200px',
-      zIndex: 100,
-      overflow: 'hidden'
-    },
-    dropdownItem: {
-      padding: '12px 20px',
-      cursor: 'pointer',
-      transition: 'background-color 0.2s',
-      ':hover': { backgroundColor: '#f8f9fa' }
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
     }
   };
 
   return (
-    <div style={styles.container}>
+    <div className="bg-white shadow-md sticky top-0 z-50 py-3 px-4 md:px-8 flex items-center justify-between font-sans">
       {/* Logo */}
-      <div style={styles.logo} onClick={() => navigate('/')}>
-        <div style={styles.logoBox}>EK</div>
-        <span style={styles.logoText}>ElectroKart</span>
+      <div 
+        className="flex items-center gap-3 cursor-pointer"
+        onClick={() => navigate('/')}
+      >
+        <div className="bg-blue-600 w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-lg">
+          EK
+        </div>
+        <span className="text-xl font-bold text-gray-800 hidden sm:block">ElectroKart</span>
       </div>
 
-      {/* Navigation Links */}
-      <div style={{ display: 'flex', gap: '30px' }}>
-        <Link 
-          to="/" 
-          style={styles.navLink}
-          onMouseOver={(e) => e.target.style.color = '#3498db'}
-          onMouseOut={(e) => e.target.style.color = '#2c3e50'}
-        >
-          Home
-        </Link>
-        <Link 
-          to="/products" 
-          style={styles.navLink}
-          onMouseOver={(e) => e.target.style.color = '#3498db'}
-          onMouseOut={(e) => e.target.style.color = '#2c3e50'}
-        >
-          Products
-        </Link>
-        <Link 
-          to="/orders" 
-          style={styles.navLink}
-          onMouseOver={(e) => e.target.style.color = '#3498db'}
-          onMouseOut={(e) => e.target.style.color = '#2c3e50'}
-        >
-          Orders
-        </Link>
+      {/* Search Bar */}
+      <div className="flex-grow max-w-xl mx-4 md:mx-8">
+        <form onSubmit={handleSearch} className="relative">
+          <input
+            type="text"
+            placeholder="Search products..."
+            className="w-full py-2 pl-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button 
+            type="submit"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-600"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+        </form>
       </div>
 
-      {/* Right Side Icons */}
-      <div style={{ display: 'flex', gap: '25px', alignItems: 'center' }}>
-        {/* Wishlist */}
-        <div style={styles.iconContainer} onClick={() => navigate('/wishlist')}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" strokeWidth="2">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+      {/* Navigation Links and Icons */}
+      <div className="flex items-center gap-4 md:gap-6">
+        {/* Navigation Links - Hidden on small screens, visible on medium+ */}
+        <div className="hidden md:flex gap-6">
+          <Link 
+            to="/" 
+            className="text-gray-700 hover:text-blue-600 transition-colors font-medium"
+          >
+            Home
+          </Link>
+          <Link 
+            to="/products" 
+            className="text-gray-700 hover:text-blue-600 transition-colors font-medium"
+          >
+            Products
+          </Link>
+          <Link 
+            to="/orders" 
+            className="text-gray-700 hover:text-blue-600 transition-colors font-medium"
+          >
+            Orders
+          </Link>
+        </div>
+        
+        {/* Mobile Menu Button - Visible only on small screens */}
+        <button className="md:hidden text-gray-600 hover:text-blue-600">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
           </svg>
-          {wishlistItemCount > 0 && <div style={styles.badge}>{wishlistItemCount}</div>}
+        </button>
+
+        {/* Wishlist */}
+        <div 
+          className="relative cursor-pointer group"
+          onClick={() => navigate('/wishlist')}
+          title="Wishlist"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-700 group-hover:text-blue-600 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg>
+          {wishlistItemCount > 0 && (
+            <div className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+              {wishlistItemCount}
+            </div>
+          )}
         </div>
         
         {/* Cart */}
-        <div style={styles.iconContainer} onClick={() => navigate('/cart')}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" strokeWidth="2">
-            <circle cx="9" cy="21" r="1"></circle>
-            <circle cx="20" cy="21" r="1"></circle>
-            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        <div 
+          className="relative cursor-pointer group"
+          onClick={() => navigate('/cart')}
+          title="Cart"
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            className="h-6 w-6 text-gray-700 group-hover:text-blue-600 transition-colors" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
           </svg>
-          {cartItemCount > 0 && <div style={styles.badge}>{cartItemCount}</div>}
+          {cartItemCount > 0 && (
+            <div className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+              {cartItemCount}
+            </div>
+          )}
         </div>
         
         {/* User Account */}
         {user ? (
-          <div 
-            style={{ position: 'relative', cursor: 'pointer' }}
-            onClick={() => setShowDropdown(!showDropdown)}
-          >
-            <div style={styles.userIcon}>
-              {user.name.charAt(0)}
+          <div className="relative">
+            <div 
+              className="flex items-center gap-2 cursor-pointer group"
+              onClick={() => setShowDropdown(!showDropdown)}
+            >
+              <div className="bg-blue-600 w-9 h-9 rounded-full flex items-center justify-center text-white font-bold group-hover:bg-blue-700 transition-colors">
+                {user.name.charAt(0)}
+              </div>
+              <span className="hidden lg:inline text-gray-700 group-hover:text-blue-600 transition-colors">
+                {user.name.split(' ')[0]}
+              </span>
             </div>
             
             {showDropdown && (
-              <div style={styles.dropdown}>
-                <div style={{ padding: '15px 20px', borderBottom: '1px solid #eee' }}>
-                  <div style={{ fontWeight: '600', color: '#2c3e50' }}>{user.name}</div>
-                  <div style={{ fontSize: '13px', color: '#7f8c8d' }}>{user.email}</div>
+              <div className="absolute right-0 top-12 bg-white rounded-lg shadow-lg w-48 overflow-hidden z-50 border border-gray-200">
+                <div className="p-4 border-b">
+                  <div className="font-semibold text-gray-800">{user.name}</div>
+                  <div className="text-gray-500 text-sm truncate">{user.email}</div>
                 </div>
                 <div 
-                  style={styles.dropdownItem}
+                  className="p-3 hover:bg-gray-50 cursor-pointer text-gray-700 hover:text-blue-600 transition-colors"
                   onClick={() => navigate('/orders')}
                 >
                   My Orders
                 </div>
                 <div 
-                  style={styles.dropdownItem}
+                  className="p-3 hover:bg-gray-50 cursor-pointer text-gray-700 hover:text-blue-600 transition-colors"
                   onClick={() => {
                     onLogout();
                     setShowDropdown(false);
@@ -192,34 +157,16 @@ function Navbar({ user, onLogout, cartItemCount, wishlistItemCount }) {
             )}
           </div>
         ) : (
-          <div style={{ display: 'flex', gap: '15px' }}>
+          <div className="flex gap-3">
             <Link 
               to="/login" 
-              style={{
-                ...styles.navLink,
-                padding: '8px 16px',
-                border: '1px solid #e0e0e0',
-                borderRadius: '6px'
-              }}
-              onMouseOver={(e) => e.target.style.backgroundColor = '#f8f9fa'}
-              onMouseOut={(e) => e.target.style.backgroundColor = 'transparent'}
+              className="px-3 py-1.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-blue-500 transition-colors text-sm md:text-base md:px-4 md:py-2"
             >
               Login
             </Link>
             <Link 
               to="/register" 
-              style={{
-                backgroundColor: '#3498db',
-                color: 'white',
-                padding: '8px 16px',
-                borderRadius: '6px',
-                textDecoration: 'none',
-                fontSize: '15px',
-                fontWeight: '500',
-                transition: 'background-color 0.2s'
-              }}
-              onMouseOver={(e) => e.target.style.backgroundColor = '#2980b9'}
-              onMouseOut={(e) => e.target.style.backgroundColor = '#3498db'}
+              className="px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm md:text-base md:px-4 md:py-2"
             >
               Register
             </Link>

@@ -3,76 +3,51 @@ import { Link } from 'react-router-dom';
 
 function Wishlist({ wishlist, removeFromWishlist, addToCart }) {
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
-      <h1 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '30px' }}>Your Wishlist</h1>
+    <div className="max-w-6xl mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8">Your Wishlist</h1>
       
       {wishlist.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '40px' }}>
-          <p style={{ fontSize: '1.2rem', marginBottom: '20px' }}>Your wishlist is empty</p>
+        <div className="text-center py-10">
+          <p className="text-lg mb-6">Your wishlist is empty</p>
           <Link 
             to="/products" 
-            style={{
-              backgroundColor: '#3498db',
-              color: 'white',
-              padding: '12px 30px',
-              borderRadius: '6px',
-              textDecoration: 'none',
-              fontWeight: '600',
-              transition: 'background-color 0.3s'
-            }}
-            onMouseOver={(e) => e.target.style.backgroundColor = '#2980b9'}
-            onMouseOut={(e) => e.target.style.backgroundColor = '#3498db'}
+            className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg transition-colors"
           >
             Browse Products
           </Link>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '30px' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {wishlist.map(product => (
-            <div key={product.id} style={{ backgroundColor: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 5px 15px rgba(0, 0, 0, 0.08)' }}>
-              <div style={{ height: '200px', backgroundColor: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                Product Image
+            <div 
+              key={product.id} 
+              className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+            >
+              <div className="h-48 bg-gray-100 flex items-center justify-center">
+                {/* Replace with actual image */}
+                <span className="text-gray-400">Product Image</span>
               </div>
-              <div style={{ padding: '20px' }}>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: '600', marginBottom: '10px' }}>{product.name}</h3>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
-                  <span style={{ fontSize: '1.2rem', fontWeight: '700', color: '#3498db' }}>${product.price.toFixed(2)}</span>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <span style={{ color: '#f39c12', marginRight: '5px' }}>★</span>
+              <div className="p-5">
+                <h3 className="text-lg font-semibold mb-2 line-clamp-2">{product.name}</h3>
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-lg font-bold text-blue-500">
+                    ${product.price.toFixed(2)}
+                  </span>
+                  <div className="flex items-center">
+                    <span className="text-yellow-500 mr-1">★</span>
                     <span>{product.rating}</span>
                   </div>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px' }}>
+                <div className="flex gap-3">
                   <button 
-                    style={{
-                      flex: 1,
-                      backgroundColor: '#3498db',
-                      color: 'white',
-                      border: 'none',
-                      padding: '8px',
-                      borderRadius: '6px',
-                      cursor: 'pointer',
-                      transition: 'background-color 0.3s'
-                    }}
+                    className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 px-3 rounded-lg transition-colors text-sm"
                     onClick={() => addToCart(product)}
-                    onMouseOver={(e) => e.target.style.backgroundColor = '#2980b9'}
-                    onMouseOut={(e) => e.target.style.backgroundColor = '#3498db'}
                   >
                     Add to Cart
                   </button>
                   <button 
-                    style={{
-                      backgroundColor: 'transparent',
-                      border: '1px solid #e74c3c',
-                      color: '#e74c3c',
-                      padding: '8px',
-                      borderRadius: '6px',
-                      cursor: 'pointer',
-                      transition: 'background-color 0.3s'
-                    }}
+                    className="border border-red-500 text-red-500 hover:bg-red-50 py-2 px-3 rounded-lg transition-colors text-sm"
                     onClick={() => removeFromWishlist(product.id)}
-                    onMouseOver={(e) => e.target.style.backgroundColor = '#fdf3f2'}
-                    onMouseOut={(e) => e.target.style.backgroundColor = 'transparent'}
                   >
                     Remove
                   </button>
