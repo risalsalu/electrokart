@@ -23,9 +23,20 @@ function ProductDetail({ products, addToCart, addToWishlist }) {
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Product Image */}
-        <div className="bg-gray-50 rounded-xl h-96 flex items-center justify-center">
-          {/* Replace with actual image */}
-          <div className="text-gray-400">Product Image</div>
+        <div className="bg-gray-100 rounded-lg flex items-center justify-center p-8">
+          {product.image ? (
+            <img 
+              src={product.image} 
+              alt={product.name}
+              className="max-h-96 object-contain"
+              onError={(e) => {
+                e.target.onerror = null; 
+                e.target.src = '/images/placeholder.jpg';
+              }}
+            />
+          ) : (
+            <div className="text-gray-500">No image available</div>
+          )}
         </div>
         
         {/* Product Details */}
@@ -52,7 +63,7 @@ function ProductDetail({ products, addToCart, addToWishlist }) {
             ${product.price.toFixed(2)}
           </p>
           
-          <p className="text-gray-500 mb-8">
+          <p className="text-gray-700 mb-8">
             {product.description}
           </p>
           
@@ -61,7 +72,7 @@ function ProductDetail({ products, addToCart, addToWishlist }) {
             <p>
               <strong className="font-medium">Availability:</strong> 
               <span className={product.stock > 0 ? 'text-green-600' : 'text-red-600'}>
-                {product.stock > 0 ? ' In Stock' : ' Out of Stock'}
+                {product.stock > 0 ? ` In Stock (${product.stock} available)` : ' Out of Stock'}
               </span>
             </p>
           </div>
@@ -92,8 +103,9 @@ function ProductDetail({ products, addToCart, addToWishlist }) {
             <button 
               className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
               onClick={() => addToCart(product, quantity)}
+              disabled={product.stock <= 0}
             >
-              Add to Cart
+              {product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
             </button>
             
             <button 
@@ -102,6 +114,18 @@ function ProductDetail({ products, addToCart, addToWishlist }) {
             >
               <span className="text-red-400">♡</span> Wishlist
             </button>
+          </div>
+
+          {/* Additional Details Section */}
+          <div className="mt-8">
+            <h2 className="text-xl font-semibold mb-2">Product Details</h2>
+            <ul className="space-y-2">
+              {product.tags && (
+                <li>
+                  <strong>Tags:</strong> {product.tags.join(', ')}
+                </li>
+              )}
+            </ul>
           </div>
         </div>
       </div>

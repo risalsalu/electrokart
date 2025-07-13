@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Register({ onRegister }) {
@@ -9,33 +9,47 @@ function Register({ onRegister }) {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleRegister = (e) => {
-    e.preventDefault();
-    
-    // Simple validation
-    if (!name || !email || !password) {
-      setError('All fields are required');
-      return;
-    }
-    
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters');
-      return;
-    }
-    
-    const newUser = { name, email, password };
-    
-    // Save to localStorage
-    localStorage.setItem('user', JSON.stringify(newUser));
-    
-    // Call the onRegister function from props
-    if (onRegister) {
-      onRegister(newUser);
-    }
-    
-    alert('Registration successful!');
-    navigate('/');
+const handleRegister = (e) => {
+  e.preventDefault();
+
+  // Simple validation
+  if (!name || !email || !password) {
+    setError('All fields are required');
+    return;
+  }
+  
+  if (password.length < 6) {
+    setError('Password must be at least 6 characters');
+    return;
+  }
+  
+  // Check if user already exists
+  const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
+  if (existingUsers.some(user => user.email === email)) {
+    setError('User with this email already exists');
+    return;
+  }
+  
+  const newUser = { 
+    name, 
+    email, 
+    password, // Note: In a real app, never store plain text passwords
+    createdAt: new Date().toISOString() 
   };
+  
+  // Save to localStorage
+  const updatedUsers = [...existingUsers, newUser];
+  localStorage.setItem('users', JSON.stringify(updatedUsers));
+  localStorage.setItem('currentUser', JSON.stringify({ email, name }));
+  
+  // Call the onRegister function from props
+  if (onRegister) {
+    onRegister(newUser);
+  }
+  
+  alert('Registration successful!');
+  navigate('/login',{state:{registeredEmail:email}});
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-gray-100 p-4">

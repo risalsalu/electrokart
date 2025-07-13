@@ -1,21 +1,42 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-function Checkout({ cart, placeOrder }) {
+function Checkout({ cart, user, clearCart, placeOrder }) {
   const [shippingAddress, setShippingAddress] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('credit_card');
+  const navigate = useNavigate();
   
   const cartTotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
   const shippingFee = cart.length > 0 ? 9.99 : 0;
   const tax = cartTotal * 0.08;
   const grandTotal = cartTotal + shippingFee + tax;
 
-  const handleSubmit = (e) => {
+  const handlePlaceOrder = (e) => {
     e.preventDefault();
-    placeOrder({
+    
+    if (!shippingAddress) {
+      alert('Please enter a shipping address');
+      return;
+    }
+
+    const newOrder = {
+      id: `ORD-${Math.random().toString(36).substr(2, 8).toUpperCase()}`,
+      date: new Date().toISOString(),
+      status: "Processing",
+      shippingAddress,
+      paymentMethod,
       items: [...cart],
-      total: grandTotal,
-      shippingAddress
-    });
+      total: grandTotal
+    };
+    
+    // Call the placeOrder function passed from App.js
+    placeOrder(newOrder);
+    
+    // Clear the cart
+    clearCart();
+    
+    // Redirect to orders page
+    navigate('/orders');
   };
 
   return (
@@ -25,7 +46,7 @@ function Checkout({ cart, placeOrder }) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Checkout Form */}
         <div className="lg:col-span-2">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handlePlaceOrder}>
             {/* Shipping Address */}
             <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
               <h2 className="text-xl font-semibold text-gray-700 mb-5">Shipping Address</h2>

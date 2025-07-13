@@ -1,7 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
-function Cart({ cart, removeFromCart, updateQuantity }) {
+function Cart({ cart, removeFromCart, updateQuantity, user }) {
+  // If user is not logged in, redirect to login page
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
   const cartTotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
   const shippingFee = cart.length > 0 ? 9.99 : 0;
   const tax = cartTotal * 0.08;

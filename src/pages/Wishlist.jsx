@@ -1,7 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
-function Wishlist({ wishlist, removeFromWishlist, addToCart }) {
+function Wishlist({ wishlist, removeFromWishlist, addToCart, user }) {
+  // If user is not logged in, redirect to login page
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Your Wishlist</h1>
