@@ -1,136 +1,88 @@
-import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { AiOutlineHeart, AiFillStar } from 'react-icons/ai';
+import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
 
-function ProductDetail({ products, addToCart, addToWishlist }) {
+const ProductDetail = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const [quantity, setQuantity] = useState(1);
-  
-  const product = products.find(p => p.id === parseInt(id));
-  
-  if (!product) {
-    return <div className="text-center py-10">Product not found</div>;
-  }
+  const [product, setProduct] = useState(null);
+  const { addToCart } = useCart();
+  const { addToWishlist } = useWishlist();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    fetch(`http://localhost:3002/products/${id}`)
+      .then((res) => res.json())
+      .then((data) => setProduct(data))
+      .catch((err) => console.error(err));
+  }, [id]);
+
+  if (!product) return <div className="text-center mt-10">Loading...</div>;
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <button 
-        className="flex items-center gap-1 text-blue-500 mb-5 hover:text-blue-600 transition-colors"
-        onClick={() => navigate(-1)}
-      >
-        <span>←</span> Back to Products
-      </button>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Product Image */}
-        <div className="bg-gray-100 rounded-lg flex items-center justify-center p-8">
-          {product.image ? (
-            <img 
-              src={product.image} 
-              alt={product.name}
-              className="max-h-96 object-contain"
-              onError={(e) => {
-                e.target.onerror = null; 
-                e.target.src = '/images/placeholder.jpg';
-              }}
-            />
-          ) : (
-            <div className="text-gray-500">No image available</div>
-          )}
+    <>
+      {/* 🔍 Image Modal */}
+      {isModalOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <img
+            src={product.image || 'https://via.placeholder.com/600'}
+            alt={product.name}
+            className="max-w-[90%] max-h-[80%] rounded-lg shadow-2xl border-4 border-white"
+          />
         </div>
-        
-        {/* Product Details */}
+      )}
+
+      {/* 🛍 Product Detail */}
+      <div className="max-w-5xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-10 mt-8">
+        {/* Product Image with hover zoom & click-to-enlarge */}
+        <div
+          className="overflow-hidden rounded-2xl shadow-lg cursor-pointer transition-transform duration-300 hover:scale-105"
+          onClick={() => setIsModalOpen(true)}
+        >
+          <img
+            src={product.image || 'https://via.placeholder.com/400'}
+            alt={product.name}
+            className="w-full h-auto object-contain transition-transform duration-300"
+          />
+        </div>
+
+        {/* Product Info */}
         <div>
-          <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
-          
-          <div className="flex items-center mb-5">
-            <div className="flex mr-3">
-              {[...Array(5)].map((_, i) => (
-                <span 
-                  key={i} 
-                  className={`text-xl ${
-                    i < Math.floor(product.rating) ? 'text-yellow-500' : 'text-gray-300'
-                  }`}
-                >
-                  ★
-                </span>
-              ))}
-            </div>
-            <span className="text-gray-500">({product.rating})</span>
-          </div>
-          
-          <p className="text-2xl font-bold text-blue-500 mb-5">
-            ${product.price.toFixed(2)}
-          </p>
-          
-          <p className="text-gray-700 mb-8">
-            {product.description}
-          </p>
-          
-          <div className="mb-8 space-y-2">
-            <p><strong className="font-medium">Category:</strong> {product.category}</p>
-            <p>
-              <strong className="font-medium">Availability:</strong> 
-              <span className={product.stock > 0 ? 'text-green-600' : 'text-red-600'}>
-                {product.stock > 0 ? ` In Stock (${product.stock} available)` : ' Out of Stock'}
-              </span>
-            </p>
-          </div>
-          
-          <div className="flex flex-wrap gap-4 mb-8">
-            <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden">
-              <button 
-                className="bg-gray-50 w-10 h-10 text-xl flex items-center justify-center hover:bg-gray-100 transition-colors"
-                onClick={() => setQuantity(q => Math.max(1, q - 1))}
-              >
-                -
-              </button>
-              <input
-                type="number"
-                value={quantity}
-                min="1"
-                onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                className="w-16 h-10 text-center border-t border-b border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-              <button 
-                className="bg-gray-50 w-10 h-10 text-xl flex items-center justify-center hover:bg-gray-100 transition-colors"
-                onClick={() => setQuantity(q => q + 1)}
-              >
-                +
-              </button>
-            </div>
-            
-            <button 
-              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
-              onClick={() => addToCart(product, quantity)}
-              disabled={product.stock <= 0}
-            >
-              {product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
-            </button>
-            
-            <button 
-              className="border border-gray-200 hover:bg-gray-50 font-semibold py-2 px-5 rounded-lg transition-colors"
-              onClick={() => addToWishlist(product)}
-            >
-              <span className="text-red-400">♡</span> Wishlist
-            </button>
+          <h2 className="text-3xl font-bold mb-4">{product.name}</h2>
+          <p className="text-xl font-semibold text-green-600 mb-2">${product.price}</p>
+          <p className="text-gray-600 mb-4">{product.description}</p>
+
+          <div className="flex items-center mb-4">
+            {[...Array(5)].map((_, i) => (
+              <AiFillStar key={i} className="text-yellow-400 text-xl" />
+            ))}
+            <span className="ml-2 text-gray-500">(4.5/5 Rating)</span>
           </div>
 
-          {/* Additional Details Section */}
-          <div className="mt-8">
-            <h2 className="text-xl font-semibold mb-2">Product Details</h2>
-            <ul className="space-y-2">
-              {product.tags && (
-                <li>
-                  <strong>Tags:</strong> {product.tags.join(', ')}
-                </li>
-              )}
-            </ul>
+          <div className="flex gap-4 mt-6">
+            <button
+              onClick={() => addToCart(product)}
+              className="bg-blue-600 text-white px-6 py-2 rounded-xl hover:bg-blue-700 transition-colors"
+            >
+              Add to Cart
+            </button>
+
+            <button
+              onClick={() => addToWishlist(product)}
+              className="flex items-center gap-1 border border-gray-400 px-6 py-2 rounded-xl hover:bg-gray-100 transition-colors"
+            >
+              <AiOutlineHeart className="text-red-500" />
+              Wishlist
+            </button>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
-}
+};
 
 export default ProductDetail;

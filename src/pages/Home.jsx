@@ -1,8 +1,29 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useMemo } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function Home({ products = [], addToCart = () => {} }) {
-  const featuredProducts = Array.isArray(products) ? products.slice(0, 3) : [];
+  const navigate = useNavigate();
+
+  const featuredProducts = useMemo(() => {
+    return Array.isArray(products) ? products.slice(0, 3) : [];
+  }, [products]);
+
+  const handleCategoryClick = (category) => {
+    navigate(`/products?category=${category}`);
+  };
+
+  const handleAddToCart = (product) => {
+    addToCart(product);
+    toast.success(`${product.name} added to cart`);
+  };
+
+  const categories = [
+    { name: 'Smartphones', icon: '📱', category: 'mobile' },
+    { name: 'Laptops', icon: '💻', category: 'laptop' },
+    { name: 'TVs', icon: '📺', category: 'tv' },
+    { name: 'Audio', icon: '🎧', category: 'headphone' }
+  ];
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -10,13 +31,12 @@ function Home({ products = [], addToCart = () => {} }) {
       <div 
         className="relative rounded-2xl overflow-hidden mb-12 md:mb-16 h-[50vh] min-h-[400px] flex items-center"
         style={{
-          backgroundImage: 'url("https://images.unsplash.com/photo-1593642632823-8f785ba67e45?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80")',
+          backgroundImage: 'url("https://assets.mixkit.co/videos/preview/mixkit-close-up-of-a-modern-smartphone-4471.mp4")',
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-r from-gray-900/70 to-gray-900/40"></div>
-        
         <div className="relative max-w-2xl mx-auto px-4 text-center">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
             Welcome to ElectroKart
@@ -32,16 +52,14 @@ function Home({ products = [], addToCart = () => {} }) {
           </Link>
         </div>
       </div>
-      
+
       {/* Featured Products */}
       <div className="mb-16">
         <div className="text-center mb-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
-            Featured Products
-          </h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Featured Products</h2>
           <div className="w-20 h-1 bg-blue-600 mx-auto"></div>
         </div>
-        
+
         {featuredProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredProducts.map(product => (
@@ -51,9 +69,14 @@ function Home({ products = [], addToCart = () => {} }) {
               >
                 <div className="h-56 overflow-hidden relative">
                   <div className="bg-gray-100 w-full h-full flex items-center justify-center">
-                    <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
+                    <img 
+                      src={product.image || "/images/placeholder.jpg"} 
+                      alt={product.name} 
+                      className="object-contain h-full" 
+                      onError={(e) => e.target.src = "/images/placeholder.jpg"}
+                    />
                   </div>
-                  {product.stock < 10 && (
+                  {product.stock && product.stock < 10 && (
                     <div className="absolute top-4 right-4 bg-red-100 text-red-800 text-xs font-bold px-3 py-1 rounded-full">
                       Only {product.stock} left
                     </div>
@@ -62,29 +85,28 @@ function Home({ products = [], addToCart = () => {} }) {
                     {product.category}
                   </div>
                 </div>
-                
                 <div className="p-6">
                   <div className="flex justify-between items-start">
                     <div>
                       <h3 className="text-xl font-semibold text-gray-800 mb-2">{product.name}</h3>
                       <p className="text-gray-600 text-sm mb-4 line-clamp-2">{product.description}</p>
                     </div>
-                    
                     <div className="flex items-center bg-yellow-100 px-2 py-1 rounded">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                       </svg>
-                      <span className="text-yellow-800 text-sm font-medium ml-1">{product.rating}</span>
+                      <span className="text-yellow-800 text-sm font-medium ml-1">
+                        {product.rating || "4.5"}
+                      </span>
                     </div>
                   </div>
-                  
                   <div className="flex justify-between items-center mt-4">
-                    <div>
-                      <span className="text-lg font-bold text-blue-600">${product.price.toFixed(2)}</span>
-                    </div>
+                    <span className="text-lg font-bold text-blue-600">
+                      ${product.price.toFixed(2)}
+                    </span>
                     <button 
                       className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-300 flex items-center"
-                      onClick={() => addToCart(product)}
+                      onClick={() => handleAddToCart(product)}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -105,8 +127,8 @@ function Home({ products = [], addToCart = () => {} }) {
           </div>
         )}
       </div>
-      
-      {/* Categories Section */}
+
+      {/* Category Cards */}
       <div className="mb-16">
         <div className="text-center mb-10">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
@@ -114,35 +136,32 @@ function Home({ products = [], addToCart = () => {} }) {
           </h2>
           <div className="w-20 h-1 bg-blue-600 mx-auto"></div>
         </div>
-        
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {[
-            { name: 'Smartphones', icon: '📱' },
-            { name: 'Laptops', icon: '💻' },
-            { name: 'TVs', icon: '📺' },
-            { name: 'Audio', icon: '🎧' }
-          ].map((category, index) => (
-            <Link 
-              key={index} 
-              to="/products"
-              className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300 text-center group"
+          {categories.map((cat, index) => (
+            <div
+              key={index}
+              onClick={() => handleCategoryClick(cat.category)}
+              className="cursor-pointer bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300 text-center group"
             >
-              <div className="text-4xl mb-3 group-hover:text-blue-600 transition-colors">{category.icon}</div>
-              <h3 className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">{category.name}</h3>
-            </Link>
+              <div className="text-4xl mb-3 group-hover:text-blue-600 transition-colors">{cat.icon}</div>
+              <h3 className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">
+                {cat.name}
+              </h3>
+            </div>
           ))}
         </div>
       </div>
-      
-      {/* Testimonials */}
-      <div className="bg-gradient-to-r from-blue-50 to-gray-50 rounded-2xl p-8 md:p-12 mb-16">
+
+      {/* Testimonials Section here (unchanged) */}
+                 <div className="bg-gradient-to-r from-blue-50 to-gray-50 rounded-2xl p-8 md:p-12 mb-16">
         <div className="text-center mb-10">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
             What Our Customers Say
           </h2>
           <div className="w-20 h-1 bg-blue-600 mx-auto"></div>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
             { 

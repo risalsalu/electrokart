@@ -1,6 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import Home from './pages/Home';
 import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
@@ -10,578 +15,165 @@ import Orders from './pages/Orders';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Checkout from './pages/Checkout';
-import Footer from './components/Footer';
 import SearchResults from './pages/SearchResults';
 
-function App() {
-  // Sample order data
-  const [orders, setOrders] = useState(
-    JSON.parse(localStorage.getItem('orders')) || [
-      {
-        id: "ORD-12345",
-        date: new Date().toISOString(),
-        status: "Delivered",
-        shippingAddress: "123 Main St, City, Country",
-        items: [
-          { id: 1, name: "Smartphone X Pro", price: 899.99, quantity: 1 },
-          { id: 3, name: "Wireless Headphones", price: 349.99, quantity: 2 }
-        ],
-        total: 1599.97
-      }
-    ]
-  );
+import { CartProvider, useCart } from './context/CartContext';
+import { WishlistProvider, useWishlist } from './context/WishlistContext';
+import { OrdersProvider, useOrders } from './context/OrdersContext';
 
-  useEffect(() => {
-    localStorage.setItem('orders', JSON.stringify(orders));
-  }, [orders]);
+function ProtectedRoute({ user, children }) {
+  return user ? children : <Navigate to="/login" replace />;
+}
 
-  const [products] = useState([
-    {
-      "id": 1,
-      "name": "Smartphone X Pro",
-      "price": 899.99,
-      "description": "6.7-inch OLED display, 128GB storage",
-      "category": "mobile",
-      "rating": 4.7,
-      "stock": 15,
-      "image": "/images/smartphone.jpg",
-      "tags": ["phone", "smartphone", "mobile", "android"]
-    },
-    {
-      "id": 2,
-      "name": "Ultra HD Smart TV",
-      "price": 1299.99,
-      "description": "65-inch 4K display with HDR",
-      "category": "tv",
-      "rating": 4.5,
-      "stock": 8,
-      "image": "/images/tv.jpg",
-      "tags": ["television", "smart tv", "4k", "ultra hd"]
-    },
-    {
-      "id": 3,
-      "name": "Wireless Headphones",
-      "price": 349.99,
-      "description": "30-hour battery life, noise cancellation",
-      "category": "headphone",
-      "rating": 4.8,
-      "stock": 22,
-      "image": "/images/headphones.jpg",
-      "tags": ["earphones", "bluetooth", "noise cancelling", "audio"]
-    },
-    {
-      "id": 4,
-      "name": "Gaming Laptop Pro",
-      "price": 1599.99,
-      "description": "RTX 3070, 16GB RAM, 144Hz display",
-      "category": "laptop",
-      "rating": 4.6,
-      "stock": 5,
-      "image": "/images/laptop.jpg",
-      "tags": ["notebook", "gaming", "computer", "pc"]
-    },
-    {
-      "id": 5,
-      "name": "Galaxy S23 Ultra",
-      "price": 1199.99,
-      "description": "6.8-inch Dynamic AMOLED, 200MP camera",
-      "category": "mobile",
-      "rating": 4.8,
-      "stock": 12,
-      "image": "/images/galaxy-s23.jpg",
-      "tags": ["samsung", "android", "flagship"]
-    },
-    {
-      "id": 6,
-      "name": "iPhone 15 Pro",
-      "price": 999.99,
-      "description": "6.1-inch Super Retina XDR, A16 Bionic",
-      "category": "mobile",
-      "rating": 4.9,
-      "stock": 10,
-      "image": "/images/iphone15.jpg",
-      "tags": ["apple", "ios", "premium"]
-    },
-    {
-      "id": 7,
-      "name": "Pixel 7 Pro",
-      "price": 899.99,
-      "description": "6.7-inch QHD+ OLED, Google Tensor G2",
-      "category": "mobile",
-      "rating": 4.7,
-      "stock": 8,
-      "image": "/images/pixel7.jpg",
-      "tags": ["google", "android", "camera"]
-    },
-    {
-      "id": 8,
-      "name": "OnePlus 11",
-      "price": 699.99,
-      "description": "6.7-inch Fluid AMOLED, Snapdragon 8 Gen 2",
-      "category": "mobile",
-      "rating": 4.6,
-      "stock": 14,
-      "image": "/images/oneplus11.jpg",
-      "tags": ["android", "flagship", "performance"]
-    },
-    {
-      "id": 9,
-      "name": "Xiaomi 13 Pro",
-      "price": 799.99,
-      "description": "6.73-inch AMOLED, Leica cameras",
-      "category": "mobile",
-      "rating": 4.5,
-      "stock": 7,
-      "image": "/images/xiaomi13.jpg",
-      "tags": ["android", "value", "camera"]
-    },
-    {
-      "id": 10,
-      "name": "Galaxy Z Flip 5",
-      "price": 999.99,
-      "description": "6.7-inch foldable, Snapdragon 8 Gen 2",
-      "category": "mobile",
-      "rating": 4.4,
-      "stock": 6,
-      "image": "/images/zflip5.jpg",
-      "tags": ["foldable", "samsung", "compact"]
-    },
-    {
-      "id": 11,
-      "name": "iPhone 14 Plus",
-      "price": 899.99,
-      "description": "6.7-inch Super Retina XDR, A15 Bionic",
-      "category": "mobile",
-      "rating": 4.5,
-      "stock": 9,
-      "image": "/images/iphone14.jpg",
-      "tags": ["apple", "large screen", "battery"]
-    },
-    {
-      "id": 12,
-      "name": "Redmi Note 12 Pro",
-      "price": 299.99,
-      "description": "6.67-inch AMOLED, MediaTek Dimensity 1080",
-      "category": "mobile",
-      "rating": 4.3,
-      "stock": 20,
-      "image": "/images/redmi-note12.jpg",
-      "tags": ["budget", "xiaomi", "value"]
-    },
-    {
-      "id": 13,
-      "name": "Nothing Phone 2",
-      "price": 599.99,
-      "description": "6.7-inch LTPO OLED, Snapdragon 8+ Gen 1",
-      "category": "mobile",
-      "rating": 4.4,
-      "stock": 11,
-      "image": "/images/nothing2.jpg",
-      "tags": ["unique", "glyph", "design"]
-    },
-    {
-      "id": 14,
-      "name": "ROG Phone 7",
-      "price": 999.99,
-      "description": "6.78-inch AMOLED, Snapdragon 8 Gen 2",
-      "category": "mobile",
-      "rating": 4.7,
-      "stock": 5,
-      "image": "/images/rog-phone7.jpg",
-      "tags": ["gaming", "asus", "performance"]
-    },
-    {
-      "id": 15,
-      "name": "Galaxy A54",
-      "price": 449.99,
-      "description": "6.4-inch Super AMOLED, Exynos 1380",
-      "category": "mobile",
-      "rating": 4.2,
-      "stock": 18,
-      "image": "/images/galaxy-a54.jpg",
-      "tags": ["mid-range", "samsung", "value"]
-    },
-    {
-      "id": 16,
-      "name": "iPhone SE (2022)",
-      "price": 429.99,
-      "description": "4.7-inch Retina HD, A15 Bionic",
-      "category": "mobile",
-      "rating": 4.1,
-      "stock": 15,
-      "image": "/images/iphone-se.jpg",
-      "tags": ["compact", "apple", "budget"]
-    },
-    {
-      "id": 17,
-      "name": "Moto G Power (2023)",
-      "price": 249.99,
-      "description": "6.5-inch IPS LCD, Snapdragon 665",
-      "category": "mobile",
-      "rating": 4.0,
-      "stock": 25,
-      "image": "/images/moto-g.jpg",
-      "tags": ["budget", "battery", "motorola"]
-    },
-    {
-      "id": 18,
-      "name": "Oppo Find X6 Pro",
-      "price": 1199.99,
-      "description": "6.82-inch AMOLED, Snapdragon 8 Gen 2",
-      "category": "mobile",
-      "rating": 4.6,
-      "stock": 4,
-      "image": "/images/oppo-x6.jpg",
-      "tags": ["flagship", "camera", "premium"]
-    },
-    {
-      "id": 19,
-      "name": "Vivo X90 Pro",
-      "price": 1099.99,
-      "description": "6.78-inch AMOLED, MediaTek Dimensity 9200",
-      "category": "mobile",
-      "rating": 4.5,
-      "stock": 6,
-      "image": "/images/vivo-x90.jpg",
-      "tags": ["camera", "flagship", "performance"]
-    },
-    {
-      "id": 20,
-      "name": "MacBook Pro 14\" M2 Pro",
-      "price": 1999.99,
-      "description": "14.2-inch Liquid Retina XDR, M2 Pro chip",
-      "category": "laptop",
-      "rating": 4.9,
-      "stock": 7,
-      "image": "/images/macbook-pro14.jpg",
-      "tags": ["apple", "premium", "creative"]
-    },
-    {
-      "id": 21,
-      "name": "Dell XPS 15",
-      "price": 1499.99,
-      "description": "15.6-inch 4K OLED, Intel i7-13700H",
-      "category": "laptop",
-      "rating": 4.8,
-      "stock": 5,
-      "image": "/images/dell-xps15.jpg",
-      "tags": ["windows", "premium", "ultrabook"]
-    },
-    {
-      "id": 22,
-      "name": "HP Spectre x360",
-      "price": 1399.99,
-      "description": "13.5-inch 3K2K OLED, Intel i7-1250U",
-      "category": "laptop",
-      "rating": 4.7,
-      "stock": 8,
-      "image": "/images/hp-spectre.jpg",
-      "tags": ["convertible", "2-in-1", "premium"]
-    },
-    {
-      "id": 23,
-      "name": "Lenovo ThinkPad X1 Carbon",
-      "price": 1599.99,
-      "description": "14-inch WUXGA, Intel i7-1260P",
-      "category": "laptop",
-      "rating": 4.8,
-      "stock": 6,
-      "image": "/images/thinkpad-x1.jpg",
-      "tags": ["business", "durable", "keyboard"]
-    },
-    {
-      "id": 24,
-      "name": "Asus ROG Zephyrus G14",
-      "price": 1599.99,
-      "description": "14-inch QHD 165Hz, Ryzen 9 7940HS",
-      "category": "laptop",
-      "rating": 4.7,
-      "stock": 4,
-      "image": "/images/rog-g14.jpg",
-      "tags": ["gaming", "compact", "amd"]
-    },
-    {
-      "id": 25,
-      "name": "MSI Stealth 16 Studio",
-      "price": 1999.99,
-      "description": "16-inch QHD+ 240Hz, Intel i9-13900H",
-      "category": "laptop",
-      "rating": 4.8,
-      "stock": 3,
-      "image": "/images/msi-stealth.jpg",
-      "tags": ["gaming", "creator", "powerful"]
-    },
-    {
-      "id": 26,
-      "name": "MacBook Air 15\" M2",
-      "price": 1299.99,
-      "description": "15.3-inch Liquid Retina, M2 chip",
-      "category": "laptop",
-      "rating": 4.7,
-      "stock": 10,
-      "image": "/images/macbook-air15.jpg",
-      "tags": ["thin", "light", "apple"]
-    },
-    {
-      "id": 27,
-      "name": "Surface Laptop 5",
-      "price": 1299.99,
-      "description": "13.5-inch PixelSense, Intel i7-1255U",
-      "category": "laptop",
-      "rating": 4.6,
-      "stock": 9,
-      "image": "/images/surface-laptop.jpg",
-      "tags": ["microsoft", "premium", "windows"]
-    },
-    {
-      "id": 28,
-      "name": "Acer Swift X",
-      "price": 999.99,
-      "description": "14-inch FHD, Ryzen 7 5825U",
-      "category": "laptop",
-      "rating": 4.4,
-      "stock": 12,
-      "image": "/images/acer-swift.jpg",
-      "tags": ["budget", "performance", "thin"]
-    },
-    {
-      "id": 29,
-      "name": "Razer Blade 15",
-      "price": 2499.99,
-      "description": "15.6-inch QHD 240Hz, Intel i9-13950HX",
-      "category": "laptop",
-      "rating": 4.8,
-      "stock": 2,
-      "image": "/images/razer-blade.jpg",
-      "tags": ["gaming", "premium", "powerful"]
-    },
-    {
-      "id": 30,
-      "name": "LG Gram 17",
-      "price": 1699.99,
-      "description": "17-inch WQXGA, Intel i7-1260P",
-      "category": "laptop",
-      "rating": 4.5,
-      "stock": 7,
-      "image": "/images/lg-gram.jpg",
-      "tags": ["light", "large screen", "ultrabook"]
-    },
-    {
-      "id": 31,
-      "name": "Framework Laptop 13",
-      "price": 1049.99,
-      "description": "13.5-inch 2256x1504, Intel i5-1240P",
-      "category": "laptop",
-      "rating": 4.6,
-      "stock": 5,
-      "image": "/images/framework.jpg",
-      "tags": ["modular", "repairable", "eco-friendly"]
-    },
-    {
-      "id": 32,
-      "name": "Alienware x14",
-      "price": 1999.99,
-      "description": "14-inch FHD 144Hz, Intel i7-13620H",
-      "category": "laptop",
-      "rating": 4.7,
-      "stock": 4,
-      "image": "/images/alienware.jpg",
-      "tags": ["gaming", "thin", "dell"]
-    },
-    {
-      "id": 33,
-      "name": "MacBook Pro 16\" M2 Max",
-      "price": 3499.99,
-      "description": "16.2-inch Liquid Retina XDR, M2 Max",
-      "category": "laptop",
-      "rating": 4.9,
-      "stock": 3,
-      "image": "/images/macbook-pro16.jpg",
-      "tags": ["pro", "apple", "performance"]
-    },
-    {
-      "id": 34,
-      "name": "Asus ZenBook Pro Duo",
-      "price": 2499.99,
-      "description": "15.6-inch 4K OLED + ScreenPad Plus",
-      "category": "laptop",
-      "rating": 4.7,
-      "stock": 2,
-      "image": "/images/zenbook-duo.jpg",
-      "tags": ["dual screen", "creator", "innovative"]
-    }
-  ]);
-
-  // State initialization with localStorage
-  const [cart, setCart] = useState(
-    JSON.parse(localStorage.getItem('cart')) || []
-  );
-  const [wishlist, setWishlist] = useState(
-    JSON.parse(localStorage.getItem('wishlist')) || []
-  );
+function AppContent() {
+  const [products, setProducts] = useState([]);
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem('currentUser')) || null
   );
 
-  // Persist cart and wishlist to localStorage
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }, [cart]);
+    axios.get('http://localhost:3002/products')
+      .then(response => setProducts(response.data))
+      .catch(error => console.error('Error fetching products:', error));
+  }, []);
 
-  useEffect(() => {
-    localStorage.setItem('wishlist', JSON.stringify(wishlist));
-  }, [wishlist]);
-
-  // Cart functions
-  const addToCart = (product, quantity = 1) => {
-    setCart(prevCart => {
-      const existingItem = prevCart.find(item => item.id === product.id);
-      if (existingItem) {
-        return prevCart.map(item => 
-          item.id === product.id 
-            ? {...item, quantity: item.quantity + quantity} 
-            : item
-        );
-      } else {
-        return [...prevCart, {...product, quantity}];
-      }
-    });
-  };
-
-  const removeFromCart = (productId) => {
-    setCart(prevCart => prevCart.filter(item => item.id !== productId));
-  };
-
-  const updateQuantity = (productId, newQuantity) => {
-    if (newQuantity < 1) {
-      removeFromCart(productId);
-      return;
-    }
-    
-    setCart(prevCart => 
-      prevCart.map(item => 
-        item.id === productId 
-          ? {...item, quantity: newQuantity} 
-          : item
-      )
-    );
-  };
-
-  // Wishlist functions
-  const addToWishlist = (product) => {
-    setWishlist(prev => 
-      prev.some(item => item.id === product.id) 
-        ? prev 
-        : [...prev, product]
-    );
-  };
-
-  const removeFromWishlist = (productId) => {
-    setWishlist(prev => prev.filter(item => item.id !== productId));
-  };
-
-  // Order function
-  const placeOrder = (newOrder) => {
-    setOrders(prevOrders => [...prevOrders, newOrder]);
-  };
-
-  // Auth functions
   const handleLogin = (userData) => {
-    const userToStore = {
-      email: userData.email,
-      name: userData.name,
-    };
-    setUser(userToStore);
-    localStorage.setItem('currentUser', JSON.stringify(userToStore));
+    const userObj = { email: userData.email, name: userData.name };
+    setUser(userObj);
+    localStorage.setItem('currentUser', JSON.stringify(userObj));
   };
 
   const handleLogout = () => {
     setUser(null);
-    setCart([]);
-    setWishlist([]);
     localStorage.removeItem('currentUser');
-    localStorage.removeItem('cart');
-    localStorage.removeItem('wishlist');
   };
 
-  const handleRegister = (userData) => {
-    const userToStore = {
-      email: userData.email,
-      name: userData.name,
-    };
-    setUser(userToStore);
-    localStorage.setItem('currentUser', JSON.stringify(userToStore));
-  };
+  const handleRegister = handleLogin;
 
-  // Helper calculations
-  const cartItemCount = cart.reduce((total, item) => total + item.quantity, 0);
-  const wishlistItemCount = wishlist.length;
+  const {
+    cart,
+    removeFromCart,
+    updateQuantity,
+    clearCart,
+    addToCart,
+    cartItemCount,
+  } = useCart();
 
-  // Protected Route component
-  const ProtectedRoute = ({ user, children }) => {
-    if (!user) {
-      return <Navigate to="/login" replace />;
-    }
-    return children;
-  };
+  const {
+    wishlist,
+    addToWishlist,
+    removeFromWishlist,
+    wishlistItemCount,
+  } = useWishlist();
+
+  const { placeOrder } = useOrders();
 
   return (
-    <Router>
-      <div className="flex flex-col min-h-screen bg-gray-50">
-        <Navbar 
-          user={user}
-          onLogout={handleLogout}
-          cartItemCount={cartItemCount}
-          wishlistItemCount={wishlistItemCount}
-        />
-        
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/search" element={<SearchResults products={products} />} />      
-            <Route path="/" element={<Home products={products} addToCart={addToCart} />} />
-            <Route path="/products" element={<Products addToCart={addToCart} addToWishlist={addToWishlist} />} />
-  <Route path="/products/:id" element={<ProductDetail products={products} addToCart={addToCart} addToWishlist={addToWishlist} />} />
-            <Route path="/cart" element={
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      <Navbar
+        user={user}
+        onLogout={handleLogout}
+        cartItemCount={cartItemCount}
+        wishlistItemCount={wishlistItemCount}
+      />
+
+      <main className="flex-grow">
+        <Routes>
+          <Route
+            path="/"
+            element={<Home products={products} addToCart={addToCart} />}
+          />
+          <Route
+            path="/search"
+            element={<SearchResults products={products} />}
+          />
+          <Route
+            path="/products"
+            element={
+              <Products
+                products={products}
+                addToCart={addToCart}
+                addToWishlist={addToWishlist}
+              />
+            }
+          />
+          <Route
+            path="/products/:id"
+            element={
+              <ProductDetail
+                addToCart={addToCart}
+                addToWishlist={addToWishlist}
+              />
+            }
+          />
+          <Route
+            path="/cart"
+            element={
               <ProtectedRoute user={user}>
-                <Cart 
-                  cart={cart} 
+                <Cart
+                  cart={cart}
                   removeFromCart={removeFromCart}
                   updateQuantity={updateQuantity}
                   user={user}
                 />
               </ProtectedRoute>
-            } />
-            <Route path="/wishlist" element={
-              <Wishlist 
-                wishlist={wishlist} 
-                removeFromWishlist={removeFromWishlist}
-                addToCart={addToCart}
-              />
-            } />
-            <Route path="/orders" element={
+            }
+          />
+          <Route
+            path="/wishlist"
+            element={
               <ProtectedRoute user={user}>
-                <Orders orders={orders} />
+                <Wishlist
+                  wishlist={wishlist}
+                  removeFromWishlist={removeFromWishlist}
+                  addToCart={addToCart}
+                  user={user}
+                />
               </ProtectedRoute>
-            } />
-            <Route path="/login" element={<Login onLogin={handleLogin} />} />
-            <Route path="/register" element={<Register onRegister={handleRegister} />} />
-            <Route path="/checkout" element={
+            }
+          />
+          <Route
+            path="/orders"
+            element={
               <ProtectedRoute user={user}>
-                <Checkout 
-                  cart={cart} 
-                  user={user} 
-                  clearCart={() => setCart([])}
+                <Orders />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/checkout"
+            element={
+              <ProtectedRoute user={user}>
+                <Checkout
+                  cart={cart}
+                  user={user}
+                  clearCart={clearCart}
                   placeOrder={placeOrder}
                 />
               </ProtectedRoute>
-            } />
-          </Routes>
-        </main>
-        
-        <Footer />
-      </div>
-    </Router>
+            }
+          />
+          <Route path="/login" element={<Login onLogin={handleLogin} />} />
+          <Route path="/register" element={<Register onRegister={handleRegister} />} />
+        </Routes>
+        <ToastContainer position="top-right" autoClose={3000} />
+      </main>
+
+      <Footer />
+    </div>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <Router>
+      <CartProvider>
+        <WishlistProvider>
+          <OrdersProvider>
+            <AppContent />
+          </OrdersProvider>
+        </WishlistProvider>
+      </CartProvider>
+    </Router>
+  );
+}

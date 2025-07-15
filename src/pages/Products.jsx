@@ -1,124 +1,126 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import axios from 'axios';
+import { toast } from 'react-toastify';
 
-const Products = ({ addToCart, addToWishlist }) => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+const Products = ({ products, addToCart, addToWishlist }) => {
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState('all');
+  const [previewImage, setPreviewImage] = useState(null);
   const location = useLocation();
-  console.log('Products component rendering');
 
-  // If products are passed as props (from App.jsx), use them directly
-  // Otherwise fetch from API
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        let url = 'http://localhost:3001/products';
-        
-        const searchParams = new URLSearchParams(location.search);
-        const category = searchParams.get('category');
-        
-        if (category) {
-          url += `?category=${category}`;
-          setCategoryFilter(category);
-        }
-
-        const response = await axios.get(url);
-        setProducts(response.data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
+    const searchParams = new URLSearchParams(location.search);
+    const category = searchParams.get('category');
+    if (category) {
+      setCategoryFilter(category);
+    }
   }, [location.search]);
 
-  const filteredProducts = categoryFilter === 'all' 
-    ? products 
-    : products.filter(product => product.category === categoryFilter);
+  useEffect(() => {
+    if (categoryFilter === 'all') {
+      setFilteredProducts(products);
+    } else {
+      setFilteredProducts(
+        products.filter((product) => product.category === categoryFilter)
+      );
+    }
+  }, [categoryFilter, products]);
 
-  if (loading) return (
-    <div className="flex justify-center items-center h-64">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-    </div>
-  );
+  const handleAddToCart = (product) => {
+    addToCart(product);
+    toast.success(`${product.name} added to cart`);
+  };
 
-  if (error) return (
-    <div className="p-8 text-center text-red-500">
-      Error loading products: {error}
-    </div>
-  );
+  const handleAddToWishlist = (product) => {
+    addToWishlist(product);
+    toast.success(`${product.name} added to wishlist`);
+  };
+
+  // Modal Close with ESC
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === 'Escape') setPreviewImage(null);
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, []);
 
   if (!products || products.length === 0) {
     return <div className="p-4 text-center">No products available</div>;
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 relative">
       <h1 className="text-3xl font-bold mb-8">Our Products</h1>
-      
-      {/* Category Filters */}
+
+      {/* Category Filter */}
       <div className="flex flex-wrap gap-4 mb-8">
-        <button
-          onClick={() => setCategoryFilter('all')}
-          className={`px-4 py-2 rounded-full ${categoryFilter === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
-        >
-          All Products
-        </button>
-        <button
-          onClick={() => setCategoryFilter('mobile')}
-          className={`px-4 py-2 rounded-full ${categoryFilter === 'mobile' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
-        >
-          Mobile Phones
-        </button>
-        <button
-          onClick={() => setCategoryFilter('laptop')}
-          className={`px-4 py-2 rounded-full ${categoryFilter === 'laptop' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
-        >
-          Laptops
-        </button>
+        {[
+          { key: 'all', label: 'All Products' },
+          { key: 'mobile', label: 'Smartphones' },
+          { key: 'laptop', label: 'Laptops' },
+          { key: 'tv', label: 'TVs' },
+          { key: 'headphone', label: 'Audio' },
+        ].map(({ key, label }) => (
+          <button
+            key={key}
+            onClick={() => setCategoryFilter(key)}
+            className={`px-4 py-2 rounded-full transition-colors ${
+              categoryFilter === key
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+            }`}
+          >
+            {label}
+          </button>
+        ))}
       </div>
 
-      {/* Product Grid */}
+      {/* Products Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filteredProducts.length > 0 ? (
-          filteredProducts.map(product => (
-            <div key={product.id} className="border rounded-lg overflow-hidden shadow hover:shadow-md transition-shadow">
-              <Link to={`/products/${product.id}`}>
-                <div className="h-48 bg-gray-100 flex items-center justify-center">
-                  {product.image ? (
-                    <img 
-                      src={product.image} 
-                      alt={product.name} 
-                      className="h-full object-contain"
-                      onError={(e) => {
-                        e.target.onerror = null; 
-                        e.target.src = '/images/placeholder.jpg';
-                      }}
-                    />
-                  ) : (
-                    <div className="text-gray-500">No image</div>
-                  )}
-                </div>
-              </Link>
+          filteredProducts.map((product) => (
+            <div
+              key={product.id}
+              className="group border rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 relative"
+            >
+              <div
+                className="h-48 bg-gray-100 flex items-center justify-center overflow-hidden cursor-pointer transform transition-transform duration-300 group-hover:scale-[1.03]"
+                onClick={() => setPreviewImage(product.image)}
+              >
+                {product.image ? (
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="h-full object-contain transition-transform duration-300 group-hover:scale-105"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = '/images/placeholder.jpg';
+                    }}
+                  />
+                ) : (
+                  <div className="text-gray-500">No image</div>
+                )}
+              </div>
+
               <div className="p-4">
-                <h3 className="font-semibold text-lg">{product.name}</h3>
-                <p className="text-gray-600">${product.price.toFixed(2)}</p>
+                <Link to={`/products/${product.id}`}>
+                  <h3 className="font-semibold text-lg mb-1 hover:text-blue-600 transition">
+                    {product.name}
+                  </h3>
+                </Link>
+                <p className="text-gray-600 mb-2">${product.price.toFixed(2)}</p>
+
                 <div className="mt-4 flex space-x-2">
-                  <button 
-                    onClick={() => addToCart(product)}
-                    className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                  <button
+                    onClick={() => handleAddToCart(product)}
+                    className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition"
                   >
                     Add to Cart
                   </button>
-                  <button 
-                    onClick={() => addToWishlist(product)}
-                    className="border border-gray-300 px-3 py-1 rounded hover:bg-gray-100"
+                  <button
+                    onClick={() => handleAddToWishlist(product)}
+                    className="border border-gray-300 px-3 py-1 rounded hover:bg-gray-100 transition"
                   >
                     Wishlist
                   </button>
@@ -132,6 +134,20 @@ const Products = ({ addToCart, addToWishlist }) => {
           </div>
         )}
       </div>
+
+      {/* Modal */}
+      {previewImage && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
+          onClick={() => setPreviewImage(null)}
+        >
+          <img
+            src={previewImage}
+            alt="Preview"
+            className="max-w-full max-h-[90vh] rounded-xl border-4 border-white shadow-2xl animate-fade-in"
+          />
+        </div>
+      )}
     </div>
   );
 };
