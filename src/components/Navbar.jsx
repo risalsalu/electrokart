@@ -1,18 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDebounce } from 'use-debounce';
 
 function Navbar({ user, onLogout, cartItemCount, wishlistItemCount }) {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
-  const [debouncedQuery] = useDebounce(searchQuery, 500);
   const [showDropdown, setShowDropdown] = useState(false);
-
-  useEffect(() => {
-    if (debouncedQuery.trim()) {
-      navigate(`/search?q=${encodeURIComponent(debouncedQuery.trim())}`);
-    }
-  }, [debouncedQuery, navigate]);
 
   const handleSearch = (e) => {
     e.preventDefault();

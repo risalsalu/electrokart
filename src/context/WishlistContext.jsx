@@ -1,30 +1,55 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+import axios from 'axios';
 
 const WishlistContext = createContext();
 
 export const WishlistProvider = ({ children }) => {
-  const [wishlist, setWishlist] = useState(
-    JSON.parse(localStorage.getItem('wishlist')) || []
-  );
+  const [wishlist, setWishlist] = useState([]);
+  const baseURL = 'http://localhost:3002/wishlist';
 
-  useEffect(() => {
-    localStorage.setItem('wishlist', JSON.stringify(wishlist));
-  }, [wishlist]);
-
-  const addToWishlist = (product) => {
-    setWishlist(prev =>
-      prev.some(item => item.id === product.id) ? prev : [...prev, product]
-    );
+  // Load wishlist from JSON server
+  const fetchWishlist = async () => {
+    try {
+      const response = await axios.get(baseURL);
+      setWishlist(response.data);
+    } catch (error) {
+      console.error('Error fetching wishlist:', error);
+    }
   };
 
-  const removeFromWishlist = (id) => {
-    setWishlist(prev => prev.filter(item => item.id !== id));
+  // Add item to JSON server wishlist
+  const addToWishlist = async (product) => {
+    try {
+      const exists = wishlist.find((item) => item.id === product.id);
+      if (exists) return;
+
+      const response = await axios.post(baseURL, product);
+      setWishlist((prev) => [...prev, response.data]);
+    } catch (error) {
+      console.error('Error adding to wishlist:', error);
+    }
+  };
+
+  // Remove item from JSON server wishlist
+  const removeFromWishlist = async (id) => {
+    try {
+      await axios.delete(`${baseURL}/${id}`);
+      setWishlist((prev) => prev.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error('Error removing from wishlist:', error);
+    }
   };
 
   const wishlistItemCount = wishlist.length;
 
+  useEffect(() => {
+    fetchWishlist();
+  }, []);
+
   return (
-    <WishlistContext.Provider value={{ wishlist, addToWishlist, removeFromWishlist, wishlistItemCount }}>
+    <WishlistContext.Provider
+      value={{ wishlist, addToWishlist, removeFromWishlist, wishlistItemCount }}
+    >
       {children}
     </WishlistContext.Provider>
   );

@@ -4,17 +4,17 @@ import { toast } from 'react-toastify';
 
 function Wishlist({ wishlist, removeFromWishlist, addToCart, user }) {
   // 🔐 Redirect if not logged in
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
+  if (!user) return <Navigate to="/login" replace />;
 
-  const handleAddToCart = (product) => {
-    addToCart(product);
+  const handleAddToCart = (e, product) => {
+    e.preventDefault(); // ✅ Stops reload
+    addToCart?.(product);
     toast.success(`${product.name} added to cart`);
   };
 
-  const handleRemove = (productId, name) => {
-    removeFromWishlist(productId);
+  const handleRemove = (e, productId, name) => {
+    e.preventDefault(); // ✅ Stops reload
+    removeFromWishlist?.(productId);
     toast.info(`${name} removed from wishlist`);
   };
 
@@ -39,10 +39,10 @@ function Wishlist({ wishlist, removeFromWishlist, addToCart, user }) {
               key={product.id}
               className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
             >
-              {/* ✅ Image block */}
+              {/* Product image */}
               <div className="h-48 bg-gray-100 flex items-center justify-center">
                 <img
-                  src={product.image}
+                  src={product.image || "/placeholder.png"}
                   alt={product.name}
                   className="h-full w-full object-contain p-4"
                   onError={(e) => {
@@ -52,13 +52,15 @@ function Wishlist({ wishlist, removeFromWishlist, addToCart, user }) {
                 />
               </div>
 
-              {/* ✅ Product info */}
+              {/* Product info */}
               <div className="p-5">
-                <h3 className="text-lg font-semibold mb-2 line-clamp-2">{product.name}</h3>
+                <h3 className="text-lg font-semibold mb-2 line-clamp-2">
+                  {product.name}
+                </h3>
 
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-lg font-bold text-blue-500">
-                    ${product.price.toFixed(2)}
+                    ${product.price?.toFixed(2)}
                   </span>
                   <div className="flex items-center">
                     <span className="text-yellow-500 mr-1">★</span>
@@ -66,17 +68,19 @@ function Wishlist({ wishlist, removeFromWishlist, addToCart, user }) {
                   </div>
                 </div>
 
-                {/* ✅ Actions */}
+                {/* Actions */}
                 <div className="flex gap-3">
                   <button
+                    type="button"
                     className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 px-3 rounded-lg transition-colors text-sm"
-                    onClick={() => handleAddToCart(product)}
+                    onClick={(e) => handleAddToCart(e, product)}
                   >
                     Add to Cart
                   </button>
                   <button
+                    type="button"
                     className="border border-red-500 text-red-500 hover:bg-red-50 py-2 px-3 rounded-lg transition-colors text-sm"
-                    onClick={() => handleRemove(product.id, product.name)}
+                    onClick={(e) => handleRemove(e, product.id, product.name)}
                   >
                     Remove
                   </button>

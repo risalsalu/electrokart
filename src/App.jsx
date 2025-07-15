@@ -156,7 +156,7 @@ function AppContent() {
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/register" element={<Register onRegister={handleRegister} />} />
         </Routes>
-        <ToastContainer position="top-right" autoClose={3000} />
+        <ToastContainer position="top-right" autoClose={1000} />
       </main>
 
       <Footer />

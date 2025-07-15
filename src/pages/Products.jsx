@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 const Products = ({ products, addToCart, addToWishlist }) => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState('all');
+  const [sortOrder, setSortOrder] = useState('none');
   const [previewImage, setPreviewImage] = useState(null);
   const location = useLocation();
 
@@ -17,14 +18,24 @@ const Products = ({ products, addToCart, addToWishlist }) => {
   }, [location.search]);
 
   useEffect(() => {
-    if (categoryFilter === 'all') {
-      setFilteredProducts(products);
-    } else {
-      setFilteredProducts(
-        products.filter((product) => product.category === categoryFilter)
+    let updatedProducts = [...products];
+
+    // Filter by category
+    if (categoryFilter !== 'all') {
+      updatedProducts = updatedProducts.filter(
+        (product) => product.category === categoryFilter
       );
     }
-  }, [categoryFilter, products]);
+
+    // Sort by price
+    if (sortOrder === 'high') {
+      updatedProducts.sort((a, b) => b.price - a.price);
+    } else if (sortOrder === 'low') {
+      updatedProducts.sort((a, b) => a.price - b.price);
+    }
+
+    setFilteredProducts(updatedProducts);
+  }, [categoryFilter, products, sortOrder]);
 
   const handleAddToCart = (product) => {
     addToCart(product);
@@ -36,7 +47,6 @@ const Products = ({ products, addToCart, addToWishlist }) => {
     toast.success(`${product.name} added to wishlist`);
   };
 
-  // Modal Close with ESC
   useEffect(() => {
     const handleKey = (e) => {
       if (e.key === 'Escape') setPreviewImage(null);
@@ -45,35 +55,46 @@ const Products = ({ products, addToCart, addToWishlist }) => {
     return () => window.removeEventListener('keydown', handleKey);
   }, []);
 
-  if (!products || products.length === 0) {
-    return <div className="p-4 text-center">No products available</div>;
-  }
-
   return (
     <div className="container mx-auto px-4 py-8 relative">
       <h1 className="text-3xl font-bold mb-8">Our Products</h1>
 
-      {/* Category Filter */}
-      <div className="flex flex-wrap gap-4 mb-8">
-        {[
-          { key: 'all', label: 'All Products' },
-          { key: 'mobile', label: 'Smartphones' },
-          { key: 'laptop', label: 'Laptops' },
-          { key: 'tv', label: 'TVs' },
-          { key: 'headphone', label: 'Audio' },
-        ].map(({ key, label }) => (
-          <button
-            key={key}
-            onClick={() => setCategoryFilter(key)}
-            className={`px-4 py-2 rounded-full transition-colors ${
-              categoryFilter === key
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
-            }`}
+      {/* Category Filter and Sort */}
+      <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
+        <div className="flex flex-wrap gap-4">
+          {[
+            { key: 'all', label: 'All Products' },
+            { key: 'mobile', label: 'Smartphones' },
+            { key: 'laptop', label: 'Laptops' },
+            { key: 'tv', label: 'TVs' },
+            { key: 'headphone', label: 'Audio' },
+          ].map(({ key, label }) => (
+            <button
+              key={key}
+              onClick={() => setCategoryFilter(key)}
+              className={`px-4 py-2 rounded-full transition-colors ${
+                categoryFilter === key
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {/* Sort Dropdown */}
+        <div>
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="border px-3 py-2 rounded-md shadow-sm"
           >
-            {label}
-          </button>
-        ))}
+            <option value="none">Sort by</option>
+            <option value="high">High to Low</option>
+            <option value="low">Low to High</option>
+          </select>
+        </div>
       </div>
 
       {/* Products Grid */}
@@ -135,7 +156,7 @@ const Products = ({ products, addToCart, addToWishlist }) => {
         )}
       </div>
 
-      {/* Modal */}
+      {/* Image Preview Modal */}
       {previewImage && (
         <div
           className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"

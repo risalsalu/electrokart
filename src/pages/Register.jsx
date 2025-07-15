@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Register({ onRegister }) {
   const [name, setName] = useState('');
@@ -9,52 +10,54 @@ function Register({ onRegister }) {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-const handleRegister = (e) => {
-  e.preventDefault();
+  const handleRegister = async (e) => {
+    e.preventDefault();
 
-  // Simple validation
-  if (!name || !email || !password) {
-    setError('All fields are required');
-    return;
-  }
-  
-  if (password.length < 6) {
-    setError('Password must be at least 6 characters');
-    return;
-  }
-  
-  // Check if user already exists
-  const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
-  if (existingUsers.some(user => user.email === email)) {
-    setError('User with this email already exists');
-    return;
-  }
-  
-  const newUser = { 
-    name, 
-    email, 
-    password, // Note: In a real app, never store plain text passwords
-    createdAt: new Date().toISOString() 
+    // Validation
+    if (!name || !email || !password) {
+      setError('All fields are required');
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters');
+      return;
+    }
+
+    try {
+      // Check if user already exists
+      const res = await axios.get(`http://localhost:3002/users?email=${email}`);
+      if (res.data.length > 0) {
+        setError('User with this email already exists');
+        return;
+      }
+
+      // Create new user
+      const newUser = {
+        name,
+        email,
+        password,
+        createdAt: new Date().toISOString()
+      };
+
+      await axios.post('http://localhost:3002/users', newUser);
+
+      if (onRegister) {
+        onRegister(newUser);
+      }
+
+      alert('Registration successful!');
+      navigate('/login', { state: { registeredEmail: email } });
+
+    } catch (err) {
+      console.error('Registration error:', err);
+      setError('Something went wrong. Please try again later.');
+    }
   };
-  
-  // Save to localStorage
-  const updatedUsers = [...existingUsers, newUser];
-  localStorage.setItem('users', JSON.stringify(updatedUsers));
-  localStorage.setItem('currentUser', JSON.stringify({ email, name }));
-  
-  // Call the onRegister function from props
-  if (onRegister) {
-    onRegister(newUser);
-  }
-  
-  alert('Registration successful!');
-  navigate('/login',{state:{registeredEmail:email}});
-};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-gray-100 p-4">
       <div className="w-full max-w-md bg-white rounded-xl shadow-xl overflow-hidden">
-        {/* Decorative Header */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-700 py-6 px-8">
           <div className="flex items-center justify-center mb-4">
             <div className="bg-white p-2 rounded-lg">
@@ -64,14 +67,14 @@ const handleRegister = (e) => {
           </div>
           <h2 className="text-xl font-semibold text-white text-center">Create Your Account</h2>
         </div>
-        
+
         <div className="p-8">
           {error && (
             <div className="mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
               {error}
             </div>
           )}
-          
+
           <form onSubmit={handleRegister} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
@@ -91,7 +94,7 @@ const handleRegister = (e) => {
                 </div>
               </div>
             </div>
-            
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
               <div className="relative">
@@ -111,7 +114,7 @@ const handleRegister = (e) => {
                 </div>
               </div>
             </div>
-            
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
               <div className="relative">
@@ -147,7 +150,7 @@ const handleRegister = (e) => {
                 Use 8+ characters with a mix of letters, numbers & symbols
               </p>
             </div>
-            
+
             <div className="flex items-center">
               <input
                 id="terms"
@@ -159,7 +162,7 @@ const handleRegister = (e) => {
                 I agree to the <a href="#" className="text-blue-600 hover:underline">Terms of Service</a> and <a href="#" className="text-blue-600 hover:underline">Privacy Policy</a>
               </label>
             </div>
-            
+
             <button
               type="submit"
               className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-3 px-4 rounded-lg font-semibold shadow-lg hover:from-blue-700 hover:to-indigo-800 transition-all transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
@@ -167,7 +170,7 @@ const handleRegister = (e) => {
               Create Account
             </button>
           </form>
-          
+
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
@@ -179,26 +182,10 @@ const handleRegister = (e) => {
             </div>
 
             <div className="mt-6 grid grid-cols-3 gap-3">
-              <button className="bg-white py-2 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center justify-center">
-                <svg className="h-5 w-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
-                </svg>
-              </button>
-              
-              <button className="bg-white py-2 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center justify-center">
-                <svg className="h-5 w-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
-                </svg>
-              </button>
-              
-              <button className="bg-white py-2 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center justify-center">
-                <svg className="h-5 w-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
-                </svg>
-              </button>
+              {/* Social icons */}
             </div>
           </div>
-          
+
           <div className="mt-8 text-center text-sm text-gray-600">
             Already have an account?{' '}
             <button 

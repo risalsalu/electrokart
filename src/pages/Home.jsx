@@ -31,7 +31,7 @@ function Home({ products = [], addToCart = () => {} }) {
       <div 
         className="relative rounded-2xl overflow-hidden mb-12 md:mb-16 h-[50vh] min-h-[400px] flex items-center"
         style={{
-          backgroundImage: 'url("https://assets.mixkit.co/videos/preview/mixkit-close-up-of-a-modern-smartphone-4471.mp4")',
+          backgroundImage: 'url("https://plus.unsplash.com/premium_photo-1726863026105-b320133454e7?q=80&w=1132&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")',
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}
