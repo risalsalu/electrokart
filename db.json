@@ -612,25 +612,23 @@
         "noise cancelling",
         "audio"
       ]
-    }
-  ],
-  "cart": [
+    },
     {
-      "id": "3",
-      "name": "Wireless Headphones",
-      "price": 349.99,
-      "description": "These wireless headphones offer up to 30 hours of battery life and advanced noise cancellation for uninterrupted listening. Designed for comfort and performance, they deliver powerful audio, making them ideal for music, calls, or long flights.",
-      "category": "headphone",
-      "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "id": "2",
+      "name": "Ultra HD Smart TV",
+      "price": 1299.99,
+      "description": "This 65-inch Ultra HD Smart TV delivers breathtaking 4K visuals with HDR support, ensuring crisp details and vibrant colors. Its smart features provide access to apps like Netflix, YouTube, and more, making it a perfect choice for immersive home entertainment and streaming.",
+      "category": "tv",
+      "image": "https://plus.unsplash.com/premium_photo-1682274001252-cd39d7158ae3?q=80&w=1292&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       "tags": [
-        "earphones",
-        "bluetooth",
-        "noise cancelling",
-        "audio"
-      ],
-      "quantity": 1
+        "television",
+        "smart tv",
+        "4k",
+        "ultra hd"
+      ]
     }
   ],
+  "cart": [],
   "orders": [
     {
       "id": "ORD-VZ3W8I1P",
@@ -789,6 +787,101 @@
             "bluetooth",
             "noise cancelling",
             "audio"
+          ],
+          "quantity": 1
+        }
+      ],
+      "total": 2763.96
+    },
+    {
+      "id": "ORD-ZONG5SV4",
+      "date": "2025-07-15T14:29:35.939Z",
+      "status": "delivered",
+      "shippingAddress": "ajsdja",
+      "paymentMethod": "cod",
+      "items": [
+        {
+          "id": "3",
+          "name": "Wireless Headphones",
+          "price": 349.99,
+          "description": "These wireless headphones offer up to 30 hours of battery life and advanced noise cancellation for uninterrupted listening. Designed for comfort and performance, they deliver powerful audio, making them ideal for music, calls, or long flights.",
+          "category": "headphone",
+          "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "tags": [
+            "earphones",
+            "bluetooth",
+            "noise cancelling",
+            "audio"
+          ],
+          "quantity": 3
+        },
+        {
+          "id": "2",
+          "name": "Ultra HD Smart TV",
+          "price": 1299.99,
+          "description": "This 65-inch Ultra HD Smart TV delivers breathtaking 4K visuals with HDR support, ensuring crisp details and vibrant colors. Its smart features provide access to apps like Netflix, YouTube, and more, making it a perfect choice for immersive home entertainment and streaming.",
+          "category": "tv",
+          "image": "https://plus.unsplash.com/premium_photo-1682274001252-cd39d7158ae3?q=80&w=1292&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "tags": [
+            "television",
+            "smart tv",
+            "4k",
+            "ultra hd"
+          ],
+          "quantity": 1
+        }
+      ],
+      "total": 2547.95
+    },
+    {
+      "id": "ORD-51PMHXBX",
+      "date": "2025-07-15T15:15:01.199Z",
+      "status": "delivered",
+      "shippingAddress": "adkufiusdf",
+      "paymentMethod": "cod",
+      "items": [
+        {
+          "id": "1",
+          "name": "Iphone 16 pro",
+          "price": 899.99,
+          "description": "The iPhone 16 Pro features a stunning 6.7-inch OLED display, offering sharp visuals and vibrant colors. It comes with 128GB of storage, a powerful chipset, and advanced camera capabilities, making it ideal for photography, productivity, and entertainment. Built for speed, style, and performance.",
+          "category": "mobile",
+          "image": "https://images.unsplash.com/photo-1739816334403-3d8b1eb8ef77?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "tags": [
+            "phone",
+            "smartphone",
+            "mobile",
+            "android"
+          ],
+          "quantity": 1
+        },
+        {
+          "id": "3",
+          "name": "Wireless Headphones",
+          "price": 349.99,
+          "description": "These wireless headphones offer up to 30 hours of battery life and advanced noise cancellation for uninterrupted listening. Designed for comfort and performance, they deliver powerful audio, making them ideal for music, calls, or long flights.",
+          "category": "headphone",
+          "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "tags": [
+            "earphones",
+            "bluetooth",
+            "noise cancelling",
+            "audio"
+          ],
+          "quantity": 1
+        },
+        {
+          "id": "2",
+          "name": "Ultra HD Smart TV",
+          "price": 1299.99,
+          "description": "This 65-inch Ultra HD Smart TV delivers breathtaking 4K visuals with HDR support, ensuring crisp details and vibrant colors. Its smart features provide access to apps like Netflix, YouTube, and more, making it a perfect choice for immersive home entertainment and streaming.",
+          "category": "tv",
+          "image": "https://plus.unsplash.com/premium_photo-1682274001252-cd39d7158ae3?q=80&w=1292&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "tags": [
+            "television",
+            "smart tv",
+            "4k",
+            "ultra hd"
           ],
           "quantity": 1
         }
