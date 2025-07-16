@@ -7,14 +7,14 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const baseURL = 'http://localhost:3002/cart';
 
-  // ✅ Fetch cart items on mount
+  //  Fetch cart items on mount
   useEffect(() => {
     axios.get(baseURL)
       .then((res) => setCart(res.data))
       .catch((err) => console.error('Failed to fetch cart:', err));
   }, []);
 
-  // ✅ Add or update cart item
+  //  Add or update cart item
   const addToCart = async (product, quantity = 1) => {
     const existing = cart.find(item => item.id === product.id);
     if (existing) {
@@ -33,13 +33,13 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // ✅ Remove from cart
+  //  Remove from cart
   const removeFromCart = async (id) => {
     await axios.delete(`${baseURL}/${id}`);
     setCart(prev => prev.filter(item => item.id !== id));
   };
 
-  // ✅ Update quantity
+  //  Update quantity
   const updateQuantity = async (id, quantity) => {
     if (quantity < 1) {
       removeFromCart(id);
@@ -55,7 +55,7 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  // ✅ Clear entire cart
+  //  Clear entire cart
   const clearCart = async () => {
     const deletePromises = cart.map(item =>
       axios.delete(`${baseURL}/${item.id}`)
@@ -68,15 +68,7 @@ export const CartProvider = ({ children }) => {
 
   return (
     <CartContext.Provider
-      value={{
-        cart,
-        addToCart,
-        removeFromCart,
-        updateQuantity,
-        clearCart,
-        cartItemCount
-      }}
-    >
+      value={{  cart,  addToCart,  removeFromCart,  updateQuantity,  clearCart,  cartItemCount  }}  > 
       {children}
     </CartContext.Provider>
   );

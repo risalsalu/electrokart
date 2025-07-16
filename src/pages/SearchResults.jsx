@@ -93,7 +93,7 @@ const SearchResults = () => {
   if (error) {
     return (
       <div className="p-8 text-center">
-        <div className="text-red-500 mb-2 font-semibold">⚠️ Error</div>
+        <div className="text-red-500 mb-2 font-semibold"> Error</div>
         <p>{error}</p>
         <button
           onClick={() => window.location.reload()}

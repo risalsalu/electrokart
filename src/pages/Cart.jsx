@@ -9,8 +9,8 @@ function Cart({ cart, removeFromCart, updateQuantity, user }) {
     (total, item) => total + item.price * item.quantity,
     0
   );
-  const shipping = cart.length > 0 ? 9.99 : 0;
-  const tax = subtotal * 0.08;
+  const shipping = cart.length > 0 ? 0.0 : 0;
+  const tax = subtotal * 0.00;
   const total = subtotal + shipping + tax;
 
   const handleDecrease = (item) => {

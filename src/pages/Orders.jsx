@@ -124,8 +124,8 @@ function Orders() {
               Order Summary
             </h2>
             {orders.map((order) => {
-              const shippingFee = order.items.length > 0 ? 9.99 : 0;
-              const tax = order.total * 0.08;
+              const shippingFee = order.items.length > 0 ? 0.00 : 0;
+              const tax = order.total * 0.00;
               const grandTotal = order.total + shippingFee + tax;
 
               return (

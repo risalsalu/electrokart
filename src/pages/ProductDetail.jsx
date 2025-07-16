@@ -22,7 +22,7 @@ const ProductDetail = () => {
 
   return (
     <>
-      {/* 🔍 Image Modal */}
+      {/*  Image Modal */}
 {isModalOpen && (
   <div
     className="fixed inset-0 bg-transparent flex items-center justify-center z-50"
@@ -36,9 +36,9 @@ const ProductDetail = () => {
   </div>
 )}
 
-      {/* 🛒 Product Detail Layout */}
+      {/*  Product Detail Layout */}
       <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-10 mt-10">
-        {/* 📸 Image Section */}
+        {/*  Image Section */}
         <div
           className="rounded-xl overflow-hidden shadow-xl border hover:shadow-2xl transition-transform duration-300 cursor-pointer"
           onClick={() => setIsModalOpen(true)}
@@ -50,7 +50,7 @@ const ProductDetail = () => {
           />
         </div>
 
-        {/* 🧾 Info Section */}
+        {/*  Info Section */}
         <div className="space-y-4">
           <h2 className="text-4xl font-bold text-gray-800">{product.name}</h2>
           <p className="text-2xl font-semibold text-green-600">${product.price}</p>
@@ -83,9 +83,9 @@ const ProductDetail = () => {
           </div>
 
           <div className="mt-8 border-t pt-6 text-sm text-gray-500">
-            <p>🚚 Delivery within 3-5 business days</p>
-            <p>🔄 Easy returns within 7 days</p>
-            <p>💳 Secure payment options</p>
+            <p>🚚 Free Delivery within 3-5 business days</p>
+            <p>🔄 Easy Returns within 7 days</p>
+            <p>💳 Secure Payment options</p>
           </div>
         </div>
       </div>

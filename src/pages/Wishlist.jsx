@@ -3,17 +3,17 @@ import { Link, Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 function Wishlist({ wishlist, removeFromWishlist, addToCart, user }) {
-  // 🔐 Redirect if not logged in
+  //  Redirect if not logged in
   if (!user) return <Navigate to="/login" replace />;
 
   const handleAddToCart = (e, product) => {
-    e.preventDefault(); // ✅ Stops reload
+    e.preventDefault();
     addToCart?.(product);
     toast.success(`${product.name} added to cart`);
   };
 
   const handleRemove = (e, productId, name) => {
-    e.preventDefault(); // ✅ Stops reload
+    e.preventDefault();
     removeFromWishlist?.(productId);
     toast.info(`${name} removed from wishlist`);
   };

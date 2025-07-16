@@ -7,8 +7,8 @@ function Checkout({ cart, user, clearCart, placeOrder }) {
   const navigate = useNavigate();
 
   const cartTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
-  const shippingFee = cart.length > 0 ? 9.99 : 0;
-  const tax = cartTotal * 0.08;
+  const shippingFee = cart.length > 0 ? 0.00 : 0;
+  const tax = cartTotal * 0.00;
   const grandTotal = cartTotal + shippingFee + tax;
 
   const handlePlaceOrder = (e) => {

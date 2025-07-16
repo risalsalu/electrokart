@@ -7,25 +7,25 @@ const baseURL = 'http://localhost:3002/orders';
 export const OrdersProvider = ({ children }) => {
   const [orders, setOrders] = useState([]);
 
-  // ✅ Fetch orders from JSON Server on mount
+  // Fetch orders from JSON Server on mount
   useEffect(() => {
     axios
       .get(baseURL)
       .then((res) => setOrders(res.data))
-      .catch((err) => console.error('❌ Error fetching orders:', err));
+      .catch((err) => console.error(' Error fetching orders:', err));
   }, []);
 
-  // ✅ Add new order to JSON Server
+  // Add new order to JSON Server
   const placeOrder = async (newOrder) => {
     try {
       const res = await axios.post(baseURL, newOrder);
       setOrders((prev) => [res.data, ...prev]);
     } catch (err) {
-      console.error('❌ Failed to place order:', err);
+      console.error(' Failed to place order:', err);
     }
   };
 
-  // ✅ Remove an item from a specific order
+  // Remove an item from a specific order
   const removeItemFromOrder = async (orderId, itemIndex) => {
     try {
       const targetOrder = orders.find((order) => order.id === orderId);
@@ -38,11 +38,11 @@ export const OrdersProvider = ({ children }) => {
       );
 
       if (newItems.length === 0) {
-        // 🧹 If order becomes empty, delete it
+        //  If order becomes empty, delete it
         await axios.delete(`${baseURL}/${orderId}`);
         setOrders((prev) => prev.filter((order) => order.id !== orderId));
       } else {
-        // ♻️ Update the order
+        //  Update the order
         const updatedOrder = { ...targetOrder, items: newItems, total: newTotal };
         await axios.put(`${baseURL}/${orderId}`, updatedOrder);
         setOrders((prev) =>
@@ -50,18 +50,12 @@ export const OrdersProvider = ({ children }) => {
         );
       }
     } catch (err) {
-      console.error('❌ Failed to update order:', err);
+      console.error(' Failed to update order:', err);
     }
   };
 
   return (
-    <OrdersContext.Provider
-      value={{
-        orders,
-        placeOrder,
-        removeItemFromOrder,
-      }}
-    >
+    <OrdersContext.Provider value={{  orders,  placeOrder,  removeItemFromOrder,  }}>
       {children}
     </OrdersContext.Provider>
   );

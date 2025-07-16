@@ -600,293 +600,36 @@
   ],
   "wishlist": [
     {
-      "id": "3",
-      "name": "Wireless Headphones",
-      "price": 349.99,
-      "description": "These wireless headphones offer up to 30 hours of battery life and advanced noise cancellation for uninterrupted listening. Designed for comfort and performance, they deliver powerful audio, making them ideal for music, calls, or long flights.",
-      "category": "headphone",
-      "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "id": "1",
+      "name": "Iphone 16 pro",
+      "price": 899.99,
+      "description": "The iPhone 16 Pro features a stunning 6.7-inch OLED display, offering sharp visuals and vibrant colors. It comes with 128GB of storage, a powerful chipset, and advanced camera capabilities, making it ideal for photography, productivity, and entertainment. Built for speed, style, and performance.",
+      "category": "mobile",
+      "image": "https://images.unsplash.com/photo-1739816334403-3d8b1eb8ef77?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       "tags": [
-        "earphones",
-        "bluetooth",
-        "noise cancelling",
-        "audio"
-      ]
-    },
-    {
-      "id": "2",
-      "name": "Ultra HD Smart TV",
-      "price": 1299.99,
-      "description": "This 65-inch Ultra HD Smart TV delivers breathtaking 4K visuals with HDR support, ensuring crisp details and vibrant colors. Its smart features provide access to apps like Netflix, YouTube, and more, making it a perfect choice for immersive home entertainment and streaming.",
-      "category": "tv",
-      "image": "https://plus.unsplash.com/premium_photo-1682274001252-cd39d7158ae3?q=80&w=1292&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "tags": [
-        "television",
-        "smart tv",
-        "4k",
-        "ultra hd"
+        "phone",
+        "smartphone",
+        "mobile",
+        "android"
       ]
     }
   ],
-  "cart": [],
-  "orders": [
+  "cart": [
     {
-      "id": "ORD-VZ3W8I1P",
-      "date": "2025-07-15T11:22:13.625Z",
-      "status": "delivered",
-      "shippingAddress": "adfesaf",
-      "paymentMethod": "credit_card",
-      "items": [
-        {
-          "id": "1",
-          "name": "Iphone 16 pro",
-          "price": 899.99,
-          "description": "The iPhone 16 Pro features a stunning 6.7-inch OLED display, offering sharp visuals and vibrant colors. It comes with 128GB of storage, a powerful chipset, and advanced camera capabilities, making it ideal for photography, productivity, and entertainment. Built for speed, style, and performance.",
-          "category": "mobile",
-          "image": "https://images.unsplash.com/photo-1739816334403-3d8b1eb8ef77?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          "tags": [
-            "phone",
-            "smartphone",
-            "mobile",
-            "android"
-          ],
-          "quantity": 2
-        },
-        {
-          "id": "6",
-          "name": "iPhone 15 Pro",
-          "price": 999.99,
-          "description": "The iPhone 15 Pro offers a sharp 6.1-inch Super Retina XDR display and is powered by the efficient A16 Bionic chip. It delivers smooth performance and vibrant visuals. The phone has a premium build, excellent camera quality, and runs iOS for seamless user experience.",
-          "category": "mobile",
-          "image": "https://images.unsplash.com/photo-1709178295038-acbeec786fcf?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          "tags": [
-            "apple",
-            "ios",
-            "premium"
-          ],
-          "quantity": 1
-        }
+      "id": "1",
+      "name": "Iphone 16 pro",
+      "price": 899.99,
+      "description": "The iPhone 16 Pro features a stunning 6.7-inch OLED display, offering sharp visuals and vibrant colors. It comes with 128GB of storage, a powerful chipset, and advanced camera capabilities, making it ideal for photography, productivity, and entertainment. Built for speed, style, and performance.",
+      "category": "mobile",
+      "image": "https://images.unsplash.com/photo-1739816334403-3d8b1eb8ef77?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "tags": [
+        "phone",
+        "smartphone",
+        "mobile",
+        "android"
       ],
-      "total": 3033.96
-    },
-    {
-      "id": "ORD-WA0HSZUI",
-      "date": "2025-07-15T11:32:44.386Z",
-      "status": "delivered",
-      "shippingAddress": "fdadfed",
-      "paymentMethod": "credit_card",
-      "items": [
-        {
-          "id": "2",
-          "name": "Ultra HD Smart TV",
-          "price": 1299.99,
-          "description": "This 65-inch Ultra HD Smart TV delivers breathtaking 4K visuals with HDR support, ensuring crisp details and vibrant colors. Its smart features provide access to apps like Netflix, YouTube, and more, making it a perfect choice for immersive home entertainment and streaming.",
-          "category": "tv",
-          "image": "https://plus.unsplash.com/premium_photo-1682274001252-cd39d7158ae3?q=80&w=1292&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          "tags": [
-            "television",
-            "smart tv",
-            "4k",
-            "ultra hd"
-          ],
-          "quantity": 2
-        },
-        {
-          "id": "7",
-          "name": "Pixel 7 Pro",
-          "price": 899.99,
-          "description": "The Pixel 7 Pro features a 6.7-inch QHD+ OLED display with vivid colors and sharp details. Powered by Google’s Tensor G2 chip, it offers smooth performance and advanced AI features. The camera system excels in capturing high-quality photos and videos, especially in low light.",
-          "category": "mobile",
-          "image": "https://images.unsplash.com/photo-1666238851883-1cdc90b547e4?q=80&w=811&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          "tags": [
-            "google",
-            "android",
-            "camera"
-          ],
-          "quantity": 2
-        },
-        {
-          "id": "4",
-          "name": "Gaming Laptop Pro",
-          "price": 1599.99,
-          "description": "The Gaming Laptop Pro is built for serious gamers, featuring an NVIDIA RTX 3070 GPU, 16GB RAM, and a smooth 144Hz display. Whether for high-end gaming or heavy multitasking, its powerful specs ensure fast, immersive performance and fluid gameplay.",
-          "category": "laptop",
-          "image": "https://images.unsplash.com/photo-1569441508845-c6da9a35924c?q=80&w=1190&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          "tags": [
-            "notebook",
-            "gaming",
-            "computer",
-            "pc"
-          ],
-          "quantity": 1
-        },
-        {
-          "id": "3",
-          "name": "Wireless Headphones",
-          "price": 349.99,
-          "description": "These wireless headphones offer up to 30 hours of battery life and advanced noise cancellation for uninterrupted listening. Designed for comfort and performance, they deliver powerful audio, making them ideal for music, calls, or long flights.",
-          "category": "headphone",
-          "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          "tags": [
-            "earphones",
-            "bluetooth",
-            "noise cancelling",
-            "audio"
-          ],
-          "quantity": 1
-        }
-      ],
-      "total": 6867.93
-    },
-    {
-      "id": "ORD-RAGZX8ME",
-      "date": "2025-07-15T11:38:29.321Z",
-      "status": "delivered",
-      "shippingAddress": "cnhdfzgm",
-      "paymentMethod": "credit_card",
-      "items": [
-        {
-          "id": "1",
-          "name": "Iphone 16 pro",
-          "price": 899.99,
-          "description": "The iPhone 16 Pro features a stunning 6.7-inch OLED display, offering sharp visuals and vibrant colors. It comes with 128GB of storage, a powerful chipset, and advanced camera capabilities, making it ideal for photography, productivity, and entertainment. Built for speed, style, and performance.",
-          "category": "mobile",
-          "image": "https://images.unsplash.com/photo-1739816334403-3d8b1eb8ef77?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          "tags": [
-            "phone",
-            "smartphone",
-            "mobile",
-            "android"
-          ],
-          "quantity": 1
-        },
-        {
-          "id": "2",
-          "name": "Ultra HD Smart TV",
-          "price": 1299.99,
-          "description": "This 65-inch Ultra HD Smart TV delivers breathtaking 4K visuals with HDR support, ensuring crisp details and vibrant colors. Its smart features provide access to apps like Netflix, YouTube, and more, making it a perfect choice for immersive home entertainment and streaming.",
-          "category": "tv",
-          "image": "https://plus.unsplash.com/premium_photo-1682274001252-cd39d7158ae3?q=80&w=1292&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          "tags": [
-            "television",
-            "smart tv",
-            "4k",
-            "ultra hd"
-          ],
-          "quantity": 1
-        },
-        {
-          "id": "3",
-          "name": "Wireless Headphones",
-          "price": 349.99,
-          "description": "These wireless headphones offer up to 30 hours of battery life and advanced noise cancellation for uninterrupted listening. Designed for comfort and performance, they deliver powerful audio, making them ideal for music, calls, or long flights.",
-          "category": "headphone",
-          "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          "tags": [
-            "earphones",
-            "bluetooth",
-            "noise cancelling",
-            "audio"
-          ],
-          "quantity": 1
-        }
-      ],
-      "total": 2763.96
-    },
-    {
-      "id": "ORD-ZONG5SV4",
-      "date": "2025-07-15T14:29:35.939Z",
-      "status": "delivered",
-      "shippingAddress": "ajsdja",
-      "paymentMethod": "cod",
-      "items": [
-        {
-          "id": "3",
-          "name": "Wireless Headphones",
-          "price": 349.99,
-          "description": "These wireless headphones offer up to 30 hours of battery life and advanced noise cancellation for uninterrupted listening. Designed for comfort and performance, they deliver powerful audio, making them ideal for music, calls, or long flights.",
-          "category": "headphone",
-          "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          "tags": [
-            "earphones",
-            "bluetooth",
-            "noise cancelling",
-            "audio"
-          ],
-          "quantity": 3
-        },
-        {
-          "id": "2",
-          "name": "Ultra HD Smart TV",
-          "price": 1299.99,
-          "description": "This 65-inch Ultra HD Smart TV delivers breathtaking 4K visuals with HDR support, ensuring crisp details and vibrant colors. Its smart features provide access to apps like Netflix, YouTube, and more, making it a perfect choice for immersive home entertainment and streaming.",
-          "category": "tv",
-          "image": "https://plus.unsplash.com/premium_photo-1682274001252-cd39d7158ae3?q=80&w=1292&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          "tags": [
-            "television",
-            "smart tv",
-            "4k",
-            "ultra hd"
-          ],
-          "quantity": 1
-        }
-      ],
-      "total": 2547.95
-    },
-    {
-      "id": "ORD-51PMHXBX",
-      "date": "2025-07-15T15:15:01.199Z",
-      "status": "delivered",
-      "shippingAddress": "adkufiusdf",
-      "paymentMethod": "cod",
-      "items": [
-        {
-          "id": "1",
-          "name": "Iphone 16 pro",
-          "price": 899.99,
-          "description": "The iPhone 16 Pro features a stunning 6.7-inch OLED display, offering sharp visuals and vibrant colors. It comes with 128GB of storage, a powerful chipset, and advanced camera capabilities, making it ideal for photography, productivity, and entertainment. Built for speed, style, and performance.",
-          "category": "mobile",
-          "image": "https://images.unsplash.com/photo-1739816334403-3d8b1eb8ef77?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          "tags": [
-            "phone",
-            "smartphone",
-            "mobile",
-            "android"
-          ],
-          "quantity": 1
-        },
-        {
-          "id": "3",
-          "name": "Wireless Headphones",
-          "price": 349.99,
-          "description": "These wireless headphones offer up to 30 hours of battery life and advanced noise cancellation for uninterrupted listening. Designed for comfort and performance, they deliver powerful audio, making them ideal for music, calls, or long flights.",
-          "category": "headphone",
-          "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          "tags": [
-            "earphones",
-            "bluetooth",
-            "noise cancelling",
-            "audio"
-          ],
-          "quantity": 1
-        },
-        {
-          "id": "2",
-          "name": "Ultra HD Smart TV",
-          "price": 1299.99,
-          "description": "This 65-inch Ultra HD Smart TV delivers breathtaking 4K visuals with HDR support, ensuring crisp details and vibrant colors. Its smart features provide access to apps like Netflix, YouTube, and more, making it a perfect choice for immersive home entertainment and streaming.",
-          "category": "tv",
-          "image": "https://plus.unsplash.com/premium_photo-1682274001252-cd39d7158ae3?q=80&w=1292&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          "tags": [
-            "television",
-            "smart tv",
-            "4k",
-            "ultra hd"
-          ],
-          "quantity": 1
-        }
-      ],
-      "total": 2763.96
+      "quantity": 1
     }
-  ]
+  ],
+  "orders": []
 }

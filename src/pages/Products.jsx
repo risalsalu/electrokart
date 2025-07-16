@@ -6,7 +6,8 @@ const Products = ({ products, addToCart, addToWishlist }) => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [sortOrder, setSortOrder] = useState('none');
-  const [previewImage, setPreviewImage] = useState(null);
+  const [modalImage, setModalImage] = useState(null);
+  const [modalProduct, setModalProduct] = useState(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -20,14 +21,12 @@ const Products = ({ products, addToCart, addToWishlist }) => {
   useEffect(() => {
     let updatedProducts = [...products];
 
-    // Filter by category
     if (categoryFilter !== 'all') {
       updatedProducts = updatedProducts.filter(
         (product) => product.category === categoryFilter
       );
     }
 
-    // Sort by price
     if (sortOrder === 'high') {
       updatedProducts.sort((a, b) => b.price - a.price);
     } else if (sortOrder === 'low') {
@@ -49,7 +48,10 @@ const Products = ({ products, addToCart, addToWishlist }) => {
 
   useEffect(() => {
     const handleKey = (e) => {
-      if (e.key === 'Escape') setPreviewImage(null);
+      if (e.key === 'Escape') {
+        setModalImage(null);
+        setModalProduct(null);
+      }
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
@@ -107,7 +109,10 @@ const Products = ({ products, addToCart, addToWishlist }) => {
             >
               <div
                 className="h-48 bg-gray-100 flex items-center justify-center overflow-hidden cursor-pointer transform transition-transform duration-300 group-hover:scale-[1.03]"
-                onClick={() => setPreviewImage(product.image)}
+                onClick={() => {
+                  setModalImage(product.image || 'https://via.placeholder.com/600');
+                  setModalProduct(product);
+                }}
               >
                 {product.image ? (
                   <img
@@ -156,19 +161,23 @@ const Products = ({ products, addToCart, addToWishlist }) => {
         )}
       </div>
 
-      {/* Image Preview Modal */}
-      {previewImage && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
-          onClick={() => setPreviewImage(null)}
-        >
-          <img
-            src={previewImage}
-            alt="Preview"
-            className="max-w-full max-h-[90vh] rounded-xl border-4 border-white shadow-2xl animate-fade-in"
-          />
-        </div>
-      )}
+      {/*  Image Modal */}
+{modalImage && (
+  <div
+    className="fixed inset-0 bg-transparent flex items-center justify-center z-50"
+    onClick={() => {
+      setModalImage(null);
+      setModalProduct(null);
+    }}
+  >
+    <img
+      src={modalImage}
+      alt={modalProduct?.name || 'Preview'}
+      className="max-w-[90%] max-h-[90%] rounded-xl border-4 border-white shadow-2xl"
+    />
+  </div>
+)}
+
     </div>
   );
 };
