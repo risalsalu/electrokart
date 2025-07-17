@@ -1,21 +1,29 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link, Navigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
+import { Heart } from 'lucide-react';
 
-function Wishlist({ wishlist, removeFromWishlist, addToCart, user }) {
-  //  Redirect if not logged in
+import { useWishlist } from '../context/WishlistContext';
+import { useCart } from '../context/CartContext';
+import { AuthContext } from '../context/AuthContext';
+
+function Wishlist() {
+  const { wishlist, removeFromWishlist } = useWishlist();
+  const { addToCart } = useCart();
+  const { user } = useContext(AuthContext);
+
   if (!user) return <Navigate to="/login" replace />;
 
   const handleAddToCart = (e, product) => {
     e.preventDefault();
-    addToCart?.(product);
+    addToCart(product);
     toast.success(`${product.name} added to cart`);
   };
 
   const handleRemove = (e, productId, name) => {
     e.preventDefault();
-    removeFromWishlist?.(productId);
-    toast.info(`${name} removed from wishlist`);
+    removeFromWishlist(productId);
+    toast.success(`${name} removed from wishlist`);
   };
 
   return (
@@ -37,9 +45,16 @@ function Wishlist({ wishlist, removeFromWishlist, addToCart, user }) {
           {wishlist.map((product) => (
             <div
               key={product.id}
-              className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+              className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow relative"
             >
-              {/* Product image */}
+              <button
+                onClick={(e) => handleRemove(e, product.id, product.name)}
+                className="absolute top-2 right-2 z-10 text-red-500 hover:scale-110 transition"
+                title="Remove from Wishlist"
+              >
+                <Heart size={24} className="fill-red-500" />
+              </button>
+
               <div className="h-48 bg-gray-100 flex items-center justify-center">
                 <img
                   src={product.image || "/placeholder.png"}
@@ -52,7 +67,6 @@ function Wishlist({ wishlist, removeFromWishlist, addToCart, user }) {
                 />
               </div>
 
-              {/* Product info */}
               <div className="p-5">
                 <h3 className="text-lg font-semibold mb-2 line-clamp-2">
                   {product.name}
@@ -68,7 +82,6 @@ function Wishlist({ wishlist, removeFromWishlist, addToCart, user }) {
                   </div>
                 </div>
 
-                {/* Actions */}
                 <div className="flex gap-3">
                   <button
                     type="button"
@@ -76,13 +89,6 @@ function Wishlist({ wishlist, removeFromWishlist, addToCart, user }) {
                     onClick={(e) => handleAddToCart(e, product)}
                   >
                     Add to Cart
-                  </button>
-                  <button
-                    type="button"
-                    className="border border-red-500 text-red-500 hover:bg-red-50 py-2 px-3 rounded-lg transition-colors text-sm"
-                    onClick={(e) => handleRemove(e, product.id, product.name)}
-                  >
-                    Remove
                   </button>
                 </div>
               </div>

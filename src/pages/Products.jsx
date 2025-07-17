@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
+import { Heart } from 'lucide-react';
+import { useWishlist } from '../context/WishlistContext';
 
-const Products = ({ products, addToCart, addToWishlist }) => {
+const Products = ({ products, addToCart }) => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [sortOrder, setSortOrder] = useState('none');
   const [modalImage, setModalImage] = useState(null);
   const [modalProduct, setModalProduct] = useState(null);
+
+  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const location = useLocation();
 
   useEffect(() => {
@@ -41,9 +45,15 @@ const Products = ({ products, addToCart, addToWishlist }) => {
     toast.success(`${product.name} added to cart`);
   };
 
-  const handleAddToWishlist = (product) => {
-    addToWishlist(product);
-    toast.success(`${product.name} added to wishlist`);
+  const handleWishlistToggle = (product) => {
+    const exists = wishlist.some((item) => item.id === product.id);
+    if (exists) {
+      removeFromWishlist(product.id);
+      toast.success(`${product.name} removed from wishlist`);
+    } else {
+      addToWishlist(product);
+      toast.success(`${product.name} added to wishlist`);
+    }
   };
 
   useEffect(() => {
@@ -137,18 +147,24 @@ const Products = ({ products, addToCart, addToWishlist }) => {
                 </Link>
                 <p className="text-gray-600 mb-2">${product.price.toFixed(2)}</p>
 
-                <div className="mt-4 flex space-x-2">
+                <div className="mt-4 flex space-x-2 items-center">
                   <button
                     onClick={() => handleAddToCart(product)}
                     className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition"
                   >
                     Add to Cart
                   </button>
-                  <button
-                    onClick={() => handleAddToWishlist(product)}
-                    className="border border-gray-300 px-3 py-1 rounded hover:bg-gray-100 transition"
-                  >
-                    Wishlist
+
+                  {/* ❤️ Heart Icon Button */}
+                  <button onClick={() => handleWishlistToggle(product)}>
+                    <Heart
+                      size={24}
+                      className={`transition-colors duration-300 ${
+                        wishlist.some((item) => item.id === product.id)
+                          ? 'text-red-500 fill-red-500'
+                          : 'text-gray-500'
+                      }`}
+                    />
                   </button>
                 </div>
               </div>
@@ -161,23 +177,22 @@ const Products = ({ products, addToCart, addToWishlist }) => {
         )}
       </div>
 
-      {/*  Image Modal */}
-{modalImage && (
-  <div
-    className="fixed inset-0 bg-transparent flex items-center justify-center z-50"
-    onClick={() => {
-      setModalImage(null);
-      setModalProduct(null);
-    }}
-  >
-    <img
-      src={modalImage}
-      alt={modalProduct?.name || 'Preview'}
-      className="max-w-[90%] max-h-[90%] rounded-xl border-4 border-white shadow-2xl"
-    />
-  </div>
-)}
-
+      {/* Image Modal */}
+      {modalImage && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50"
+          onClick={() => {
+            setModalImage(null);
+            setModalProduct(null);
+          }}
+        >
+          <img
+            src={modalImage}
+            alt={modalProduct?.name || 'Preview'}
+            className="max-w-[90%] max-h-[90%] rounded-xl border-4 border-white shadow-2xl"
+          />
+        </div>
+      )}
     </div>
   );
 };

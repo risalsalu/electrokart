@@ -17,10 +17,10 @@ export const WishlistProvider = ({ children }) => {
     }
   };
 
-  // Add item to JSON server wishlist
+  // Add item to wishlist
   const addToWishlist = async (product) => {
     try {
-      const exists = wishlist.find((item) => item.id === product.id);
+      const exists = wishlist.some((item) => item.id === product.id);
       if (exists) return;
 
       const response = await axios.post(baseURL, product);
@@ -30,25 +30,35 @@ export const WishlistProvider = ({ children }) => {
     }
   };
 
-  // Remove item from JSON server wishlist
+  // Remove item from wishlist
   const removeFromWishlist = async (id) => {
     try {
-      await axios.delete(`${baseURL}/${id}`);
+      // Optimistically update UI first
       setWishlist((prev) => prev.filter((item) => item.id !== id));
+
+      // Then sync with server
+      await axios.delete(`${baseURL}/${id}`);
     } catch (error) {
       console.error('Error removing from wishlist:', error);
     }
   };
 
+  // Total items
   const wishlistItemCount = wishlist.length;
 
+  // Load data on first render
   useEffect(() => {
     fetchWishlist();
   }, []);
 
   return (
     <WishlistContext.Provider
-      value={{ wishlist, addToWishlist, removeFromWishlist, wishlistItemCount }}
+      value={{
+        wishlist,
+        addToWishlist,
+        removeFromWishlist,
+        wishlistItemCount,
+      }}
     >
       {children}
     </WishlistContext.Provider>

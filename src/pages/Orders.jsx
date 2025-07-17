@@ -149,7 +149,7 @@ function Orders() {
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Tax (8%)</span>
+                    <span className="text-gray-600">Tax (0%)</span>
                     <span className="font-medium">${tax.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between pt-4 border-t border-gray-200 text-lg font-semibold text-gray-800">

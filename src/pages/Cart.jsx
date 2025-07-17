@@ -117,7 +117,7 @@ function Cart({ cart, removeFromCart, updateQuantity, user }) {
               <span>${shipping.toFixed(2)}</span>
             </div>
             <div className="flex justify-between">
-              <span>Tax (8%)</span>
+              <span>Tax (0%)</span>
               <span>${tax.toFixed(2)}</span>
             </div>
             <hr className="my-3" />

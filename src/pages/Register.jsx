@@ -45,9 +45,10 @@ function Register({ onRegister }) {
       if (onRegister) {
         onRegister(newUser);
       }
+      
 
       alert('Registration successful!');
-      navigate('/login', { state: { registeredEmail: email } });
+      navigate('/', { state: { registeredEmail: email } });
 
     } catch (err) {
       console.error('Registration error:', err);

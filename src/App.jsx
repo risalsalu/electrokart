@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Toaster } from 'react-hot-toast'; // ✅ hot-toast
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -17,7 +16,7 @@ import Register from './pages/Register';
 import Checkout from './pages/Checkout';
 import SearchResults from './pages/SearchResults';
 
-import AuthProvider ,{ AuthContext} from './Context/AuthContext';
+import AuthProvider, { AuthContext } from './context/AuthContext';
 import { CartProvider, useCart } from './context/CartContext';
 import { WishlistProvider, useWishlist } from './context/WishlistContext';
 import { OrdersProvider, useOrders } from './context/OrdersContext';
@@ -56,7 +55,9 @@ const AppContent = () => {
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/register" element={<Register onRegister={handleRegister} />} />
         </Routes>
-        <ToastContainer position="top-right" autoClose={1000} />
+
+        {/* ✅ react-hot-toast toaster placement */}
+        <Toaster position="top-center" toastOptions={{ duration: 2000 }} />
       </main>
       <Footer />
     </div>
