@@ -1,18 +1,18 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { useOrders } from "../context/OrdersContext";
-import { toast } from "react-toastify";
+import { useLocation } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function Orders() {
   const { orders, removeItemFromOrder } = useOrders();
-
-  const hasShownToast = useRef(false);
+  const location = useLocation();
 
   useEffect(() => {
-    if (orders.length > 0 && !hasShownToast.current) {
+    if (location.state?.orderPlaced) {
       toast.success("Order placed successfully!");
-      hasShownToast.current = true;
+      window.history.replaceState({}, document.title); // Clear location.state on reload
     }
-  }, [orders]);
+  }, [location]);
 
   if (!orders.length) {
     return (
@@ -50,8 +50,7 @@ function Orders() {
                 </div>
                 <div>
                   <span
-                    className={`inline-block px-4 py-1 rounded-full font-medium
-                    ${
+                    className={`inline-block px-4 py-1 rounded-full font-medium ${
                       order.status === "Delivered"
                         ? "bg-green-50 text-green-600"
                         : order.status === "Cancelled"
@@ -98,7 +97,9 @@ function Orders() {
                     <button
                       onClick={() => {
                         removeItemFromOrder(order.id, index);
-                        toast.info(`${item.name} removed from order`);
+                        toast(`Removed ${item.name} from order`, {
+                          icon: "🗑️",
+                        });
                       }}
                       className="ml-4 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
                       aria-label={`Remove ${item.name}`}
@@ -117,15 +118,15 @@ function Orders() {
           ))}
         </div>
 
-        {/* Order Summary */}
+        {/* Summary */}
         <div className="w-full lg:w-96">
           <div className="bg-white rounded-xl shadow-sm p-6 sticky top-8">
             <h2 className="text-xl font-semibold text-gray-800 mb-6">
               Order Summary
             </h2>
             {orders.map((order) => {
-              const shippingFee = order.items.length > 0 ? 0.00 : 0;
-              const tax = order.total * 0.00;
+              const shippingFee = order.items.length > 0 ? 0.0 : 0;
+              const tax = order.total * 0.0;
               const grandTotal = order.total + shippingFee + tax;
 
               return (

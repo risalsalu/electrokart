@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 function Login({ onLogin }) {
   const location = useLocation();
@@ -22,27 +23,26 @@ function Login({ onLogin }) {
       if (res.data.length > 0) {
         const user = res.data[0];
 
-        // Save session to localStorage
-        localStorage.setItem('currentUser', JSON.stringify({
-          email: user.email,
-          name: user.name,
-        }));
-
-        // Call parent login handler
-        if (onLogin) {
-          onLogin({
-            email: user.email,
-            name: user.name,
-          });
+        // Save session
+        if (user.role === 'admin') {
+          localStorage.setItem('admin', JSON.stringify({ email: user.email, name: user.name }));
+          toast.success('Admin login successful!');
+          navigate('/admin/dashboard');
+        } else {
+          localStorage.setItem('currentUser', JSON.stringify({ email: user.email, name: user.name }));
+          if (onLogin) {
+            onLogin({ email: user.email, name: user.name });
+          }
+          toast.success('Login successful!');
+          navigate('/');
         }
-
-        alert('Login successful!');
-        navigate('/');
       } else {
+        toast.error('Invalid email or password.');
         setError('Invalid email or password.');
       }
     } catch (err) {
       console.error('Login error:', err);
+      toast.error('Login failed. Please try again later.');
       setError('Something went wrong. Please try again later.');
     }
   };
@@ -81,9 +81,12 @@ function Login({ onLogin }) {
               <label className="block text-sm font-medium text-gray-700">
                 Password
               </label>
-              <a href="#" className="text-sm text-blue-600 hover:underline">
+              <span
+                className="text-sm text-blue-600 hover:underline cursor-pointer"
+                onClick={() => toast('Forgot password feature not implemented.')}
+              >
                 Forgot password?
-              </a>
+              </span>
             </div>
             <input
               type="password"
@@ -105,7 +108,7 @@ function Login({ onLogin }) {
 
         <div className="border-t border-gray-200 px-6 py-5 text-center">
           <p className="text-gray-600 text-sm">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <button
               onClick={() => navigate('/register')}
               className="font-medium text-blue-600 hover:text-blue-800 hover:underline transition"

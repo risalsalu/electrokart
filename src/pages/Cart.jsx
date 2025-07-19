@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 function Cart({ cart, removeFromCart, updateQuantity, user }) {
   const navigate = useNavigate();
@@ -10,15 +10,15 @@ function Cart({ cart, removeFromCart, updateQuantity, user }) {
     0
   );
   const shipping = cart.length > 0 ? 0.0 : 0;
-  const tax = subtotal * 0.00;
+  const tax = subtotal * 0.0;
   const total = subtotal + shipping + tax;
 
   const handleDecrease = (item) => {
     if (item.quantity > 1) {
       updateQuantity(item.id, item.quantity - 1);
-      toast.info(`Reduced quantity of ${item.name}`);
+      toast(`Reduced quantity of ${item.name}`, { icon: "➖" });
     } else {
-      toast.warn("Minimum quantity is 1");
+      toast.error("Minimum quantity is 1");
     }
   };
 
@@ -27,9 +27,19 @@ function Cart({ cart, removeFromCart, updateQuantity, user }) {
     toast.success(`Increased quantity of ${item.name}`);
   };
 
-  const handleRemove = (item) => {
-    removeFromCart(item.id);
-    toast.error(`${item.name} removed from cart`);
+  const handleRemove = async (item) => {
+    try {
+      const success = await removeFromCart(item.id);
+
+      // Optional: if removeFromCart returns false on failure
+      if (success === false) {
+        toast.error(`Failed to remove ${item.name}`);
+      }
+
+      // No success toast (as per your request)
+    } catch (error) {
+      toast.error(`Failed to remove ${item.name}`);
+    }
   };
 
   const handleCheckout = () => {

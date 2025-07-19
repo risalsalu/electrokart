@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 function Register({ onRegister }) {
   const [name, setName] = useState('');
@@ -12,32 +13,34 @@ function Register({ onRegister }) {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setError('');
 
-    // Validation
     if (!name || !email || !password) {
       setError('All fields are required');
+      toast.error('Please fill all fields');
       return;
     }
 
     if (password.length < 6) {
       setError('Password must be at least 6 characters');
+      toast.error('Password must be at least 6 characters');
       return;
     }
 
     try {
-      // Check if user already exists
       const res = await axios.get(`http://localhost:3002/users?email=${email}`);
       if (res.data.length > 0) {
         setError('User with this email already exists');
+        toast.error('Email already in use');
         return;
       }
 
-      // Create new user
       const newUser = {
         name,
         email,
         password,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        role: 'user'
       };
 
       await axios.post('http://localhost:3002/users', newUser);
@@ -45,14 +48,14 @@ function Register({ onRegister }) {
       if (onRegister) {
         onRegister(newUser);
       }
-      
 
-      alert('Registration successful!');
+      toast.success('Registration successful!');
       navigate('/', { state: { registeredEmail: email } });
 
     } catch (err) {
       console.error('Registration error:', err);
       setError('Something went wrong. Please try again later.');
+      toast.error('Registration failed. Try again later.');
     }
   };
 
@@ -79,52 +82,37 @@ function Register({ onRegister }) {
           <form onSubmit={handleRegister} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
-              <div className="relative">
-                <input
-                  type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                  placeholder="Enter your full name"
-                />
-                <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                  </svg>
-                </div>
-              </div>
+              <input
+                type="text"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter your full name"
+              />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-              <div className="relative">
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                  placeholder="Enter your email"
-                />
-                <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                  </svg>
-                </div>
-              </div>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter your email"
+              />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
               <div className="relative">
                 <input
-                  type={passwordVisible ? "text" : "password"}
+                  type={passwordVisible ? 'text' : 'password'}
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors pr-10"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 pr-10"
                   placeholder="Create a password"
                 />
                 <button
@@ -172,24 +160,9 @@ function Register({ onRegister }) {
             </button>
           </form>
 
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">Or continue with</span>
-              </div>
-            </div>
-
-            <div className="mt-6 grid grid-cols-3 gap-3">
-              {/* Social icons */}
-            </div>
-          </div>
-
           <div className="mt-8 text-center text-sm text-gray-600">
             Already have an account?{' '}
-            <button 
+            <button
               onClick={() => navigate('/login')}
               className="font-medium text-blue-600 hover:text-blue-800 hover:underline"
             >

@@ -3,8 +3,9 @@ import { useLocation, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { Heart } from 'lucide-react';
 import { useWishlist } from '../context/WishlistContext';
+import { useCart } from '../context/CartContext';
 
-const Products = ({ products, addToCart }) => {
+const Products = ({ products }) => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [sortOrder, setSortOrder] = useState('none');
@@ -12,14 +13,13 @@ const Products = ({ products, addToCart }) => {
   const [modalProduct, setModalProduct] = useState(null);
 
   const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
+  const { cart, addToCart } = useCart();
   const location = useLocation();
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const category = searchParams.get('category');
-    if (category) {
-      setCategoryFilter(category);
-    }
+    if (category) setCategoryFilter(category);
   }, [location.search]);
 
   useEffect(() => {
@@ -41,8 +41,12 @@ const Products = ({ products, addToCart }) => {
   }, [categoryFilter, products, sortOrder]);
 
   const handleAddToCart = (product) => {
-    addToCart(product);
-    toast.success(`${product.name} added to cart`);
+    const exists = cart.find((item) => item.id === product.id);
+    if (exists) {
+      toast.error(`${product.name} is already in cart`);
+    } else {
+      addToCart(product); // ⛔️ Removed toast here
+    }
   };
 
   const handleWishlistToggle = (product) => {
@@ -155,7 +159,6 @@ const Products = ({ products, addToCart }) => {
                     Add to Cart
                   </button>
 
-                  {/* ❤️ Heart Icon Button */}
                   <button onClick={() => handleWishlistToggle(product)}>
                     <Heart
                       size={24}

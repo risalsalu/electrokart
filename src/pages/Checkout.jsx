@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 function Checkout({ cart, user, clearCart, placeOrder }) {
   const [shippingAddress, setShippingAddress] = useState('');
@@ -7,21 +8,21 @@ function Checkout({ cart, user, clearCart, placeOrder }) {
   const navigate = useNavigate();
 
   const cartTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
-  const shippingFee = cart.length > 0 ? 0.00 : 0;
-  const tax = cartTotal * 0.00;
+  const shippingFee = cart.length > 0 ? 0.0 : 0;
+  const tax = cartTotal * 0.0;
   const grandTotal = cartTotal + shippingFee + tax;
 
   const handlePlaceOrder = (e) => {
     e.preventDefault();
 
-    if (!shippingAddress) {
-      alert('Please enter a shipping address');
+    if (!user) {
+      toast.error('You must be logged in to place an order');
+      navigate('/login');
       return;
     }
 
-    if (!user) {
-      alert('You must be logged in to place an order');
-      navigate('/login');
+    if (!shippingAddress.trim()) {
+      toast.error('Please enter a shipping address');
       return;
     }
 
@@ -37,7 +38,12 @@ function Checkout({ cart, user, clearCart, placeOrder }) {
 
     placeOrder(newOrder);
     clearCart();
-    navigate('/orders');
+
+    toast.success('Order placed successfully!');
+
+    setTimeout(() => {
+      navigate('/orders');
+    }, 1000);
   };
 
   return (
@@ -79,7 +85,9 @@ function Checkout({ cart, user, clearCart, placeOrder }) {
                       className="h-5 w-5 text-blue-600 focus:ring-blue-500"
                     />
                     <label htmlFor={method} className="ml-3 block text-gray-700 font-medium">
-                      {method === 'cod' ? 'Cash on Delivery' : method.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                      {method === 'cod'
+                        ? 'Cash on Delivery'
+                        : method.replace('_', ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
                     </label>
                   </div>
                 ))}
@@ -102,8 +110,12 @@ function Checkout({ cart, user, clearCart, placeOrder }) {
           <div className="mb-6 space-y-4">
             {cart.map((item) => (
               <div key={item.id} className="flex justify-between">
-                <div className="text-gray-600">{item.name} × {item.quantity}</div>
-                <div className="text-gray-800 font-medium">${(item.price * item.quantity).toFixed(2)}</div>
+                <div className="text-gray-600">
+                  {item.name} × {item.quantity}
+                </div>
+                <div className="text-gray-800 font-medium">
+                  ${(item.price * item.quantity).toFixed(2)}
+                </div>
               </div>
             ))}
           </div>
