@@ -23,7 +23,7 @@ import AdminDashboard from './admin/AdminDashboard';
 import ProductManagement from './admin/ProductManagement';
 import OrderManagement from './admin/OrderManagement';
 import UserManagement from './admin/UserManagement';
-import AdminLayout from "./components/admin/Layout";
+import AdminLayout from "./components/admin/AdminLayout";
 
 // 🧠 Contexts
 import AuthProvider, { AuthContext } from './context/AuthContext';

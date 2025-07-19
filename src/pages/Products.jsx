@@ -45,7 +45,7 @@ const Products = ({ products }) => {
     if (exists) {
       toast.error(`${product.name} is already in cart`);
     } else {
-      addToCart(product); // ⛔️ Removed toast here
+      addToCart(product); // Removed toast here
     }
   };
 
