@@ -636,7 +636,23 @@
     }
   ],
   "wishlist": [],
-  "cart": [],
+  "cart": [
+    {
+      "id": "2",
+      "name": "Ultra HD Smart TV",
+      "price": 1299.99,
+      "description": "This 65-inch Ultra HD Smart TV delivers breathtaking 4K visuals with HDR support, ensuring crisp details and vibrant colors. Its smart features provide access to apps like Netflix, YouTube, and more, making it a perfect choice for immersive home entertainment and streaming.",
+      "category": "tv",
+      "image": "https://images.samsung.com/is/image/samsung/assets/uk/tvs/tv-buying-guide/the-best-tv-picture-quality/uk_UE32K4100AKXXU-420x300.png?$420_300_PNG$",
+      "tags": [
+        "television",
+        "smart tv",
+        "4k",
+        "ultra hd"
+      ],
+      "quantity": 1
+    }
+  ],
   "orders": [
     {
       "id": "ORD-716FVNTO",
