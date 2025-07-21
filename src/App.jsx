@@ -4,7 +4,6 @@ import {BrowserRouter as Router,Routes,Route,Navigate,useLocation
 } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
-// 🧩 User Components
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -18,26 +17,22 @@ import Register from './pages/Register';
 import Checkout from './pages/Checkout';
 import SearchResults from './pages/SearchResults';
 
-// 🧩 Admin Components
 import AdminDashboard from './admin/AdminDashboard';
 import ProductManagement from './admin/ProductManagement';
 import OrderManagement from './admin/OrderManagement';
 import UserManagement from './admin/UserManagement';
 import AdminLayout from "./components/admin/AdminLayout";
 
-// 🧠 Contexts
-import AuthProvider, { AuthContext } from "./context/AuthContext";
-import { CartProvider, useCart } from './context/CartContext';
-import { WishlistProvider, useWishlist } from './context/WishlistContext';
-import { OrdersProvider, useOrders } from './context/OrdersContext';
+import AuthProvider, { AuthContext } from "./Context/AuthContext";
+import { CartProvider, useCart } from './Context/CartContext';
+import { WishlistProvider, useWishlist } from './Context/WishlistContext';
+import { OrdersProvider, useOrders } from './Context/OrdersContext';
 
-// 🔐 Protected user route
 const ProtectedRoute = ({ children }) => {
   const { user } = useContext(AuthContext);
   return user ? children : <Navigate to="/login" replace />;
 };
 
-// 🎯 AppContent handles routing & layout
 const AppContent = () => {
   const location = useLocation();
   const [products, setProducts] = useState([]);
@@ -47,7 +42,6 @@ const AppContent = () => {
   const { wishlist, addToWishlist, removeFromWishlist, wishlistItemCount } = useWishlist();
   const { placeOrder } = useOrders();
 
-  // Fetch product list on load
   useEffect(() => {
     axios
       .get('http://localhost:3002/products')
@@ -95,8 +89,6 @@ const AppContent = () => {
     </div>
   );
 };
-
-// 🔧 App Entry Point
 const App = () => (
   <Router>
     <AuthProvider>
@@ -110,5 +102,4 @@ const App = () => (
     </AuthProvider>
   </Router>
 );
-
 export default App;

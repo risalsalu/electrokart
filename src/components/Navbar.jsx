@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
-import { useWishlist } from '../context/WishlistContext';
+import { useCart } from '../Context/CartContext';
+import { useWishlist } from '../Context/WishlistContext';
 
 function Navbar({ user, onLogout }) {
   const navigate = useNavigate();
