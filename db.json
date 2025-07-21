@@ -60,7 +60,7 @@
       "price": 999.99,
       "category": "mobile",
       "stock": "2",
-      "image": "https://phonehero.cdn.imgeng.in/img/bigmodelpics/iphone-16-pro-max-black-titanium.png",
+      "image": "https://itronics.in/wp-content/uploads/2024/09/iPhone_16_Pro_Max_Black_Titanium_PDP_Image_Position_1__en-IN.png",
       "brand": "Apple",
       "color": "Black",
       "discount": "",
@@ -115,7 +115,7 @@
       "price": 899.99,
       "category": "mobile",
       "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
+      "image": "https://www.dxomark.com/wp-content/uploads/medias/post-132367/Apple-iPhone-14_Plus_FINAL_featured-image-packshot-review.jpg",
       "brand": "Apple",
       "color": "Black",
       "discount": "",
@@ -126,7 +126,7 @@
       "price": 299.99,
       "category": "mobile",
       "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
+      "image": "https://i01.appmifile.com/v1/MI_18455B3E4DA706226CF7535A58E875F0267/pms_1681210490.8945532.png",
       "brand": "Mi",
       "color": "Grey",
       "discount": "",
@@ -137,7 +137,7 @@
       "price": 599.99,
       "category": "mobile",
       "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
+      "image": "https://fdn.gsmarena.com/imgroot/news/23/06/nothing-phone-2-renders-onleaks/inline/-1200/gsmarena_001.jpg",
       "brand": "Nothing",
       "color": "White",
       "discount": "",
@@ -148,7 +148,7 @@
       "price": 999.99,
       "category": "mobile",
       "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
+      "image": "https://dlcdnwebimgs.asus.com/gain/C91B34FA-D253-4E35-9C67-BDFF3EC90E9B/w250/fwebp",
       "brand": "Asus",
       "color": "Black",
       "discount": "",
@@ -159,7 +159,7 @@
       "price": 449.99,
       "category": "mobile",
       "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
+      "image": "https://www.dxomark.com/wp-content/uploads/medias/post-142650/Samsung-Galaxy-A54-5G_featured-image-packshot-review.jpg",
       "brand": "Samsung",
       "color": "Gold",
       "discount": "",
@@ -170,7 +170,7 @@
       "price": 749.99,
       "category": "laptops",
       "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
+      "image": "https://hp.widen.net/content/njkc3kemey/png/njkc3kemey.png?w=800&h=600&dpi=72&color=ffffff00",
       "brand": "HP",
       "color": "Black",
       "discount": "",
@@ -181,7 +181,7 @@
       "price": 699.99,
       "category": "laptops",
       "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
+      "image": "https://freedomtech.com.au/wp-content/uploads/2024/10/Remove-background-project-3.png",
       "brand": "Dell",
       "color": "Black",
       "discount": "",
@@ -192,7 +192,7 @@
       "price": 599.99,
       "category": "laptops",
       "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
+      "image": "https://p3-ofp.static.pub//fes/cms/2024/09/16/oni50xc5ahyj6scw51veskg2cf6wfz717977.png",
       "brand": "Lenovo",
       "color": "Black",
       "discount": "",
@@ -203,7 +203,7 @@
       "price": 999.99,
       "category": "laptops",
       "stock": "2",
-      "image": "https://itronics.in/wp-content/uploads/2024/09/iPhone_16_Pro_Max_Black_Titanium_PDP_Image_Position_1__en-IN.png",
+      "image": "https://www.pngarts.com/files/4/Apple-Macbook-Pro-Transparent-Image.png",
       "brand": "Apple",
       "color": "Gold",
       "discount": "",
@@ -214,150 +214,29 @@
       "price": 799.99,
       "category": "laptops",
       "stock": "2",
-      "image": "https://itronics.in/wp-content/uploads/2024/09/iPhone_16_Pro_Max_Black_Titanium_PDP_Image_Position_1__en-IN.png",
+      "image": "https://dlcdnwebimgs.asus.com/gain/dd08062b-93d2-432c-b2a4-e6b163501519/",
       "brand": "Asus",
       "color": "Grey",
       "discount": "",
       "id": "20"
     },
     {
-      "name": "Acer Aspire 5",
-      "price": 679.99,
-      "category": "laptops",
-      "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
-      "brand": "Acer",
-      "color": "Black",
-      "discount": "",
-      "id": "21"
-    },
-    {
-      "name": "Microsoft Surface Laptop Go",
-      "price": 649.99,
-      "category": "laptops",
-      "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
-      "brand": "Microsoft",
-      "color": "Grey",
-      "discount": "",
-      "id": "22"
-    },
-    {
-      "name": "HP Spectre x360",
-      "price": 1199.99,
-      "category": "laptops",
-      "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
-      "brand": "HP",
-      "color": "Black",
-      "discount": "",
-      "id": "23"
-    },
-    {
-      "name": "Dell XPS 13",
-      "price": 1099.99,
-      "category": "laptops",
-      "stock": "2",
-      "image": "https://itronics.in/wp-content/uploads/2024/09/iPhone_16_Pro_Max_Black_Titanium_PDP_Image_Position_1__en-IN.png",
-      "brand": "Dell",
-      "color": "Black",
-      "discount": "",
-      "id": "24"
-    },
-    {
-      "name": "MSI Modern 14",
-      "price": 729.99,
-      "category": "laptops",
-      "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
-      "brand": "MSI",
-      "color": "Black",
-      "discount": "",
-      "id": "25"
-    },
-    {
-      "name": "Samsung Crystal UHD 43\"",
-      "price": 379.99,
-      "category": "tv",
-      "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
-      "brand": "Samsung",
-      "color": "Black",
-      "discount": "",
-      "id": "26"
-    },
-    {
-      "name": "LG NanoCell 50\"",
-      "price": 549.99,
-      "category": "tv",
-      "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
-      "brand": "LG",
-      "color": "Black",
-      "discount": "",
-      "id": "27"
-    },
-    {
-      "name": "Sony Bravia X75 55\"",
-      "price": 699.99,
-      "category": "tv",
-      "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
-      "brand": "Sony",
-      "color": "Black",
-      "discount": "",
-      "id": "28"
-    },
-    {
-      "name": "OnePlus Y Series 40\"",
-      "price": 269.99,
-      "category": "tv",
-      "stock": "2",
-      "image": "https://itronics.in/wp-content/uploads/2024/09/iPhone_16_Pro_Max_Black_Titanium_PDP_Image_Position_1__en-IN.png",
-      "brand": "Oneplus",
-      "color": "Black",
-      "discount": "",
-      "id": "29"
-    },
-    {
-      "name": "Redmi Smart TV 32\"",
-      "price": 189.99,
-      "category": "tv",
-      "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
-      "brand": "Mi",
-      "color": "Black",
-      "discount": "",
-      "id": "30"
-    },
-    {
       "name": "TCL 4K QLED 50\"",
       "price": 649.99,
       "category": "tv",
       "stock": "2",
-      "image": "https://itronics.in/wp-content/uploads/2024/09/iPhone_16_Pro_Max_Black_Titanium_PDP_Image_Position_1__en-IN.png",
+      "image": "https://media-ik.croma.com/prod/https://media.tatacroma.com/Croma%20Assets/Entertainment/Television/Images/306516_0_illijz.png?tr=w-600",
       "brand": "TCL",
       "color": "Black",
       "discount": "",
       "id": "31"
     },
     {
-      "name": "Vu Premium 55\"",
-      "price": 499.99,
-      "category": "tv",
-      "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
-      "brand": "Vu",
-      "color": "Black",
-      "discount": "",
-      "id": "32"
-    },
-    {
       "name": "Realme Smart TV X 43\"",
       "price": 329.99,
       "category": "tv",
       "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
+      "image": "https://www.pngitem.com/pimgs/m/722-7228451_smart-samsung-tv-png-transparent-png.png",
       "brand": "Realme",
       "color": "Black",
       "discount": "",
@@ -368,7 +247,7 @@
       "price": 599.99,
       "category": "tv",
       "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
+      "image": "https://images.philips.com/is/image/philipsconsumer/e0d0bb2662d849558853afbf0127b854?$pnglarge$&wid=1250",
       "brand": "Philips",
       "color": "Black",
       "discount": "",
@@ -379,9 +258,9 @@
       "price": 299.99,
       "category": "headphones",
       "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
+      "image": "https://png.pngtree.com/png-vector/20240315/ourmid/pngtree-sony-headphones-on-transparent-generated-ai-png-image_11941249.png",
       "brand": "Sony",
-      "color": "Black",
+      "color": "White",
       "discount": "",
       "id": "36"
     },
@@ -390,9 +269,9 @@
       "price": 129.99,
       "category": "headphones",
       "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
+      "image": "https://uk.jbl.com/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dw3143f46e/01.JBL_Live_770NC_Product%20Image_Hero_White.png?sw=300&sh=300",
       "brand": "JBL",
-      "color": "Grey",
+      "color": "White",
       "discount": "",
       "id": "37"
     },
@@ -401,9 +280,9 @@
       "price": 49.99,
       "category": "headphones",
       "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
+      "image": "https://media-ik.croma.com/prod/https://media.tatacroma.com/Croma%20Assets/Communication/Headphones%20and%20Earphones/Images/308504_0_dt0a5y.png?tr=w-600",
       "brand": "Boat",
-      "color": "White",
+      "color": "Black",
       "discount": "",
       "id": "38"
     },
@@ -412,7 +291,7 @@
       "price": 549.99,
       "category": "headphones",
       "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
+      "image": "https://www.icrescent.in/cdn/shop/files/262016_okfsmf.png?v=1752037696&width=1946",
       "brand": "Apple",
       "color": "White",
       "discount": "",
@@ -423,9 +302,9 @@
       "price": 29.99,
       "category": "headphones",
       "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
+      "image": "https://media.tatacroma.com/Croma%20Assets/Entertainment/Wireless%20Earbuds/Images/307765_0_svfljf.png",
       "brand": "Realme",
-      "color": "Grey",
+      "color": "White",
       "discount": "",
       "id": "41"
     },
@@ -434,396 +313,46 @@
       "price": 99.99,
       "category": "headphones",
       "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
+      "image": "https://media.tatacroma.com/270439_0_vyzxyf.png",
       "brand": "Boat",
-      "color": "Gold",
+      "color": "Black",
       "discount": "",
       "id": "42"
-    },
-    {
-      "id": "43",
-      "name": "Bose QuietComfort 45",
-      "price": 329.99,
-      "description": "Bose QuietComfort 45 headphones are designed for unmatched comfort and exceptional noise cancellation. Featuring soft ear cushions, advanced ANC technology, and up to 24 hours of battery life, these headphones deliver premium audio for long listening sessions. Ideal for travel, work, or deep focus.",
-      "category": "headphone",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
-      "tags": [
-        "bose",
-        "comfort",
-        "noise cancelling"
-      ]
-    },
-    {
-      "name": "Noise Buds VS104",
-      "price": 24.99,
-      "category": "headphones",
-      "stock": "2",
-      "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
-      "brand": "Noise",
-      "color": "White",
-      "discount": "",
-      "id": "44"
     }
   ],
   "users": [
     {
-      "name": "Muhammed Rizal N P",
-      "email": "bridgeon@gmail.com",
-      "role": "user",
-      "phone": "",
-      "status": "active",
-      "id": "d809"
-    },
-    {
-      "name": "Muhammed Rizal",
-      "email": "bridgeon1@gmail.com",
-      "role": "user",
-      "phone": "",
-      "status": "active",
-      "id": "7a7e"
-    },
-    {
-      "name": "muhamed",
-      "email": "muhamed@gmail.com",
-      "role": "user",
-      "phone": "",
-      "status": "active",
-      "id": "f72d"
-    },
-    {
-      "name": "Muhammed Rizal N P",
-      "email": "admin@gmail.com",
-      "role": "admin",
-      "phone": "",
-      "status": "active",
-      "id": "4c12"
-    },
-    {
-      "name": "abc123",
-      "email": "abc123@gmail.com",
-      "role": "user",
-      "phone": "",
-      "status": "active",
-      "id": "9562"
-    },
-    {
-      "name": "sample",
-      "email": "sample@gmail.com",
-      "role": "user",
-      "phone": "",
-      "status": "active",
-      "id": "ab37"
-    },
-    {
-      "id": "1f12",
-      "name": "faslu ",
-      "email": "shifanmohd9@gmail.com",
-      "password": "shifanmohd9@gmail.com",
-      "createdAt": "2025-07-19T06:58:35.340Z",
+      "id": "9014",
+      "name": "user",
+      "email": "user@gmail.com",
+      "password": "user@gmail.com",
+      "createdAt": "2025-07-19T10:36:42.588Z",
       "role": "user"
+    },
+    {
+      "id": "d783",
+      "name": "bridgeon",
+      "email": "bridgeon@gmail.com",
+      "password": "bridgeon@gmail.com",
+      "createdAt": "2025-07-19T13:25:28.351Z",
+      "role": "user"
+    },
+    {
+      "id": "7b32",
+      "name": "admin",
+      "email": "admin@gmail.com",
+      "password": "admin@gmail.com",
+      "createdAt": "2025-07-19T13:26:21.626Z",
+      "role": "admin"
     }
   ],
   "wishlist": [],
   "cart": [],
   "orders": [
     {
-      "id": "ORD-716FVNTO",
-      "date": "2025-07-18T10:38:57.060Z",
-      "status": "Cancelled",
-      "shippingAddress": "dqd",
-      "paymentMethod": "cod",
-      "items": [
-        {
-          "id": "2",
-          "name": "Ultra HD Smart TV",
-          "price": 1299.99,
-          "description": "This 65-inch Ultra HD Smart TV delivers breathtaking 4K visuals with HDR support, ensuring crisp details and vibrant colors. Its smart features provide access to apps like Netflix, YouTube, and more, making it a perfect choice for immersive home entertainment and streaming.",
-          "category": "tv",
-          "image": "https://images.samsung.com/is/image/samsung/assets/uk/tvs/tv-buying-guide/the-best-tv-picture-quality/uk_UE32K4100AKXXU-420x300.png?$420_300_PNG$",
-          "tags": [
-            "television",
-            "smart tv",
-            "4k",
-            "ultra hd"
-          ],
-          "quantity": 1
-        },
-        {
-          "id": "3",
-          "name": "Wireless Headphones",
-          "price": 349.99,
-          "description": "These wireless headphones offer up to 30 hours of battery life and advanced noise cancellation for uninterrupted listening. Designed for comfort and performance, they deliver powerful audio, making them ideal for music, calls, or long flights.",
-          "category": "headphone",
-          "image": "https://www.freeiconspng.com/thumbs/headphones-png/headphones-png-14.png",
-          "tags": [
-            "earphones",
-            "bluetooth",
-            "noise cancelling",
-            "audio"
-          ],
-          "quantity": 1
-        },
-        {
-          "id": "4",
-          "name": "Gaming Laptop Pro",
-          "price": 1599.99,
-          "description": "The Gaming Laptop Pro is built for serious gamers, featuring an NVIDIA RTX 3070 GPU, 16GB RAM, and a smooth 144Hz display. Whether for high-end gaming or heavy multitasking, its powerful specs ensure fast, immersive performance and fluid gameplay.",
-          "category": "laptop",
-          "image": "https://upload.wikimedia.org/wikipedia/commons/e/e4/AVANT-P870DMG-GAMING-LAPTOP.png",
-          "tags": [
-            "notebook",
-            "gaming",
-            "computer",
-            "pc"
-          ],
-          "quantity": 1
-        }
-      ],
-      "total": 3249.97
-    },
-    {
-      "id": "ORD-J4TQNOK9",
-      "date": "2025-07-18T11:27:49.304Z",
-      "status": "delivered",
-      "shippingAddress": "bridgeon solution,\nkinfra park,\nkakkanchery,\nMalappuram",
-      "paymentMethod": "cod",
-      "items": [
-        {
-          "id": "3",
-          "name": "Wireless Headphones",
-          "price": 349.99,
-          "description": "These wireless headphones offer up to 30 hours of battery life and advanced noise cancellation for uninterrupted listening. Designed for comfort and performance, they deliver powerful audio, making them ideal for music, calls, or long flights.",
-          "category": "headphone",
-          "image": "https://www.freeiconspng.com/thumbs/headphones-png/headphones-png-14.png",
-          "tags": [
-            "earphones",
-            "bluetooth",
-            "noise cancelling",
-            "audio"
-          ],
-          "quantity": 1
-        },
-        {
-          "id": "1",
-          "name": "Iphone 16 pro",
-          "price": 899.99,
-          "description": "The iPhone 16 Pro features a stunning 6.7-inch OLED display, offering sharp visuals and vibrant colors. It comes with 128GB of storage, a powerful chipset, and advanced camera capabilities, making it ideal for photography, productivity, and entertainment. Built for speed, style, and performance.",
-          "category": "mobile",
-          "image": "https://itronics.in/wp-content/uploads/2024/09/iPhone_16_Pro_Max_Black_Titanium_PDP_Image_Position_1__en-IN.png",
-          "tags": [
-            "phone",
-            "smartphone",
-            "mobile",
-            "android"
-          ],
-          "quantity": 1
-        },
-        {
-          "id": "6",
-          "name": "iPhone 15 Pro",
-          "price": 999.99,
-          "description": "The iPhone 15 Pro offers a sharp 6.1-inch Super Retina XDR display and is powered by the efficient A16 Bionic chip. It delivers smooth performance and vibrant visuals. The phone has a premium build, excellent camera quality, and runs iOS for seamless user experience.",
-          "category": "mobile",
-          "image": "https://phonehero.cdn.imgeng.in/img/bigmodelpics/iphone-16-pro-max-black-titanium.png",
-          "tags": [
-            "apple",
-            "ios",
-            "premium"
-          ],
-          "quantity": 1
-        }
-      ],
-      "total": 2249.97
-    },
-    {
-      "id": "ORD-GUVDH1EY",
-      "date": "2025-07-18T11:30:45.436Z",
-      "status": "delivered",
-      "shippingAddress": "adsd",
-      "paymentMethod": "cod",
-      "items": [
-        {
-          "id": "2",
-          "name": "Ultra HD Smart TV",
-          "price": 1299.99,
-          "description": "This 65-inch Ultra HD Smart TV delivers breathtaking 4K visuals with HDR support, ensuring crisp details and vibrant colors. Its smart features provide access to apps like Netflix, YouTube, and more, making it a perfect choice for immersive home entertainment and streaming.",
-          "category": "tv",
-          "image": "https://images.samsung.com/is/image/samsung/assets/uk/tvs/tv-buying-guide/the-best-tv-picture-quality/uk_UE32K4100AKXXU-420x300.png?$420_300_PNG$",
-          "tags": [
-            "television",
-            "smart tv",
-            "4k",
-            "ultra hd"
-          ],
-          "quantity": 1
-        },
-        {
-          "id": "3",
-          "name": "Wireless Headphones",
-          "price": 349.99,
-          "description": "These wireless headphones offer up to 30 hours of battery life and advanced noise cancellation for uninterrupted listening. Designed for comfort and performance, they deliver powerful audio, making them ideal for music, calls, or long flights.",
-          "category": "headphone",
-          "image": "https://www.freeiconspng.com/thumbs/headphones-png/headphones-png-14.png",
-          "tags": [
-            "earphones",
-            "bluetooth",
-            "noise cancelling",
-            "audio"
-          ],
-          "quantity": 1
-        },
-        {
-          "id": "4",
-          "name": "Gaming Laptop Pro",
-          "price": 1599.99,
-          "description": "The Gaming Laptop Pro is built for serious gamers, featuring an NVIDIA RTX 3070 GPU, 16GB RAM, and a smooth 144Hz display. Whether for high-end gaming or heavy multitasking, its powerful specs ensure fast, immersive performance and fluid gameplay.",
-          "category": "laptop",
-          "image": "https://upload.wikimedia.org/wikipedia/commons/e/e4/AVANT-P870DMG-GAMING-LAPTOP.png",
-          "tags": [
-            "notebook",
-            "gaming",
-            "computer",
-            "pc"
-          ],
-          "quantity": 1
-        }
-      ],
-      "total": 3249.97
-    },
-    {
-      "id": "ORD-K25U0VXA",
-      "date": "2025-07-18T11:30:54.652Z",
-      "status": "delivered",
-      "shippingAddress": "ads",
-      "paymentMethod": "credit_card",
-      "items": [
-        {
-          "id": "3",
-          "name": "Wireless Headphones",
-          "price": 349.99,
-          "description": "These wireless headphones offer up to 30 hours of battery life and advanced noise cancellation for uninterrupted listening. Designed for comfort and performance, they deliver powerful audio, making them ideal for music, calls, or long flights.",
-          "category": "headphone",
-          "image": "https://www.freeiconspng.com/thumbs/headphones-png/headphones-png-14.png",
-          "tags": [
-            "earphones",
-            "bluetooth",
-            "noise cancelling",
-            "audio"
-          ],
-          "quantity": 1
-        }
-      ],
-      "total": 349.99
-    },
-    {
-      "id": "ORD-EDFIZ3ON",
-      "date": "2025-07-18T11:31:01.669Z",
-      "status": "delivered",
-      "shippingAddress": "adsasd",
-      "paymentMethod": "credit_card",
-      "items": [
-        {
-          "id": "4",
-          "name": "Gaming Laptop Pro",
-          "price": 1599.99,
-          "description": "The Gaming Laptop Pro is built for serious gamers, featuring an NVIDIA RTX 3070 GPU, 16GB RAM, and a smooth 144Hz display. Whether for high-end gaming or heavy multitasking, its powerful specs ensure fast, immersive performance and fluid gameplay.",
-          "category": "laptop",
-          "image": "https://upload.wikimedia.org/wikipedia/commons/e/e4/AVANT-P870DMG-GAMING-LAPTOP.png",
-          "tags": [
-            "notebook",
-            "gaming",
-            "computer",
-            "pc"
-          ],
-          "quantity": 1
-        }
-      ],
-      "total": 1599.99
-    },
-    {
-      "id": "ORD-1QH13MWO",
-      "date": "2025-07-18T11:31:09.526Z",
-      "status": "delivered",
-      "shippingAddress": "sda",
-      "paymentMethod": "credit_card",
-      "items": [
-        {
-          "id": "1",
-          "name": "Iphone 16 pro",
-          "price": 899.99,
-          "description": "The iPhone 16 Pro features a stunning 6.7-inch OLED display, offering sharp visuals and vibrant colors. It comes with 128GB of storage, a powerful chipset, and advanced camera capabilities, making it ideal for photography, productivity, and entertainment. Built for speed, style, and performance.",
-          "category": "mobile",
-          "image": "https://itronics.in/wp-content/uploads/2024/09/iPhone_16_Pro_Max_Black_Titanium_PDP_Image_Position_1__en-IN.png",
-          "tags": [
-            "phone",
-            "smartphone",
-            "mobile",
-            "android"
-          ],
-          "quantity": 1
-        }
-      ],
-      "total": 899.99
-    },
-    {
-      "id": "ORD-D4T5HBZC",
-      "date": "2025-07-18T12:02:18.315Z",
-      "status": "delivered",
-      "shippingAddress": "ddxw",
-      "paymentMethod": "cod",
-      "items": [
-        {
-          "id": "1",
-          "name": "Iphone 16 pro",
-          "price": 899.99,
-          "description": "The iPhone 16 Pro features a stunning 6.7-inch OLED display, offering sharp visuals and vibrant colors. It comes with 128GB of storage, a powerful chipset, and advanced camera capabilities, making it ideal for photography, productivity, and entertainment. Built for speed, style, and performance.",
-          "category": "mobile",
-          "image": "https://itronics.in/wp-content/uploads/2024/09/iPhone_16_Pro_Max_Black_Titanium_PDP_Image_Position_1__en-IN.png",
-          "tags": [
-            "phone",
-            "smartphone",
-            "mobile",
-            "android"
-          ],
-          "quantity": 1
-        },
-        {
-          "id": "2",
-          "name": "Ultra HD Smart TV",
-          "price": 1299.99,
-          "description": "This 65-inch Ultra HD Smart TV delivers breathtaking 4K visuals with HDR support, ensuring crisp details and vibrant colors. Its smart features provide access to apps like Netflix, YouTube, and more, making it a perfect choice for immersive home entertainment and streaming.",
-          "category": "tv",
-          "image": "https://images.samsung.com/is/image/samsung/assets/uk/tvs/tv-buying-guide/the-best-tv-picture-quality/uk_UE32K4100AKXXU-420x300.png?$420_300_PNG$",
-          "tags": [
-            "television",
-            "smart tv",
-            "4k",
-            "ultra hd"
-          ],
-          "quantity": 2
-        },
-        {
-          "id": "3",
-          "name": "Wireless Headphones",
-          "price": 349.99,
-          "description": "These wireless headphones offer up to 30 hours of battery life and advanced noise cancellation for uninterrupted listening. Designed for comfort and performance, they deliver powerful audio, making them ideal for music, calls, or long flights.",
-          "category": "headphone",
-          "image": "https://www.freeiconspng.com/thumbs/headphones-png/headphones-png-14.png",
-          "tags": [
-            "earphones",
-            "bluetooth",
-            "noise cancelling",
-            "audio"
-          ],
-          "quantity": 4
-        }
-      ],
-      "total": 4899.93
-    },
-    {
       "id": "ORD-580U3IM6",
       "date": "2025-07-18T12:21:05.586Z",
-      "status": "delivered",
+      "status": "completed",
       "shippingAddress": "dfzz",
       "paymentMethod": "credit_card",
       "items": [
@@ -888,7 +417,7 @@
     {
       "id": "ORD-VB4B6JAK",
       "date": "2025-07-19T05:04:06.719Z",
-      "status": "Processing",
+      "status": "Cancelled",
       "shippingAddress": "ert",
       "paymentMethod": "paypal",
       "items": [
@@ -909,40 +438,6 @@
         }
       ],
       "total": 349.99
-    },
-    {
-      "id": "ORD-2TEMY2YI",
-      "date": "2025-07-19T07:01:18.046Z",
-      "status": "delivered",
-      "shippingAddress": "dcdc",
-      "paymentMethod": "credit_card",
-      "items": [
-        {
-          "id": "1",
-          "name": "Iphone 16 pro",
-          "price": 899.99,
-          "category": "mobile",
-          "stock": "2",
-          "image": "https://itronics.in/wp-content/uploads/2024/09/iPhone_16_Pro_Max_Black_Titanium_PDP_Image_Position_1__en-IN.png",
-          "brand": "Apple",
-          "color": "White",
-          "discount": "",
-          "quantity": 3
-        },
-        {
-          "name": "Ultra HD Smart TV",
-          "price": 1299.99,
-          "category": "tv",
-          "stock": "2",
-          "image": "https://images.samsung.com/is/image/samsung/assets/uk/tvs/tv-buying-guide/the-best-tv-picture-quality/uk_UE32K4100AKXXU-420x300.png?$420_300_PNG$",
-          "brand": "LG",
-          "color": "Black",
-          "discount": "",
-          "id": "2",
-          "quantity": 1
-        }
-      ],
-      "total": 3999.96
     }
   ]
 }

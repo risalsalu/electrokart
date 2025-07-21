@@ -16,18 +16,21 @@ const Products = ({ products }) => {
   const { cart, addToCart } = useCart();
   const location = useLocation();
 
+  // Read category from URL
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const category = searchParams.get('category');
-    if (category) setCategoryFilter(category);
+    if (category) setCategoryFilter(category.toLowerCase());
   }, [location.search]);
 
+  // Apply filters and sorting
   useEffect(() => {
     let updatedProducts = [...products];
 
     if (categoryFilter !== 'all') {
       updatedProducts = updatedProducts.filter(
-        (product) => product.category === categoryFilter
+        (product) =>
+          product.category?.toLowerCase() === categoryFilter.toLowerCase()
       );
     }
 
@@ -40,15 +43,18 @@ const Products = ({ products }) => {
     setFilteredProducts(updatedProducts);
   }, [categoryFilter, products, sortOrder]);
 
+  // Add to cart
   const handleAddToCart = (product) => {
     const exists = cart.find((item) => item.id === product.id);
     if (exists) {
       toast.error(`${product.name} is already in cart`);
     } else {
-      addToCart(product); // Removed toast here
+      addToCart(product);
+      toast.success(`${product.name} added to cart`);
     }
   };
 
+  // Toggle wishlist
   const handleWishlistToggle = (product) => {
     const exists = wishlist.some((item) => item.id === product.id);
     if (exists) {
@@ -60,6 +66,7 @@ const Products = ({ products }) => {
     }
   };
 
+  // Escape key closes modal
   useEffect(() => {
     const handleKey = (e) => {
       if (e.key === 'Escape') {
@@ -81,9 +88,9 @@ const Products = ({ products }) => {
           {[
             { key: 'all', label: 'All Products' },
             { key: 'mobile', label: 'Smartphones' },
-            { key: 'laptop', label: 'Laptops' },
+            { key: 'laptops', label: 'Laptops' },
             { key: 'tv', label: 'TVs' },
-            { key: 'headphone', label: 'Audio' },
+            { key: 'headphones', label: 'Audio' },
           ].map(({ key, label }) => (
             <button
               key={key}
@@ -121,6 +128,7 @@ const Products = ({ products }) => {
               key={product.id}
               className="group border rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 relative"
             >
+              {/* Product Image */}
               <div
                 className="h-48 bg-gray-100 flex items-center justify-center overflow-hidden cursor-pointer transform transition-transform duration-300 group-hover:scale-[1.03]"
                 onClick={() => {
@@ -143,6 +151,7 @@ const Products = ({ products }) => {
                 )}
               </div>
 
+              {/* Product Info */}
               <div className="p-4">
                 <Link to={`/products/${product.id}`}>
                   <h3 className="font-semibold text-lg mb-1 hover:text-blue-600 transition">
@@ -181,21 +190,27 @@ const Products = ({ products }) => {
       </div>
 
       {/* Image Modal */}
-      {modalImage && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50"
-          onClick={() => {
-            setModalImage(null);
-            setModalProduct(null);
-          }}
-        >
-          <img
-            src={modalImage}
-            alt={modalProduct?.name || 'Preview'}
-            className="max-w-[90%] max-h-[90%] rounded-xl border-4 border-white shadow-2xl"
-          />
-        </div>
-      )}
+     {modalImage && (
+  <div
+    className="fixed inset-0 bg-black/40 backdrop-blur-[4px] z-50 flex items-center justify-center"
+    onClick={() => {
+      setModalImage(null);
+      setModalProduct(null);
+    }}
+  >
+    <div
+      className="bg-white p-4 rounded-xl shadow-2xl border-4 border-black max-w-[90%] max-h-[90%]"
+      onClick={(e) => e.stopPropagation()} // prevent modal close when clicking on image
+    >
+      <img
+        src={modalImage}
+        alt={modalProduct?.name || 'Preview'}
+        className="max-h-[70vh] max-w-full object-contain"
+      />
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

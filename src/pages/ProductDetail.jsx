@@ -25,16 +25,23 @@ const ProductDetail = () => {
       {/*  Image Modal */}
 {isModalOpen && (
   <div
-    className="fixed inset-0 bg-transparent flex items-center justify-center z-50"
+    className="fixed inset-0 bg-black/40 backdrop-blur-[4px] z-50 flex items-center justify-center"
     onClick={() => setIsModalOpen(false)}
   >
-    <img
-      src={product.image || 'https://via.placeholder.com/600'}
-      alt={product.name}
-      className="max-w-[90%] max-h-[90%] rounded-xl border-4 border-white shadow-2xl"
-    />
+    <div
+      className="bg-white p-4 rounded-xl shadow-2xl border-4 border-black max-w-[90%] max-h-[90%]"
+      onClick={(e) => e.stopPropagation()} // prevents closing on image click
+    >
+      <img
+        src={product.image || 'https://via.placeholder.com/600'}
+        alt={product.name}
+        className="max-h-[70vh] max-w-full object-contain"
+      />
+    </div>
   </div>
 )}
+
+
 
       {/*  Product Detail Layout */}
       <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-10 mt-10">

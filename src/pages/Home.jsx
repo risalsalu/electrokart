@@ -38,7 +38,7 @@ function Home({ products = [], addToCart = () => {}, cart = [] }) {
           className="absolute inset-0 bg-cover bg-center animate-[moveBG_40s_linear_infinite]"
           style={{
             backgroundImage:
-              'url("https://plus.unsplash.com/premium_photo-1726863026105-b320133454e7?q=80&w=1132&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")'
+              'url("https://img.freepik.com/free-photo/office-workplace-with-laptop-smartphone_146671-13978.jpg?semt=ais_hybrid&w=740")'
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30"></div>
