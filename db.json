@@ -41,7 +41,7 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/e/e4/AVANT-P870DMG-GAMING-LAPTOP.png",
       "brand": "Asus",
       "color": "",
-      "discount": "",
+      "discount": "10",
       "id": "4"
     },
     {
@@ -327,7 +327,8 @@
       "email": "user@gmail.com",
       "password": "user@gmail.com",
       "createdAt": "2025-07-19T10:36:42.588Z",
-      "role": "user"
+      "role": "user",
+      "status": "active"
     },
     {
       "id": "d783",
@@ -335,7 +336,8 @@
       "email": "bridgeon@gmail.com",
       "password": "bridgeon@gmail.com",
       "createdAt": "2025-07-19T13:25:28.351Z",
-      "role": "user"
+      "role": "user",
+      "status": "active"
     },
     {
       "id": "7b32",
@@ -343,16 +345,39 @@
       "email": "admin@gmail.com",
       "password": "admin@gmail.com",
       "createdAt": "2025-07-19T13:26:21.626Z",
-      "role": "admin"
+      "role": "admin",
+      "status": "active"
+    },
+    {
+      "id": "4a5d",
+      "name": "sample",
+      "email": "sample@gmail.com",
+      "password": "sample@gmail.com",
+      "createdAt": "2025-07-21T06:06:52.083Z",
+      "role": "user",
+      "status": "active"
     }
   ],
   "wishlist": [],
-  "cart": [],
+  "cart": [
+    {
+      "id": "3",
+      "name": "Wireless Headphones",
+      "price": 349.99,
+      "category": "headphones",
+      "stock": "2",
+      "image": "https://www.freeiconspng.com/thumbs/headphones-png/headphones-png-14.png",
+      "brand": "Sony",
+      "color": "Black",
+      "discount": "",
+      "quantity": 1
+    }
+  ],
   "orders": [
     {
       "id": "ORD-580U3IM6",
       "date": "2025-07-18T12:21:05.586Z",
-      "status": "completed",
+      "status": "Delivered",
       "shippingAddress": "dfzz",
       "paymentMethod": "credit_card",
       "items": [
@@ -392,7 +417,7 @@
     {
       "id": "ORD-D0HWB4MO",
       "date": "2025-07-19T03:55:12.522Z",
-      "status": "delivered",
+      "status": "Pending",
       "shippingAddress": "ghjkl;",
       "paymentMethod": "credit_card",
       "items": [
@@ -438,6 +463,84 @@
         }
       ],
       "total": 349.99
+    },
+    {
+      "id": "ORD-MSDFYVDV",
+      "date": "2025-07-21T03:53:21.841Z",
+      "status": "Shipped",
+      "shippingAddress": "Sinan",
+      "paymentMethod": "cod",
+      "items": [
+        {
+          "id": "3",
+          "name": "Wireless Headphones",
+          "price": 349.99,
+          "category": "headphones",
+          "stock": "2",
+          "image": "https://www.freeiconspng.com/thumbs/headphones-png/headphones-png-14.png",
+          "brand": "Sony",
+          "color": "Black",
+          "discount": "",
+          "quantity": 2
+        }
+      ],
+      "total": 699.98
+    },
+    {
+      "id": "ORD-DHTHXID9",
+      "date": "2025-07-21T06:27:36.480Z",
+      "status": "delivered",
+      "shippingAddress": "ad",
+      "paymentMethod": "credit_card",
+      "items": [
+        {
+          "id": "2",
+          "name": "Ultra HD Smart TV",
+          "price": 1299.99,
+          "category": "tv",
+          "stock": "2",
+          "image": "https://images.samsung.com/is/image/samsung/assets/uk/tvs/tv-buying-guide/the-best-tv-picture-quality/uk_UE32K4100AKXXU-420x300.png?$420_300_PNG$",
+          "brand": "LG",
+          "color": "Black",
+          "discount": "",
+          "quantity": 1
+        },
+        {
+          "id": "3",
+          "name": "Wireless Headphones",
+          "price": 349.99,
+          "category": "headphones",
+          "stock": "2",
+          "image": "https://www.freeiconspng.com/thumbs/headphones-png/headphones-png-14.png",
+          "brand": "Sony",
+          "color": "Black",
+          "discount": "",
+          "quantity": 1
+        }
+      ],
+      "total": 1649.98
+    },
+    {
+      "id": "ORD-SZJOX750",
+      "date": "2025-07-21T06:58:51.641Z",
+      "status": "Delivered",
+      "shippingAddress": "sd",
+      "paymentMethod": "credit_card",
+      "items": [
+        {
+          "name": "Iphone 16 pro",
+          "price": 899.99,
+          "category": "mobile",
+          "stock": "2",
+          "image": "https://itronics.in/wp-content/uploads/2024/09/iPhone_16_Pro_Max_Black_Titanium_PDP_Image_Position_1__en-IN.png",
+          "brand": "Apple",
+          "color": "White",
+          "discount": "",
+          "id": "1",
+          "quantity": 5
+        }
+      ],
+      "total": 4499.95
     }
   ]
 }

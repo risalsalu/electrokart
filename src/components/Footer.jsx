@@ -9,8 +9,10 @@ const Footer = () => {
         {/* Brand Info */}
         <div>
           <div className="flex items-center space-x-3 mb-4">
-            <div className="bg-blue-600 text-white w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg">EK</div>
-            <h2 className="text-xl font-semibold text-white">ElectroKart</h2>
+            <div className="bg-gradient-to-br from-blue-600 to-blue-800 w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-md">
+              ⚡
+            </div>
+            <h2 className="text-xl font-semibold text-white font-[Poppins]">ElectroKart</h2>
           </div>
           <p className="text-sm text-gray-400 leading-relaxed">
             Your one-stop destination for top-notch electronics. Enjoy unbeatable prices and lightning-fast delivery.
@@ -61,7 +63,7 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Newsletter + Contact */}
+        {/* Newsletter */}
         <div>
           <h4 className="text-white font-semibold mb-4">Newsletter</h4>
           <p className="text-sm text-gray-400 mb-4">Get exclusive offers & updates</p>
@@ -76,20 +78,14 @@ const Footer = () => {
             </button>
           </div>
           <div className="mt-6 text-sm space-y-2">
-            <p>
-              📍 <span className="text-gray-400">123 Tech Street, Silicon Valley, CA</span>
-            </p>
-            <p>
-              📧 <a href="mailto:support@electrokart.com" className="text-gray-400 hover:text-white">support@electrokart.com</a>
-            </p>
-            <p>
-              📞 <a href="tel:+15551234567" className="text-gray-400 hover:text-white">(555) 123-4567</a>
-            </p>
+            <p>📍 <span className="text-gray-400">123 Tech Street, Silicon Valley, CA</span></p>
+            <p>📧 <a href="mailto:support@electrokart.com" className="text-gray-400 hover:text-white">support@electrokart.com</a></p>
+            <p>📞 <a href="tel:+15551234567" className="text-gray-400 hover:text-white">(555) 123-4567</a></p>
           </div>
         </div>
       </div>
 
-      {/* Footer Bottom */}
+      {/* Bottom Footer */}
       <div className="max-w-7xl mx-auto mt-10 pt-6 border-t border-gray-800 text-center text-sm text-gray-500">
         <p>&copy; {new Date().getFullYear()} ElectroKart. All rights reserved.</p>
         <div className="mt-3 space-x-4">

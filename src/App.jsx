@@ -26,7 +26,7 @@ import UserManagement from './admin/UserManagement';
 import AdminLayout from "./components/admin/AdminLayout";
 
 // 🧠 Contexts
-import AuthProvider, { AuthContext } from './context/AuthContext';
+import AuthProvider, { AuthContext } from "./context/AuthContext";
 import { CartProvider, useCart } from './context/CartContext';
 import { WishlistProvider, useWishlist } from './context/WishlistContext';
 import { OrdersProvider, useOrders } from './context/OrdersContext';
