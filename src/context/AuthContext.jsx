@@ -1,56 +1,68 @@
-import { createContext, useState, useEffect } from "react";
+// context/AuthContext.jsx
+import { createContext, useContext, useState, useEffect } from "react";
 
+// Create the Auth context
 export const AuthContext = createContext();
+
+// Custom hook to use Auth context
+export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Load user from localStorage on initial load
+  // On mount, load user from localStorage
   useEffect(() => {
     const storedUser = localStorage.getItem("currentUser");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+    setLoading(false);
   }, []);
 
-  // Login handler
+  // Helper function to format user data
+  const formatUser = (userData) => ({
+    id: userData.id || userData.email,
+    name: userData.name || "Unnamed User",
+    email: userData.email,
+    role: userData.role || "user",
+  });
+
+  // Handle login
   const handleLogin = (userData) => {
-    const userToStore = {
-      id: userData.id,
-      name: userData.name,
-      email: userData.email,
-      role: userData.role || "user", // default to user if no role
-    };
-    setUser(userToStore);
-    localStorage.setItem("currentUser", JSON.stringify(userToStore));
+    const formattedUser = formatUser(userData);
+    setUser(formattedUser);
+    localStorage.setItem("currentUser", JSON.stringify(formattedUser));
   };
 
-  // Logout handler
-  const handleLogout = () => {
-    setUser(null);
+  // Handle logout
+  const handleLogout = (onSuccess) => {
     localStorage.removeItem("currentUser");
+    setUser(null);
+    if (typeof onSuccess === "function") {
+      onSuccess(); // e.g., navigate to login
+    }
   };
 
-  // Register handler (optional)
+  // Handle register (same as login for context)
   const handleRegister = (userData) => {
-    const userToStore = {
-      id: userData.id,
-      name: userData.name,
-      email: userData.email,
-      role: userData.role || "user",
-    };
-    setUser(userToStore);
-    localStorage.setItem("currentUser", JSON.stringify(userToStore));
+    const formattedUser = formatUser(userData);
+    setUser(formattedUser);
+    localStorage.setItem("currentUser", JSON.stringify(formattedUser));
   };
+
+  // Show loading screen while checking localStorage
+  if (loading) return <div>Loading...</div>;
 
   return (
     <AuthContext.Provider
       value={{
-        user,
+        user,                // { id, name, email, role }
         handleLogin,
         handleLogout,
         handleRegister,
         isAdmin: user?.role === "admin",
+        isLoggedIn: !!user,
       }}
     >
       {children}

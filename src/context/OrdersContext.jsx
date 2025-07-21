@@ -1,35 +1,58 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
+import { useAuth } from './AuthContext';
 
 const OrdersContext = createContext();
 const baseURL = 'http://localhost:3002/orders';
 
 export const OrdersProvider = ({ children }) => {
   const [orders, setOrders] = useState([]);
+  const { user } = useAuth(); // 👤 Get current user from AuthContext
 
-  // Fetch orders from JSON Server on mount
+  // ✅ Fetch only current user's orders
   useEffect(() => {
-    axios
-      .get(baseURL)
-      .then((res) => setOrders(res.data))
-      .catch((err) => console.error(' Error fetching orders:', err));
-  }, []);
+    const fetchOrders = async () => {
+      if (!user?.id) {
+        setOrders([]);
+        return;
+      }
 
-  // Add new order to JSON Server
+      try {
+        const res = await axios.get(`${baseURL}?userId=${user.id}`);
+        setOrders(res.data);
+      } catch (err) {
+        console.error('Error fetching orders:', err);
+      }
+    };
+
+    fetchOrders();
+  }, [user]);
+
+  // ✅ Place a new order with current user's ID
   const placeOrder = async (newOrder) => {
+    if (!user?.id) return;
+
+    const orderWithUser = {
+      ...newOrder,
+      userId: user.id,
+      createdAt: new Date().toISOString(),
+    };
+
     try {
-      const res = await axios.post(baseURL, newOrder);
-      setOrders((prev) => [res.data, ...prev]);
+      const res = await axios.post(baseURL, orderWithUser);
+      setOrders((prevOrders) => [res.data, ...prevOrders]);
     } catch (err) {
-      console.error(' Failed to place order:', err);
+      console.error('Failed to place order:', err);
     }
   };
 
-  // Remove an item from a specific order
+  // ✅ Remove item from a user's order
   const removeItemFromOrder = async (orderId, itemIndex) => {
     try {
       const targetOrder = orders.find((order) => order.id === orderId);
-      if (!targetOrder) return;
+
+      // Only proceed if the order exists and belongs to current user
+      if (!targetOrder || targetOrder.userId !== user?.id) return;
 
       const newItems = targetOrder.items.filter((_, idx) => idx !== itemIndex);
       const newTotal = newItems.reduce(
@@ -38,11 +61,11 @@ export const OrdersProvider = ({ children }) => {
       );
 
       if (newItems.length === 0) {
-        //  If order becomes empty, delete it
+        // ❌ No items left – delete the order
         await axios.delete(`${baseURL}/${orderId}`);
         setOrders((prev) => prev.filter((order) => order.id !== orderId));
       } else {
-        //  Update the order
+        // ✅ Update the order
         const updatedOrder = { ...targetOrder, items: newItems, total: newTotal };
         await axios.put(`${baseURL}/${orderId}`, updatedOrder);
         setOrders((prev) =>
@@ -50,15 +73,16 @@ export const OrdersProvider = ({ children }) => {
         );
       }
     } catch (err) {
-      console.error(' Failed to update order:', err);
+      console.error('Failed to update or delete order:', err);
     }
   };
 
   return (
-    <OrdersContext.Provider value={{  orders,  placeOrder,  removeItemFromOrder,  }}>
+    <OrdersContext.Provider value={{ orders, placeOrder, removeItemFromOrder }}>
       {children}
     </OrdersContext.Provider>
   );
 };
 
+// ✅ Custom hook
 export const useOrders = () => useContext(OrdersContext);

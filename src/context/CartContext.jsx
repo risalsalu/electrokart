@@ -1,54 +1,59 @@
 import { createContext, useContext, useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { useAuth } from './AuthContext';
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
+  const { user } = useAuth(); // ✅ Use custom hook
   const baseURL = 'http://localhost:3002/cart';
 
-  // ✅ Fetch cart items once on mount
+  // ✅ Fetch cart only if user is logged in
   useEffect(() => {
-    fetchCartItems();
-  }, []);
+    if (user) {
+      fetchCartItems();
+    } else {
+      setCart([]); // Clear cart if user logs out
+    }
+  }, [user]);
 
   const fetchCartItems = async () => {
     try {
-      const res = await axios.get(baseURL);
+      const res = await axios.get(`${baseURL}?userId=${user.id}`);
       setCart(res.data);
     } catch (err) {
       console.error('Failed to fetch cart:', err);
     }
   };
 
-  // ✅ Prevent multiple adds & update cart in sync with backend
   const addToCart = async (product, quantity = 1) => {
+    if (!user) {
+      toast.error("Please log in to add items to cart.");
+      return;
+    }
+
     try {
-      const res = await axios.get(`${baseURL}/${product.id}`);
-      if (res.data) {
-        // Product exists – update quantity
-        const updatedItem = {
-          ...res.data,
-          quantity: res.data.quantity + quantity
-        };
-        await axios.patch(`${baseURL}/${product.id}`, updatedItem);
-        setCart(prev =>
-          prev.map(item => item.id === product.id ? updatedItem : item)
-        );
-        toast.success(`${product.name} quantity updated in cart.`);
+      const exists = cart.some(item => item.productId === product.id);
+      if (exists) {
+        toast.error(`${product.name} is already in the cart.`);
+        return;
       }
+
+      const newItem = {
+        ...product,
+        productId: product.id,
+        quantity,
+        userId: user.id, // ✅ Attach user ID
+      };
+
+      const res = await axios.post(baseURL, newItem);
+      setCart(prev => [...prev, res.data]);
+      toast.success(`${product.name} added to cart.`);
     } catch (err) {
-      if (err.response?.status === 404) {
-        // Product doesn't exist – add new
-        const newItem = { ...product, quantity };
-        await axios.post(baseURL, newItem);
-        setCart(prev => [...prev, newItem]);
-        toast.success(`${product.name} added to cart.`);
-      } else {
-        console.error('Add to cart failed:', err);
-        toast.error('Something went wrong adding to cart.');
-      }
+      console.error('Add to cart failed:', err);
+      toast.error('Something went wrong adding to cart.');
     }
   };
 
@@ -65,11 +70,14 @@ export const CartProvider = ({ children }) => {
 
   const updateQuantity = async (id, quantity) => {
     if (quantity < 1) return removeFromCart(id);
+
     try {
       const item = cart.find(item => item.id === id);
       if (!item) return;
+
       const updatedItem = { ...item, quantity };
       await axios.patch(`${baseURL}/${id}`, updatedItem);
+
       setCart(prev =>
         prev.map(item => item.id === id ? updatedItem : item)
       );
@@ -80,19 +88,19 @@ export const CartProvider = ({ children }) => {
   };
 
   const clearCart = async () => {
+    if (!user) return;
+
     try {
-      await Promise.all(cart.map(item =>
-        axios.delete(`${baseURL}/${item.id}`)
-      ));
+      await Promise.all(
+        cart.map(item => axios.delete(`${baseURL}/${item.id}`))
+      );
       setCart([]);
-      // toast.success('Cart cleared.');
     } catch (err) {
       toast.error('Failed to clear cart.');
       console.error(err);
     }
   };
 
-  // ✅ Use useMemo to avoid recalculating on every render
   const cartItemCount = useMemo(() => {
     return cart.reduce((total, item) => total + item.quantity, 0);
   }, [cart]);

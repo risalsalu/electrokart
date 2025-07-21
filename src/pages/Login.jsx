@@ -23,16 +23,20 @@ function Login({ onLogin }) {
       if (res.data.length > 0) {
         const user = res.data[0];
 
-        // Save session
+        const sessionUser = {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        };
+
         if (user.role === 'admin') {
-          localStorage.setItem('admin', JSON.stringify({ email: user.email, name: user.name }));
+          localStorage.setItem('admin', JSON.stringify(sessionUser));
           toast.success('Admin login successful!');
           navigate('/admin/dashboard');
         } else {
-          localStorage.setItem('currentUser', JSON.stringify({ email: user.email, name: user.name }));
-          if (onLogin) {
-            onLogin({ email: user.email, name: user.name });
-          }
+          localStorage.setItem('currentUser', JSON.stringify(sessionUser));
+          onLogin?.(sessionUser); // Notify parent (e.g., App.jsx)
           toast.success('Login successful!');
           navigate('/');
         }

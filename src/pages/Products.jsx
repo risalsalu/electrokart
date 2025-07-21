@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { Heart } from 'lucide-react';
-import { useWishlist } from '../context/WishlistContext';
-import { useCart } from '../context/CartContext';
+import { useWishlist } from '../Context/WishlistContext';
+import { useCart } from '../Context/CartContext';
+import { AuthContext } from '../Context/AuthContext';
 
 const Products = ({ products }) => {
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -14,16 +15,16 @@ const Products = ({ products }) => {
 
   const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const { cart, addToCart } = useCart();
+  const { isLoggedIn } = useContext(AuthContext);
+
   const location = useLocation();
 
-  // Read category from URL
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const category = searchParams.get('category');
     if (category) setCategoryFilter(category.toLowerCase());
   }, [location.search]);
 
-  // Apply filters and sorting
   useEffect(() => {
     let updatedProducts = [...products];
 
@@ -43,19 +44,26 @@ const Products = ({ products }) => {
     setFilteredProducts(updatedProducts);
   }, [categoryFilter, products, sortOrder]);
 
-  // Add to cart
   const handleAddToCart = (product) => {
+    if (!isLoggedIn) {
+      toast.error('Please log in to add products to your cart.');
+      return;
+    }
+
     const exists = cart.find((item) => item.id === product.id);
     if (exists) {
-      toast.error(`${product.name} is already in cart`);
+      toast.error(`${product.name} is already in cart.`);
     } else {
-      addToCart(product);
-      toast.success(`${product.name} added to cart`);
+      addToCart(product); // ⬅️ Let the context handle the toast
     }
   };
 
-  // Toggle wishlist
   const handleWishlistToggle = (product) => {
+    if (!isLoggedIn) {
+      toast.error('Please log in to use the wishlist.');
+      return;
+    }
+
     const exists = wishlist.some((item) => item.id === product.id);
     if (exists) {
       removeFromWishlist(product.id);
@@ -66,7 +74,6 @@ const Products = ({ products }) => {
     }
   };
 
-  // Escape key closes modal
   useEffect(() => {
     const handleKey = (e) => {
       if (e.key === 'Escape') {
@@ -82,7 +89,6 @@ const Products = ({ products }) => {
     <div className="container mx-auto px-4 py-8 relative">
       <h1 className="text-3xl font-bold mb-8">Our Products</h1>
 
-      {/* Category Filter and Sort */}
       <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
         <div className="flex flex-wrap gap-4">
           {[
@@ -106,7 +112,6 @@ const Products = ({ products }) => {
           ))}
         </div>
 
-        {/* Sort Dropdown */}
         <div>
           <select
             value={sortOrder}
@@ -120,7 +125,6 @@ const Products = ({ products }) => {
         </div>
       </div>
 
-      {/* Products Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
@@ -128,7 +132,6 @@ const Products = ({ products }) => {
               key={product.id}
               className="group border rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 relative"
             >
-              {/* Product Image */}
               <div
                 className="h-48 bg-gray-100 flex items-center justify-center overflow-hidden cursor-pointer transform transition-transform duration-300 group-hover:scale-[1.03]"
                 onClick={() => {
@@ -151,7 +154,6 @@ const Products = ({ products }) => {
                 )}
               </div>
 
-              {/* Product Info */}
               <div className="p-4">
                 <Link to={`/products/${product.id}`}>
                   <h3 className="font-semibold text-lg mb-1 hover:text-blue-600 transition">
@@ -189,28 +191,26 @@ const Products = ({ products }) => {
         )}
       </div>
 
-      {/* Image Modal */}
-     {modalImage && (
-  <div
-    className="fixed inset-0 bg-black/40 backdrop-blur-[4px] z-50 flex items-center justify-center"
-    onClick={() => {
-      setModalImage(null);
-      setModalProduct(null);
-    }}
-  >
-    <div
-      className="bg-white p-4 rounded-xl shadow-2xl border-4 border-black max-w-[90%] max-h-[90%]"
-      onClick={(e) => e.stopPropagation()} // prevent modal close when clicking on image
-    >
-      <img
-        src={modalImage}
-        alt={modalProduct?.name || 'Preview'}
-        className="max-h-[70vh] max-w-full object-contain"
-      />
-    </div>
-  </div>
-)}
-
+      {modalImage && (
+        <div
+          className="fixed inset-0 bg-black/40 backdrop-blur-[4px] z-50 flex items-center justify-center"
+          onClick={() => {
+            setModalImage(null);
+            setModalProduct(null);
+          }}
+        >
+          <div
+            className="bg-white p-4 rounded-xl shadow-2xl border-4 border-black max-w-[90%] max-h-[90%]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={modalImage}
+              alt={modalProduct?.name || 'Preview'}
+              className="max-h-[70vh] max-w-full object-contain"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

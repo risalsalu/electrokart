@@ -1,9 +1,22 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
-function Home({ products = [], addToCart = () => {}, cart = [] }) {
+function Home({ products = [] }) {
   const navigate = useNavigate();
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const slideImages = [
+    "https://img.freepik.com/free-photo/office-workplace-with-laptop-smartphone_146671-13978.jpg?semt=ais_hybrid&w=740",
+    "https://images.unsplash.com/photo-1752867494500-9ea9322f58c9?q=80&w=1170&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1595303526913-c7037797ebe7?q=80&w=1229&auto=format&fit=crop"
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slideImages.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [slideImages.length]);
 
   const featuredProducts = useMemo(() => {
     return Array.isArray(products) ? products.slice(0, 3) : [];
@@ -13,14 +26,8 @@ function Home({ products = [], addToCart = () => {}, cart = [] }) {
     navigate(`/products?category=${category}`);
   };
 
-  const handleAddToCart = (product) => {
-    const exists = cart.some(item => item.id === product.id);
-    if (exists) {
-      toast.info(`${product.name} is already in your cart`);
-      return;
-    }
-    addToCart(product);
-    toast.success(`${product.name} added to cart`);
+  const handleProductClick = (productId) => {
+    navigate(`/products/${productId}`);
   };
 
   const categories = [
@@ -32,16 +39,13 @@ function Home({ products = [], addToCart = () => {}, cart = [] }) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      {/* Hero Section with Moving Background */}
+      {/* Hero Section */}
       <div className="relative h-[60vh] min-h-[400px] overflow-hidden rounded-2xl mb-16">
         <div
-          className="absolute inset-0 bg-cover bg-center animate-[moveBG_40s_linear_infinite]"
-          style={{
-            backgroundImage:
-              'url("https://img.freepik.com/free-photo/office-workplace-with-laptop-smartphone_146671-13978.jpg?semt=ais_hybrid&w=740")'
-          }}
+          className="absolute inset-0 bg-cover bg-center transition-all duration-1000"
+          style={{ backgroundImage: `url(${slideImages[currentSlide]})` }}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30" />
         <div className="relative z-10 flex flex-col justify-center items-center h-full text-center text-white px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Welcome to ElectroKart</h1>
           <p className="text-lg md:text-xl max-w-2xl mb-6">
@@ -54,20 +58,13 @@ function Home({ products = [], addToCart = () => {}, cart = [] }) {
             Shop Now
           </Link>
         </div>
-        <style>{`
-          @keyframes moveBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-          }
-        `}</style>
       </div>
 
-      {/* Categories Section at Top */}
+      {/* Categories */}
       <div className="mb-16">
         <div className="text-center mb-10">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Shop By Category</h2>
-          <div className="w-20 h-1 bg-blue-600 mx-auto"></div>
+          <div className="w-20 h-1 bg-blue-600 mx-auto" />
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {categories.map((cat, index) => (
@@ -89,7 +86,7 @@ function Home({ products = [], addToCart = () => {}, cart = [] }) {
       <div className="mb-16">
         <div className="text-center mb-10">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Featured Products</h2>
-          <div className="w-20 h-1 bg-blue-600 mx-auto mb-4"></div>
+          <div className="w-20 h-1 bg-blue-600 mx-auto mb-4" />
           <Link
             to="/products"
             className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-full text-sm transition"
@@ -103,7 +100,8 @@ function Home({ products = [], addToCart = () => {}, cart = [] }) {
             {featuredProducts.map((product) => (
               <div
                 key={product.id}
-                className="bg-white rounded-xl overflow-hidden shadow hover:shadow-xl transition-shadow"
+                className="bg-white rounded-xl overflow-hidden shadow hover:shadow-xl transition-shadow cursor-pointer"
+                onClick={() => handleProductClick(product.id)}
               >
                 <div className="h-56 overflow-hidden relative bg-gray-50 flex items-center justify-center">
                   <img
@@ -118,15 +116,7 @@ function Home({ products = [], addToCart = () => {}, cart = [] }) {
                 </div>
                 <div className="p-5">
                   <h3 className="text-lg font-semibold text-gray-800">{product.name}</h3>
-                  <div className="flex justify-between items-center mt-2">
-                    <span className="text-lg font-bold text-blue-600">${product.price.toFixed(2)}</span>
-                    <button
-                      onClick={() => handleAddToCart(product)}
-                      className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 text-sm rounded-lg"
-                    >
-                      Add to Cart
-                    </button>
-                  </div>
+                  <div className="text-lg font-bold text-blue-600 mt-2">${product.price.toFixed(2)}</div>
                 </div>
               </div>
             ))}
@@ -135,8 +125,7 @@ function Home({ products = [], addToCart = () => {}, cart = [] }) {
           <div className="text-center text-gray-500">No featured products found.</div>
         )}
       </div>
-
-      {/* Testimonials */}
+            {/* Testimonials */}
       <div className="bg-gradient-to-r from-blue-50 to-gray-50 rounded-2xl p-8 md:p-12 mb-16">
         <div className="text-center mb-10">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">What Our Customers Say</h2>

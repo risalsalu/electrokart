@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../Context/CartContext';
 import { useWishlist } from '../Context/WishlistContext';
+import { AuthContext } from '../Context/AuthContext';
 
-function Navbar({ user, onLogout }) {
+function Navbar() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
 
   const { cartItemCount } = useCart();
-  const { wishlist } = useWishlist();
+  const { wishlistItemCount } = useWishlist();
+  const { user, handleLogout } = useContext(AuthContext);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -27,6 +29,13 @@ function Navbar({ user, onLogout }) {
     }
   };
 
+  const handleLogoutClick = () => {
+    handleLogout(() => {
+      setShowDropdown(false);
+      navigate('/login');
+    });
+  };
+
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50 py-3 px-4 md:px-8 flex items-center justify-between font-sans">
       {/* Logo */}
@@ -34,8 +43,7 @@ function Navbar({ user, onLogout }) {
         className="flex items-center gap-3 cursor-pointer group transition-all duration-300 hover:scale-[1.03]"
         onClick={() => navigate('/')}
       >
-        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-900 shadow-lg flex items-center justify-center 
-                      text-white text-2xl font-bold transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-[6deg]">
+        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-900 shadow-lg flex items-center justify-center text-white text-2xl font-bold transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-[6deg]">
           ⚡
         </div>
         <div className="hidden sm:flex flex-col leading-tight">
@@ -69,16 +77,15 @@ function Navbar({ user, onLogout }) {
         </form>
       </div>
 
-      {/* Right Side Icons */}
+      {/* Right Side */}
       <div className="flex items-center gap-4 md:gap-6">
-        {/* Links */}
         <div className="hidden md:flex gap-6">
           <Link to="/" className="text-gray-700 hover:text-blue-600 font-medium">Home</Link>
           <Link to="/products" className="text-gray-700 hover:text-blue-600 font-medium">Products</Link>
           <Link to="/orders" className="text-gray-700 hover:text-blue-600 font-medium">Orders</Link>
         </div>
 
-        {/* Wishlist - Only show if user is logged in */}
+        {/* Wishlist */}
         {user && (
           <div
             onClick={() => handleProtectedRoute('/wishlist')}
@@ -88,15 +95,15 @@ function Navbar({ user, onLogout }) {
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-700 group-hover:text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
-            {wishlist.length > 0 && (
+            {wishlistItemCount > 0 && (
               <div className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
-                {wishlist.length}
+                {wishlistItemCount}
               </div>
             )}
           </div>
         )}
 
-        {/* Cart - Only show if user is logged in */}
+        {/* Cart */}
         {user && (
           <div
             onClick={() => handleProtectedRoute('/cart')}
@@ -114,12 +121,12 @@ function Navbar({ user, onLogout }) {
           </div>
         )}
 
-        {/* User dropdown or login/register */}
+        {/* User Menu or Login */}
         {user ? (
           <div className="relative">
             <div onClick={() => setShowDropdown(!showDropdown)} className="flex items-center gap-2 cursor-pointer group">
               <div className="bg-blue-600 w-9 h-9 rounded-full flex items-center justify-center text-white font-bold group-hover:bg-blue-700">
-                {user.name.charAt(0)}
+                {user.name.charAt(0).toUpperCase()}
               </div>
               <span className="hidden lg:inline text-gray-700 group-hover:text-blue-600">
                 {user.name.split(' ')[0]}
@@ -138,7 +145,7 @@ function Navbar({ user, onLogout }) {
                   My Orders
                 </div>
                 <div
-                  onClick={() => { onLogout(); setShowDropdown(false); }}
+                  onClick={handleLogoutClick}
                   className="p-3 hover:bg-gray-50 cursor-pointer text-gray-700 hover:text-blue-600"
                 >
                   Logout
@@ -147,14 +154,12 @@ function Navbar({ user, onLogout }) {
             )}
           </div>
         ) : (
-          <div className="flex gap-3">
-            <Link to="/login" className="px-3 py-1.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-blue-500 text-sm md:text-base">
-              Login
-            </Link>
-            <Link to="/register" className="px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm md:text-base">
-              Register
-            </Link>
-          </div>
+          <Link
+            to="/login"
+            className="px-4 py-2 bg-gradient-to-br from-blue-600 to-blue-700 text-white font-medium rounded-full shadow-md hover:from-blue-700 hover:to-blue-800 transition duration-200"
+          >
+            Login
+          </Link>
         )}
       </div>
     </nav>
