@@ -11,7 +11,7 @@ function Checkout({ cart, user, clearCart, placeOrder }) {
   const navigate = useNavigate();
 
   const cartTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
-  const shippingFee = cart.length > 0 ? 0.00 : 0; // Changed to $5.99 when items exist
+  const shippingFee = cart.length > 0 ? 0.00 : 0; 
   const tax = cartTotal * 0.0; 
   const grandTotal = cartTotal + shippingFee + tax;
 
@@ -54,7 +54,6 @@ function Checkout({ cart, user, clearCart, placeOrder }) {
     try {
       await placeOrder(newOrder);
       clearCart();
-// Move this line BEFORE navigate()
 toast.success('Order placed successfully!');
 navigate('/orders');
 

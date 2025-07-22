@@ -7,15 +7,14 @@ const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
-  const { user } = useAuth(); // ✅ Use custom hook
+  const { user } = useAuth(); 
   const baseURL = 'http://localhost:3002/cart';
 
-  // ✅ Fetch cart only if user is logged in
   useEffect(() => {
     if (user) {
       fetchCartItems();
     } else {
-      setCart([]); // Clear cart if user logs out
+      setCart([]); 
     }
   }, [user]);
 
@@ -45,7 +44,7 @@ export const CartProvider = ({ children }) => {
         ...product,
         productId: product.id,
         quantity,
-        userId: user.id, // ✅ Attach user ID
+        userId: user.id, 
       };
 
       const res = await axios.post(baseURL, newItem);

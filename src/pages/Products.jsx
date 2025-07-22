@@ -54,7 +54,7 @@ const Products = ({ products }) => {
     if (exists) {
       toast.error(`${product.name} is already in cart.`);
     } else {
-      addToCart(product); // ⬅️ Let the context handle the toast
+      addToCart(product); 
     }
   };
 

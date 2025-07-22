@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { Heart } from 'lucide-react';
 import { useWishlist } from '../Context/WishlistContext';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../Context/CartContext';
 import { AuthContext } from '../Context/AuthContext';
 
 function Wishlist() {
@@ -14,13 +14,12 @@ function Wishlist() {
 
   const handleAddToCart = (e, product) => {
     e.preventDefault();
-    addToCart(product); // ✅ Cart context already shows toast
+    addToCart(product); 
   };
 
   const handleRemove = (e, productId, name) => {
     e.preventDefault();
     removeFromWishlist(productId);
-    // ✅ You can keep this toast, as WishlistContext doesn't trigger one
     toast.success(`${name} removed from wishlist`);
   };
 

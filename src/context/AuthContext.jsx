@@ -1,7 +1,5 @@
-// context/AuthContext.jsx
 import { createContext, useContext, useState, useEffect } from "react";
 
-// Create the Auth context
 export const AuthContext = createContext();
 
 // Custom hook to use Auth context
@@ -40,24 +38,21 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem("currentUser");
     setUser(null);
     if (typeof onSuccess === "function") {
-      onSuccess(); // e.g., navigate to login
+      onSuccess(); 
     }
   };
 
-  // Handle register (same as login for context)
   const handleRegister = (userData) => {
     const formattedUser = formatUser(userData);
     setUser(formattedUser);
     localStorage.setItem("currentUser", JSON.stringify(formattedUser));
   };
-
-  // Show loading screen while checking localStorage
   if (loading) return <div>Loading...</div>;
 
   return (
     <AuthContext.Provider
       value={{
-        user,                // { id, name, email, role }
+        user,               
         handleLogin,
         handleLogout,
         handleRegister,

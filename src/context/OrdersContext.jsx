@@ -7,9 +7,9 @@ const baseURL = 'http://localhost:3002/orders';
 
 export const OrdersProvider = ({ children }) => {
   const [orders, setOrders] = useState([]);
-  const { user } = useAuth(); // 👤 Get current user from AuthContext
+  const { user } = useAuth(); //  Get current user from AuthContext
 
-  // ✅ Fetch only current user's orders
+  // Fetch only current user's orders
   useEffect(() => {
     const fetchOrders = async () => {
       if (!user?.id) {
@@ -28,7 +28,7 @@ export const OrdersProvider = ({ children }) => {
     fetchOrders();
   }, [user]);
 
-  // ✅ Place a new order with current user's ID
+  // Place a new order with current user's ID
   const placeOrder = async (newOrder) => {
     if (!user?.id) return;
 
@@ -46,7 +46,7 @@ export const OrdersProvider = ({ children }) => {
     }
   };
 
-  // ✅ Remove item from a user's order
+  // Remove item from a user's order
   const removeItemFromOrder = async (orderId, itemIndex) => {
     try {
       const targetOrder = orders.find((order) => order.id === orderId);
@@ -61,11 +61,10 @@ export const OrdersProvider = ({ children }) => {
       );
 
       if (newItems.length === 0) {
-        // ❌ No items left – delete the order
+        //  No items left – delete the order
         await axios.delete(`${baseURL}/${orderId}`);
         setOrders((prev) => prev.filter((order) => order.id !== orderId));
       } else {
-        // ✅ Update the order
         const updatedOrder = { ...targetOrder, items: newItems, total: newTotal };
         await axios.put(`${baseURL}/${orderId}`, updatedOrder);
         setOrders((prev) =>
@@ -84,5 +83,5 @@ export const OrdersProvider = ({ children }) => {
   );
 };
 
-// ✅ Custom hook
+//  Custom hook
 export const useOrders = () => useContext(OrdersContext);

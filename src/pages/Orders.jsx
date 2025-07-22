@@ -12,7 +12,6 @@ function Orders() {
 
   const hasShownToast = useRef(false);
 
-  // ✅ Show toast only once after placing an order
   useEffect(() => {
     if (location.state?.orderPlaced && !hasShownToast.current) {
       toast.success("Order placed successfully!");
@@ -21,7 +20,7 @@ function Orders() {
     }
   }, [location, navigate]);
 
-  // ✅ If user is not logged in
+  // If user is not logged in
   if (!user) {
     return (
       <div className="max-w-6xl mx-auto px-4 py-8 text-center">
@@ -37,7 +36,7 @@ function Orders() {
     );
   }
 
-  // ✅ If no orders
+  // If no orders
   if (!orders.length) {
     return (
       <div className="max-w-6xl mx-auto px-4 py-8 text-center">

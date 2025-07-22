@@ -36,7 +36,7 @@ function Login({ onLogin }) {
           navigate('/admin/dashboard');
         } else {
           localStorage.setItem('currentUser', JSON.stringify(sessionUser));
-          onLogin?.(sessionUser); // Notify parent (e.g., App.jsx)
+          onLogin?.(sessionUser); 
           toast.success('Login successful!');
           navigate('/');
         }
