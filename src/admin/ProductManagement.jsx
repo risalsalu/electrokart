@@ -1,88 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {
-  Trash2,
-  Edit,
-  Plus,
-  Search,
-  ChevronLeft, // Changed from ChevronDown for previous
-  ChevronRight, // Changed from ChevronDown for next
-  Image as ImageIcon
-} from "lucide-react";
-import { toast, ToastContainer } from "react-toastify"; // Import ToastContainer
-// The direct CSS import below was causing a compilation error in this environment.
-// import 'react-toastify/dist/ReactToastify.css'; // Import toast CSS
-
-// Custom Confirmation Modal Component
-const ConfirmModal = ({ show, title, message, onConfirm, onCancel }) => {
-  if (!show) return null;
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-4 font-sans">
-      <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm">
-        <h3 className="text-lg font-semibold text-gray-900 mb-3">{title}</h3>
-        <p className="text-gray-700 mb-6">{message}</p>
-        <div className="flex justify-end space-x-3">
-          <button
-            onClick={onCancel}
-            className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={onConfirm}
-            className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
-          >
-            Confirm
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Custom Prompt Modal Component
-const PromptModal = ({ show, title, message, defaultValue, onConfirm, onCancel }) => {
-  const [inputValue, setInputValue] = useState(defaultValue);
-
-  useEffect(() => {
-    setInputValue(defaultValue); // Reset input value when defaultValue changes
-  }, [defaultValue]);
-
-  if (!show) return null;
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-4 font-sans">
-      <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm">
-        <h3 className="text-lg font-semibold text-gray-900 mb-3">{title}</h3>
-        <p className="text-gray-700 mb-4">{message}</p>
-        <input
-          type="number"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          className="w-full border border-gray-300 px-4 py-2 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-6"
-          min="0"
-          required
-        />
-        <div className="flex justify-end space-x-3">
-          <button
-            onClick={onCancel}
-            className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={() => onConfirm(inputValue)}
-            className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
-          >
-            Update
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
+import {Trash2,Edit,Plus,Search,ChevronLeft, ChevronRight,Image as ImageIcon} from "lucide-react";
+import { Toaster, toast } from 'react-hot-toast';
 
 const ProductManagement = () => {
   const [products, setProducts] = useState([]);
@@ -298,11 +217,78 @@ const ProductManagement = () => {
   useEffect(() => {
     fetchProducts();
   }, []);
+  const ConfirmModal = ({ show, title, message, onConfirm, onCancel }) => {
+  if (!show) return null;
+
+  return (
+<div className="fixed inset-0 bg-white/10 backdrop-blur-md flex items-center justify-center z-50 p-4 font-sans">
+      <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm">
+        <h3 className="text-lg font-semibold text-gray-900 mb-3">{title}</h3>
+        <p className="text-gray-700 mb-6">{message}</p>
+        <div className="flex justify-end space-x-3">
+          <button
+            onClick={onCancel}
+            className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Custom Prompt Modal Component
+const PromptModal = ({ show, title, message, defaultValue, onConfirm, onCancel }) => {
+  const [inputValue, setInputValue] = useState(defaultValue);
+
+  useEffect(() => {
+    setInputValue(defaultValue); // Reset input value when defaultValue changes
+  }, [defaultValue]);
+
+  if (!show) return null;
+
+  return (
+<div className="fixed inset-0 bg-white/10 backdrop-blur-md flex items-center justify-center z-50 p-4 font-sans">
+      <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm">
+        <h3 className="text-lg font-semibold text-gray-900 mb-3">{title}</h3>
+        <p className="text-gray-700 mb-4">{message}</p>
+        <input
+          type="number"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          className="w-full border border-gray-300 px-4 py-2 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-6"
+          min="0"
+          required
+        />
+        <div className="flex justify-end space-x-3">
+          <button
+            onClick={onCancel}
+            className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => onConfirm(inputValue)}
+            className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+          >
+            Update
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
   return (
     <div className="min-h-screen bg-gray-50 p-6 font-sans">
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
-
+     <Toaster position="top-center"/>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
@@ -357,8 +343,6 @@ const ProductManagement = () => {
                 <option value="tv">TV</option>
                 <option value="laptops">Laptops</option>
                 <option value="headphones">Headphones</option>
-                <option value="accessories">Accessories</option>
-                <option value="wearables">Wearables</option>
               </select>
             </div>
           </div>
@@ -558,7 +542,7 @@ const ProductManagement = () => {
 
       {/* Product Form Modal */}
       {showForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-4 font-sans">
+      <div className="fixed inset-0 bg-white/10 backdrop-blur-md flex items-center justify-center z-50 p-4 font-sans">
           <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-2xl">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-semibold text-gray-800">
@@ -644,8 +628,6 @@ const ProductManagement = () => {
                     <option value="tv">TV</option>
                     <option value="laptops">Laptops</option>
                     <option value="headphones">Headphones</option>
-                    <option value="accessories">Accessories</option>
-                    <option value="wearables">Wearables</option>
                   </select>
                 </div>
                 <div>

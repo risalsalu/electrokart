@@ -27,6 +27,7 @@ import AuthProvider, { AuthContext } from './Context/AuthContext';
 import { CartProvider, useCart } from './Context/CartContext';
 import { WishlistProvider, useWishlist } from './Context/WishlistContext';
 import { OrdersProvider, useOrders } from './Context/OrdersContext';
+import NotFound from './pages/Notfound';
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useContext(AuthContext);
@@ -75,6 +76,8 @@ const AppContent = () => {
               <Route path="/checkout" element={<ProtectedRoute> <Checkout cart={cart} user={user} clearCart={clearCart} placeOrder={placeOrder} /> </ProtectedRoute> }/>
               <Route path="/login" element={<Login onLogin={handleLogin} />} />
               <Route path="/register" element={<Register onRegister={handleRegister} />} />
+              <Route path="*" element={<NotFound />} />
+
             </Routes>
           </main>
           {!shouldHideLayout && <Footer />}

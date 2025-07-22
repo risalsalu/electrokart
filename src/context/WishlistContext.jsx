@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { useAuth } from "./AuthContext"; // ✅ Fixed import
+import { useAuth } from "./AuthContext"; 
 import { toast } from "react-hot-toast";
 
 const WishlistContext = createContext();
@@ -11,7 +11,7 @@ export const WishlistProvider = ({ children }) => {
 
   const baseURL = "http://localhost:3002/wishlist";
 
-  // ✅ Fetch wishlist for the logged-in user
+  //  Fetch wishlist for the logged-in user
   const fetchWishlist = async () => {
     try {
       if (!user) {
@@ -27,7 +27,7 @@ export const WishlistProvider = ({ children }) => {
     }
   };
 
-  // ✅ Add product to wishlist
+  //  Add product to wishlist
   const addToWishlist = async (product) => {
     try {
       if (!user) {
@@ -58,7 +58,7 @@ export const WishlistProvider = ({ children }) => {
     }
   };
 
-  // ✅ Remove from wishlist
+  //  Remove from wishlist
   const removeFromWishlist = async (wishlistItemId) => {
     try {
       await axios.delete(`${baseURL}/${wishlistItemId}`);
@@ -72,7 +72,7 @@ export const WishlistProvider = ({ children }) => {
   const isInWishlist = (productId) =>
     wishlist.some((item) => item.productId === productId);
 
-  const clearWishlist = () => setWishlist([]); // ✅ Clear on logout if needed
+  const clearWishlist = () => setWishlist([]); 
 
   useEffect(() => {
     fetchWishlist();

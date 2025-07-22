@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { 
-  Users, ShoppingCart, Package, Eye, 
-  RefreshCw, DollarSign, BarChart3, Truck, 
-  CheckCircle, Clock, XCircle, ChevronDown, ChevronUp
-} from "lucide-react";
+import {Users, ShoppingCart, Package, Eye, RefreshCw, DollarSign, BarChart3, Truck, CheckCircle, Clock, XCircle} from "lucide-react";
 
 const AdminDashboard = () => {
   const [data, setData] = useState({ products: [], users: [], orders: [] });
@@ -12,7 +8,7 @@ const AdminDashboard = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showOrderDetails, setShowOrderDetails] = useState(false);
   const [dailyStats, setDailyStats] = useState([]);
-  const [topProducts, setTopProducts] = useState([]);
+  const [productCategories, setProductCategories] = useState([]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -24,7 +20,7 @@ const AdminDashboard = () => {
       ]);
       setData({ products, users, orders });
       calculateDailyStats(orders);
-      calculateTopProducts(orders);
+      calculateProductCategories(products);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -48,33 +44,31 @@ const AdminDashboard = () => {
       dailyData[date].revenue += order.total || 0;
     });
 
-    const sortedDailyStats = Object.values(dailyData).sort((a, b) => 
-      new Date(a.date) - new Date(b.date)
-    );
+const sortedDailyStats = Object.values(dailyData)
+  .sort((a, b) => new Date(a.date) - new Date(b.date))
+  .slice(-7); // Show only last 7 days
+
     
     setDailyStats(sortedDailyStats);
   };
 
-  const calculateTopProducts = (orders) => {
-    const productCount = {};
+  const calculateProductCategories = (products) => {
+    const categoryCount = {};
     
-    orders.forEach((order) => {
-      order.items.forEach((item) => {
-        if (!productCount[item.id]) {
-          productCount[item.id] = {
-            ...item,
-            count: 0,
-          };
-        }
-        productCount[item.id].count += item.quantity || 1;
-      });
+    products.forEach((product) => {
+      const category = product.category || 'Uncategorized';
+      if (!categoryCount[category]) {
+        categoryCount[category] = 0;
+      }
+      categoryCount[category]++;
     });
 
-    const sortedProducts = Object.values(productCount)
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 5);
+    // Convert to array and sort by count
+    const sortedCategories = Object.entries(categoryCount)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count);
 
-    setTopProducts(sortedProducts);
+    setProductCategories(sortedCategories);
   };
 
   useEffect(() => { fetchData(); }, []);
@@ -99,144 +93,193 @@ const AdminDashboard = () => {
     }
   };
 
-  const Chart = ({ data: chartData, title, type = 'line', color = "rgb(59, 130, 246)" }) => {
-    if (!chartData?.length) return <div className="text-center text-gray-500">No data available</div>;
-    
-    // Ensure all values are valid numbers
-    const validData = chartData.map(item => ({
-      ...item,
-      value: Number(item.value) || 0
-    }));
-    
-    const maxValue = Math.max(1, ...validData.map(d => d.value));
+  // Color palette for charts
+  const colors = [
+    '#3B82F6', // blue
+    '#10B981', // green
+    '#F59E0B', // yellow
+    '#EF4444', // red
+    '#8B5CF6', // purple
+    '#EC4899', // pink
+    '#14B8A6', // teal
+    '#F97316', // orange
+  ];
 
-    if (type === 'bar') {
-      return (
-        <div className="w-full">
-          <h3 className="text-lg font-semibold mb-4">{title}</h3>
-          <div className="space-y-3">
-            {validData.map((item, index) => (
-              <div key={index} className="flex items-center gap-3">
-                <div className="w-20 text-sm text-gray-600 truncate">{item.label}</div>
-                <div className="flex-1 bg-gray-200 rounded-full h-6 relative">
-                  <div
-                    className="h-full rounded-full transition-all duration-1000"
-                    style={{ 
-                      width: `${(item.value / maxValue) * 100}%`,
-                      backgroundColor: color
-                    }}
-                  />
-                  <div className="absolute inset-0 flex items-center justify-end pr-2">
-                    <span className="text-xs font-semibold">{item.value}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      );
-    }
+  const RevenueChart = () => {
+    if (!dailyStats.length) return <div className="text-center text-gray-500">No revenue data available</div>;
+    
+    const maxRevenue = Math.max(...dailyStats.map(day => day.revenue), 1);
+    const minRevenue = Math.min(...dailyStats.map(day => day.revenue), 0);
+    const range = maxRevenue - minRevenue;
 
-    // Line chart
-    const range = maxValue || 1;
     return (
       <div className="w-full">
-        <h3 className="text-lg font-semibold mb-4">{title}</h3>
+        <h3 className="text-lg font-semibold mb-4">Revenue (Last 7 Days)</h3>
         <div className="relative h-64">
           <svg width="100%" height="100%">
-            <defs>
-              <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor={color} stopOpacity="0.3"/>
-                <stop offset="100%" stopColor={color} stopOpacity="0.1"/>
-              </linearGradient>
-            </defs>
-            
+            {/* Grid lines */}
             {[0, 25, 50, 75, 100].map((y) => (
-              <line key={y} x1="40" y1={`${20 + (y * 2)}%`} x2="95%" y2={`${20 + (y * 2)}%`} stroke="#e5e7eb" strokeWidth="1" />
+              <g key={y}>
+                <line 
+                  x1="40" y1={`${20 + y}%`} 
+                  x2="95%" y2={`${20 + y}%`} 
+                  stroke="#e5e7eb" strokeWidth="1" 
+                />
+                <text 
+                  x="30" y={`${20 + y}%`} 
+                  textAnchor="end" 
+                  dominantBaseline="middle" 
+                  className="text-xs fill-gray-500"
+                >
+                  ${Math.round(minRevenue + (range * (100 - y) / 100))}
+                </text>
+              </g>
             ))}
             
+            {/* X-axis labels */}
+            {dailyStats.map((day, index) => (
+              <text
+                key={index}
+                x={`${40 + (index / (dailyStats.length - 1)) * 55}%`}
+                y="95%"
+                textAnchor="middle"
+                className="text-xs fill-gray-500"
+              >
+                {day.date}
+              </text>
+            ))}
+            
+            {/* Line path */}
             <path
-              d={validData.map((point, index) => {
-                const x = 40 + (index / Math.max(1, (validData.length - 1))) * 55;
-                const y = 20 + ((maxValue - point.value) / range) * 60;
-                return `${index === 0 ? 'M' : 'L'} ${x} ${y}`;
+              d={dailyStats.map((day, index) => {
+                const x = 40 + (index / (dailyStats.length - 1)) * 55;
+                const y = 20 + ((maxRevenue - day.revenue) / range) * 80;
+                return `${index === 0 ? 'M' : 'L'} ${x}% ${y}%`;
               }).join(' ')}
-              fill="none" stroke={color} strokeWidth="3"
+              fill="none" 
+              stroke="#3B82F6" 
+              strokeWidth="3"
             />
             
+            {/* Area fill */}
             <path
-              d={validData.map((point, index) => {
-                const x = 40 + (index / Math.max(1, (validData.length - 1))) * 55;
-                const y = 20 + ((maxValue - point.value) / range) * 60;
-                return `${index === 0 ? 'M' : 'L'} ${x} ${y}`;
-              }).join(' ') + ` L 95 80 L 40 80 Z`}
-              fill="url(#gradient)"
+              d={dailyStats.map((day, index) => {
+                const x = 40 + (index / (dailyStats.length - 1)) * 55;
+                const y = 20 + ((maxRevenue - day.revenue) / range) * 80;
+                return `${index === 0 ? 'M' : 'L'} ${x}% ${y}%`;
+              }).join(' ') + ` L 95% 100% L 40% 100% Z`}
+              fill="url(#revenueGradient)"
             />
             
-            {validData.map((point, index) => {
-              const x = 40 + (index / Math.max(1, (validData.length - 1))) * 55;
-              const y = 20 + ((maxValue - point.value) / range) * 60;
+            {/* Data points */}
+            {dailyStats.map((day, index) => {
+              const x = 40 + (index / (dailyStats.length - 1)) * 55;
+              const y = 20 + ((maxRevenue - day.revenue) / range) * 80;
               return (
-                <circle
-                  key={index}
-                  cx={x}
-                  cy={y}
-                  r="4" 
-                  fill={color} 
-                  stroke="white" 
-                  strokeWidth="2"
-                />
+                <g key={index}>
+                  <circle
+                    cx={`${x}%`}
+                    cy={`${y}%`}
+                    r="4" 
+                    fill="#3B82F6" 
+                    stroke="white" 
+                    strokeWidth="2"
+                  />
+                  <text
+                    x={`${x}%`}
+                    y={`${y - 10}%`}
+                    textAnchor="middle"
+                    className="text-xs font-semibold fill-gray-700"
+                  >
+                    ${day.revenue.toFixed(2)}
+                  </text>
+                </g>
               );
             })}
+            
+            <defs>
+              <linearGradient id="revenueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.3"/>
+                <stop offset="100%" stopColor="#3B82F6" stopOpacity="0.1"/>
+              </linearGradient>
+            </defs>
           </svg>
         </div>
       </div>
     );
   };
 
-  const getChartData = () => {
-    if (!data.orders?.length || !data.products?.length) {
-      return {
-        orders: [],
-        revenue: [],
-        topProducts: [],
-        statusDistribution: [
-          { label: 'Pending', value: 0 },
-          { label: 'Shipped', value: 0 },
-          { label: 'Delivered', value: 0 },
-          { label: 'Cancelled', value: 0 }
-        ]
-      };
-    }
-
-    // Daily stats for orders and revenue
-    const dailyOrders = dailyStats.map(day => ({
-      label: day.date,
-      value: day.orders
-    }));
-
-    const dailyRevenue = dailyStats.map(day => ({
-      label: day.date,
-      value: day.revenue
-    }));
-
-    // Top products
-    const topProductsChart = topProducts.map(product => ({
-      label: product.name.substring(0, 15),
-      value: product.count
-    }));
-
-    return {
-      orders: dailyOrders,
-      revenue: dailyRevenue,
-      topProducts: topProductsChart,
-      statusDistribution: [
-        { label: 'Pending', value: Number(metrics.orderStatus.pending) || 0 },
-        { label: 'Shipped', value: Number(metrics.orderStatus.shipped) || 0 },
-        { label: 'Delivered', value: Number(metrics.orderStatus.delivered) || 0 },
-        { label: 'Cancelled', value: Number(metrics.orderStatus.cancelled) || 0 }
-      ]
-    };
+  const CategoryPieChart = () => {
+    if (!productCategories.length) return <div className="text-center text-gray-500">No category data available</div>;
+    
+    const total = productCategories.reduce((sum, cat) => sum + cat.count, 0);
+    let startAngle = 0;
+    
+    return (
+      <div className="w-full">
+        <h3 className="text-lg font-semibold mb-4">Product Categories</h3>
+        <div className="relative h-64 flex items-center justify-center">
+          <svg width="200" height="200" viewBox="0 0 100 100">
+            {productCategories.map((category, index) => {
+              const percentage = (category.count / total) * 100;
+              const endAngle = startAngle + (percentage / 100) * 360;
+              
+              // Calculate arc path
+              const startRad = (startAngle - 90) * (Math.PI / 180);
+              const endRad = (endAngle - 90) * (Math.PI / 180);
+              
+              const largeArcFlag = percentage > 50 ? 1 : 0;
+              const x1 = 50 + 40 * Math.cos(startRad);
+              const y1 = 50 + 40 * Math.sin(startRad);
+              const x2 = 50 + 40 * Math.cos(endRad);
+              const y2 = 50 + 40 * Math.sin(endRad);
+              
+              const pathData = [
+                `M 50 50`,
+                `L ${x1} ${y1}`,
+                `A 40 40 0 ${largeArcFlag} 1 ${x2} ${y2}`,
+                `Z`
+              ].join(' ');
+              
+              startAngle = endAngle;
+              
+              return (
+                <path
+                  key={index}
+                  d={pathData}
+                  fill={colors[index % colors.length]}
+                  stroke="white"
+                  strokeWidth="0.5"
+                />
+              );
+            })}
+            
+            {/* Center circle */}
+            <circle cx="50" cy="50" r="15" fill="white" />
+            <text x="50" y="50" textAnchor="middle" dominantBaseline="middle" className="text-xs font-semibold">
+              {total} Products
+            </text>
+          </svg>
+          
+          {/* Legend */}
+          <div className="absolute bottom-0 left-0 right-0">
+            <div className="flex flex-wrap justify-center gap-2">
+              {productCategories.map((category, index) => (
+                <div key={index} className="flex items-center">
+                  <div 
+                    className="w-3 h-3 rounded-full mr-1" 
+                    style={{ backgroundColor: colors[index % colors.length] }}
+                  />
+                  <span className="text-xs text-gray-700">
+                    {category.name} ({category.count})
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   const statusCards = [
@@ -292,7 +335,6 @@ const AdminDashboard = () => {
     );
   }
 
-  const chartData = getChartData();
   const recentOrders = data.orders.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0)).slice(0, 5);
 
   return (
@@ -447,34 +489,10 @@ const AdminDashboard = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
               <div className="bg-white p-6 rounded-2xl shadow-lg">
-                <Chart 
-                  data={chartData.orders} 
-                  title="Daily Orders" 
-                  color="#3b82f6"
-                />
+                <RevenueChart />
               </div>
               <div className="bg-white p-6 rounded-2xl shadow-lg">
-                <Chart 
-                  data={chartData.revenue} 
-                  title="Daily Revenue ($)" 
-                  color="#10b981"
-                />
-              </div>
-              <div className="bg-white p-6 rounded-2xl shadow-lg">
-                <Chart 
-                  data={chartData.topProducts} 
-                  title="Top Selling Products" 
-                  type="bar"
-                  color="#8b5cf6"
-                />
-              </div>
-              <div className="bg-white p-6 rounded-2xl shadow-lg">
-                <Chart 
-                  data={chartData.statusDistribution} 
-                  title="Order Status Distribution" 
-                  type="bar"
-                  color="#ec4899"
-                />
+                <CategoryPieChart />
               </div>
             </div>
           </>
@@ -483,20 +501,10 @@ const AdminDashboard = () => {
         {activeTab === 'analytics' && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <div className="bg-white p-6 rounded-2xl shadow-lg">
-              <Chart 
-                data={chartData.topProducts} 
-                title="Top Selling Products" 
-                type="bar"
-                color="#8b5cf6"
-              />
+              <RevenueChart />
             </div>
             <div className="bg-white p-6 rounded-2xl shadow-lg">
-              <Chart 
-                data={chartData.statusDistribution} 
-                title="Order Status" 
-                type="bar"
-                color="#ec4899"
-              />
+              <CategoryPieChart />
             </div>
           </div>
         )}

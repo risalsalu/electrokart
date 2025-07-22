@@ -37,11 +37,11 @@
       "name": "Gaming Laptop Pro",
       "price": 1599.99,
       "category": "laptops",
-      "stock": "1",
+      "stock": 2,
       "image": "https://upload.wikimedia.org/wikipedia/commons/e/e4/AVANT-P870DMG-GAMING-LAPTOP.png",
       "brand": "Asus",
       "color": "",
-      "discount": "10",
+      "discount": "",
       "id": "4"
     },
     {
@@ -309,15 +309,15 @@
       "id": "41"
     },
     {
-      "name": "boAt Nirvana 751 ANC",
-      "price": 99.99,
-      "category": "headphones",
+      "id": "eac0",
+      "name": "Galaxy S24 Ultra",
+      "price": "999",
+      "category": "mobile",
       "stock": "2",
-      "image": "https://media.tatacroma.com/270439_0_vyzxyf.png",
-      "brand": "Boat",
-      "color": "Black",
-      "discount": "",
-      "id": "42"
+      "image": "https://bloomsgroup.com/wp-content/uploads/2024/02/Titanium-Violet.png",
+      "brand": "Samsung",
+      "color": "Grey",
+      "discount": ""
     }
   ],
   "users": [
@@ -347,6 +347,14 @@
       "createdAt": "2025-07-19T13:26:21.626Z",
       "role": "admin",
       "status": "active"
+    },
+    {
+      "id": "35ed",
+      "name": "Ajay",
+      "email": "ajay@gmail.com",
+      "password": "ajay@gmail.com",
+      "createdAt": "2025-07-22T08:01:32.484Z",
+      "role": "user"
     }
   ],
   "wishlist": [
@@ -390,27 +398,12 @@
       "userId": "d783"
     }
   ],
-  "cart": [
-    {
-      "id": "2",
-      "name": "Ultra HD Smart TV",
-      "price": 1299.99,
-      "category": "tv",
-      "stock": "2",
-      "image": "https://images.samsung.com/is/image/samsung/assets/uk/tvs/tv-buying-guide/the-best-tv-picture-quality/uk_UE32K4100AKXXU-420x300.png?$420_300_PNG$",
-      "brand": "LG",
-      "color": "Black",
-      "discount": "",
-      "productId": "2",
-      "quantity": 1,
-      "userId": "d783"
-    }
-  ],
+  "cart": [],
   "orders": [
     {
       "id": "ORD-GNALS64P",
       "date": "2025-07-21T15:48:49.104Z",
-      "status": "Pending",
+      "status": "Cancelled",
       "customerName": "RIFAS ALI N P",
       "shippingAddress": "C T House\nVazhayil parambu",
       "email": "user@gmail.com",
@@ -580,7 +573,7 @@
     {
       "id": "ORD-1ABVVO18",
       "date": "2025-07-21T16:04:18.347Z",
-      "status": "Pending",
+      "status": "Shipped",
       "customerName": "Nishad",
       "shippingAddress": "Palarotta House Calicut Nallalam\n",
       "email": "user@gmail.com",
@@ -626,7 +619,7 @@
     {
       "id": "ORD-TMS5JDWF",
       "date": "2025-07-21T16:05:14.555Z",
-      "status": "Pending",
+      "status": "Shipped",
       "customerName": "faris",
       "shippingAddress": "C T House\nVazhayil parambu",
       "email": "bridgeon@gmail.com",
@@ -658,7 +651,7 @@
     {
       "id": "ORD-Q2E6RVC4",
       "date": "2025-07-21T16:06:18.472Z",
-      "status": "Pending",
+      "status": "Delivered",
       "customerName": "Muhammed Rizal N P",
       "shippingAddress": "C T House\nVazhayil parambu west bazar po Nallalam",
       "email": "bridgeon@gmail.com",
@@ -686,6 +679,84 @@
       "total": 899.99,
       "userId": "d783",
       "createdAt": "2025-07-21T16:06:18.472Z"
+    },
+    {
+      "id": "ORD-N84HXR5E",
+      "date": "2025-07-22T04:25:13.678Z",
+      "status": "Delivered",
+      "customerName": "Sinan",
+      "shippingAddress": "Sinan house",
+      "email": "user@gmail.com",
+      "phone": "",
+      "paymentMethod": "cod",
+      "items": [
+        {
+          "id": "6",
+          "name": "iPhone 15 Pro",
+          "price": 999.99,
+          "category": "mobile",
+          "stock": "2",
+          "image": "https://itronics.in/wp-content/uploads/2024/09/iPhone_16_Pro_Max_Black_Titanium_PDP_Image_Position_1__en-IN.png",
+          "brand": "Apple",
+          "color": "Black",
+          "discount": "",
+          "productId": "6",
+          "quantity": 1,
+          "userId": "9014"
+        },
+        {
+          "id": "1",
+          "name": "Iphone 16 pro",
+          "price": 899.99,
+          "category": "mobile",
+          "stock": "2",
+          "image": "https://itronics.in/wp-content/uploads/2024/09/iPhone_16_Pro_Max_Black_Titanium_PDP_Image_Position_1__en-IN.png",
+          "brand": "Apple",
+          "color": "White",
+          "discount": "",
+          "productId": "1",
+          "quantity": 1,
+          "userId": "9014"
+        }
+      ],
+      "subtotal": 2799.97,
+      "shipping": 0,
+      "tax": 0,
+      "total": 1899.98,
+      "userId": "9014",
+      "createdAt": "2025-07-22T04:25:13.678Z"
+    },
+    {
+      "id": "ORD-STJ0LGSL",
+      "date": "2025-07-22T06:40:08.968Z",
+      "status": "Shipped",
+      "customerName": "Akshay",
+      "shippingAddress": "Palarotta House Calicut Nallalam\n",
+      "email": "user@gmail.com",
+      "phone": "",
+      "paymentMethod": "paypal",
+      "items": [
+        {
+          "id": "3",
+          "name": "Wireless Headphones",
+          "price": 349.99,
+          "category": "headphones",
+          "stock": "2",
+          "image": "https://www.freeiconspng.com/thumbs/headphones-png/headphones-png-14.png",
+          "brand": "Sony",
+          "color": "Black",
+          "discount": "",
+          "productId": "3",
+          "quantity": 1,
+          "userId": "9014"
+        }
+      ],
+      "subtotal": 349.99,
+      "shipping": 0,
+      "tax": 0,
+      "total": 349.99,
+      "userId": "9014",
+      "createdAt": "2025-07-22T06:40:08.968Z"
     }
   ]
 }

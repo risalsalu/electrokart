@@ -160,7 +160,7 @@ const Products = ({ products }) => {
                     {product.name}
                   </h3>
                 </Link>
-                <p className="text-gray-600 mb-2">${product.price.toFixed(2)}</p>
+                 <p className="text-gray-600 mb-2">${Number(product.price).toFixed(2)}</p>
 
                 <div className="mt-4 flex space-x-2 items-center">
                   <button
