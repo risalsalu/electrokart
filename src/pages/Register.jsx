@@ -65,7 +65,7 @@ function Register({ onRegister }) {
         <div className="bg-gradient-to-r from-blue-600 to-indigo-700 py-6 px-8">
           <div className="flex items-center justify-center mb-4">
             <div className="bg-white p-2 rounded-lg">
-              <div className="bg-blue-600 w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-xl">EK</div>
+<div className="bg-blue-600 w-10 h-10 rounded-lg flex items-center justify-center text-white text-xl">⚡</div>
             </div>
             <h1 className="text-2xl font-bold text-white ml-3">ElectroKart</h1>
           </div>

@@ -22,7 +22,7 @@ const ProductManagement = () => {
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10); // 10 items per page
+  const [itemsPerPage] = useState(10); 
 
   // Custom Modal States
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -101,6 +101,7 @@ const ProductManagement = () => {
       toast.error("Failed to update stock");
     }
   };
+  
 
   // Handle form input changes
   const handleInputChange = (e) => {
@@ -114,8 +115,6 @@ const ProductManagement = () => {
   // Submit product form
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Basic validation
     if (!formData.name || !formData.price || !formData.category || !formData.stock || !formData.brand || !formData.image) {
       toast.error("Please fill in all required fields (marked with *)");
       return;

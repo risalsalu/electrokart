@@ -10,6 +10,7 @@ import { toast } from "react-hot-toast";
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const [mainImage, setMainImage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { user } = useContext(AuthContext);
@@ -21,7 +22,10 @@ const ProductDetail = () => {
   useEffect(() => {
     axios
       .get(`http://localhost:3002/products/${id}`)
-      .then((res) => setProduct(res.data))
+      .then((res) => {
+        setProduct(res.data);
+        setMainImage(res.data.images?.[0] || res.data.image); // fallback to single image
+      })
       .catch((err) => {
         console.error("Failed to load product:", err);
         toast.error("Failed to load product.");
@@ -73,7 +77,7 @@ const ProductDetail = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <img
-              src={product.image || "https://via.placeholder.com/600"}
+              src={mainImage}
               alt={product.name}
               className="max-h-[70vh] max-w-full object-contain"
             />
@@ -83,31 +87,50 @@ const ProductDetail = () => {
 
       {/* Main Product View */}
       <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-10 mt-10">
-        {/* Product Image */}
-        <div
-          className="relative rounded-xl overflow-hidden shadow-xl border hover:shadow-2xl transition-transform duration-300 cursor-pointer"
-          onClick={() => setIsModalOpen(true)}
-        >
-          {/* Heart Wishlist Icon */}
+        {/* Product Images */}
+        <div className="space-y-4">
+          {/* Wishlist Icon */}
           <div
-            className="absolute top-4 right-4 z-10 bg-white rounded-full p-2 shadow-md hover:scale-110 transition"
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleWishlist();
-            }}
+            className="relative rounded-xl overflow-hidden shadow-xl border hover:shadow-2xl transition-transform duration-300 cursor-pointer"
+            onClick={() => setIsModalOpen(true)}
           >
-            {isInWishlist(product.id) ? (
-              <AiFillHeart className="text-red-500 text-2xl" />
-            ) : (
-              <AiOutlineHeart className="text-red-500 text-2xl" />
-            )}
+            <div
+              className="absolute top-4 right-4 z-10 bg-white rounded-full p-2 shadow-md hover:scale-110 transition"
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleWishlist();
+              }}
+            >
+              {isInWishlist(product.id) ? (
+                <AiFillHeart className="text-red-500 text-2xl" />
+              ) : (
+                <AiOutlineHeart className="text-red-500 text-2xl" />
+              )}
+            </div>
+
+            <img
+              src={mainImage}
+              alt={product.name}
+              className="w-full h-[400px] object-contain bg-white"
+            />
           </div>
 
-          <img
-            src={product.image || "https://via.placeholder.com/400"}
-            alt={product.name}
-            className="w-full h-[400px] object-contain bg-white"
-          />
+          {/* Thumbnail Images */}
+          {product.images && product.images.length > 1 && (
+            <div className="flex gap-3">
+              {product.images.map((img, idx) => (
+                <img
+                  key={idx}
+                  src={img}
+                  alt={`Thumbnail ${idx}`}
+                  onClick={() => setMainImage(img)}
+                  className={`w-20 h-20 object-cover rounded-lg cursor-pointer border-2 ${
+                    mainImage === img ? "border-blue-500" : "border-transparent"
+                  }`}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Product Details */}

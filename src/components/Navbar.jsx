@@ -32,7 +32,7 @@ function Navbar() {
   const handleLogoutClick = () => {
     handleLogout(() => {
       setShowDropdown(false);
-      navigate('/login');
+      navigate('/');
     });
   };
 

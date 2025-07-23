@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Search, ChevronDown, ChevronUp, Mail, Phone, User, ShoppingCart, Heart, Package, Shield, Sliders } from "lucide-react";
+import { Search, ChevronDown, ChevronUp, Mail, Phone, User, ShoppingCart, Heart, Package, Sliders } from "lucide-react";
 import { toast } from "react-toastify";
 
 const UserManagement = () => {

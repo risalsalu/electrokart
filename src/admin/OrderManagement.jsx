@@ -115,15 +115,6 @@ const OrderManagement = () => {
             <h2 className="text-2xl md:text-3xl font-bold text-gray-800">Order Management</h2>
             <p className="text-gray-600 mt-1">View and manage customer orders</p>
           </div>
-          <button 
-            onClick={fetchOrders}
-            className="mt-4 md:mt-0 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors flex items-center"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-            </svg>
-            Refresh Orders
-          </button>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
@@ -307,7 +298,7 @@ const OrderManagement = () => {
       </div>
 
 {selectedOrder && (
-  <div className="fixed z-50 inset-0 flex items-center justify-center bg-black bg-opacity-80">
+<div className="fixed z-50 inset-0 flex items-center justify-center backdrop-blur-sm bg-black/50">
     <div className="bg-white p-8 rounded-xl max-w-xl w-full shadow-lg z-50">
       <h2 className="text-xl font-bold mb-4">Order #{selectedOrder.id}</h2>
       <p className="text-gray-700">Customer: {selectedOrder.customerName || "Guest"}</p>

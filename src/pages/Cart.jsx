@@ -84,7 +84,7 @@ function Cart({ cart, removeFromCart, updateQuantity, user }) {
                 <div>
                   <div className="font-semibold text-lg">{item.name}</div>
                   <div className="text-gray-500 text-sm">
-                    ${item.price.toFixed(2)}
+{typeof item.price === 'number' ? item.price.toFixed(2) : Number(item.price).toFixed(2)}
                   </div>
                 </div>
               </div>

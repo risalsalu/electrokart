@@ -54,7 +54,7 @@ const Products = ({ products }) => {
     if (exists) {
       toast.error(`${product.name} is already in cart.`);
     } else {
-      addToCart(product); 
+      addToCart(product);
     }
   };
 
@@ -132,6 +132,21 @@ const Products = ({ products }) => {
               key={product.id}
               className="group border rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 relative"
             >
+              {/* Wishlist Icon Top Right */}
+              <button
+                onClick={() => handleWishlistToggle(product)}
+                className="absolute top-2 right-2 bg-white rounded-full p-1 shadow hover:bg-gray-100 z-10"
+              >
+                <Heart
+                  size={22}
+                  className={`transition-colors duration-300 ${
+                    wishlist.some((item) => item.id === product.id)
+                      ? 'text-red-500 fill-red-500'
+                      : 'text-gray-500'
+                  }`}
+                />
+              </button>
+
               <div
                 className="h-48 bg-gray-100 flex items-center justify-center overflow-hidden cursor-pointer transform transition-transform duration-300 group-hover:scale-[1.03]"
                 onClick={() => {
@@ -160,7 +175,7 @@ const Products = ({ products }) => {
                     {product.name}
                   </h3>
                 </Link>
-                 <p className="text-gray-600 mb-2">${Number(product.price).toFixed(2)}</p>
+                <p className="text-gray-600 mb-2">${Number(product.price).toFixed(2)}</p>
 
                 <div className="mt-4 flex space-x-2 items-center">
                   <button
@@ -168,17 +183,6 @@ const Products = ({ products }) => {
                     className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition"
                   >
                     Add to Cart
-                  </button>
-
-                  <button onClick={() => handleWishlistToggle(product)}>
-                    <Heart
-                      size={24}
-                      className={`transition-colors duration-300 ${
-                        wishlist.some((item) => item.id === product.id)
-                          ? 'text-red-500 fill-red-500'
-                          : 'text-gray-500'
-                      }`}
-                    />
                   </button>
                 </div>
               </div>

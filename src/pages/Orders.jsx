@@ -115,7 +115,7 @@ function Orders() {
                       <div className="font-medium">{item.name}</div>
                       <div className="text-gray-500 text-sm">Qty: {item.quantity}</div>
                     </div>
-                    <div className="font-medium">${item.price.toFixed(2)}</div>
+                    <div className="font-medium">${Number(item.price).toFixed(2)}</div>
                     <button
                       onClick={() => {
                         removeItemFromOrder(order.id, index);

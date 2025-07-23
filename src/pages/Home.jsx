@@ -20,7 +20,7 @@ function Home({ products = [] }) {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slideImages.length);
-    }, 5000);
+    }, 3000);
     return () => clearInterval(interval);
   }, [slideImages.length]);
 
@@ -270,12 +270,6 @@ function Home({ products = [] }) {
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
             </svg>
-          </Link>
-          <Link
-            to="/about"
-            className="inline-flex items-center justify-center bg-transparent border-2 border-white/30 hover:border-white text-white font-semibold py-3 px-8 rounded-full text-lg transition-all duration-300 hover:bg-white/10"
-          >
-            Learn More
           </Link>
         </div>
       </div>
