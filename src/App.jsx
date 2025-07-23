@@ -26,8 +26,8 @@ import AdminLayout from './components/admin/AdminLayout';
 import { CartProvider, useCart } from './contexttemp/CartContext';
 import { WishlistProvider, useWishlist } from './contexttemp/WishlistContext';
 import { OrdersProvider, useOrders } from './contexttemp/OrdersContext';
-import NotFound from './pages/Notfound';
 import AuthProvider, { AuthContext } from './contexttemp/AuthContext'; 
+import NotFound from './pages/Notfound';
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useContext(AuthContext);
