@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { Heart } from 'lucide-react';
-import { useWishlist } from '../Context/WishlistContext';
-import { useCart } from '../Context/CartContext';
-import { AuthContext } from '../Context/AuthContext';
+import { useWishlist } from '../contexttemp/WishlistContext';
+import { useCart } from '../contexttemp/CartContext';
+import { AuthContext } from '../contexttemp/AuthContext';
 
 function Wishlist() {
   const { wishlist, removeFromWishlist } = useWishlist();

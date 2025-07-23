@@ -23,11 +23,11 @@ import OrderManagement from './admin/OrderManagement';
 import UserManagement from './admin/UserManagement';
 import AdminLayout from './components/admin/AdminLayout';
 
-import AuthProvider, { AuthContext } from './Context/AuthContext';
-import { CartProvider, useCart } from './Context/CartContext';
-import { WishlistProvider, useWishlist } from './Context/WishlistContext';
-import { OrdersProvider, useOrders } from './Context/OrdersContext';
+import { CartProvider, useCart } from './contexttemp/CartContext';
+import { WishlistProvider, useWishlist } from './contexttemp/WishlistContext';
+import { OrdersProvider, useOrders } from './contexttemp/OrdersContext';
 import NotFound from './pages/Notfound';
+import AuthProvider, { AuthContext } from './contexttemp/AuthContext'; 
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useContext(AuthContext);

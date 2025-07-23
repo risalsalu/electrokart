@@ -2,9 +2,10 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { Heart } from 'lucide-react';
-import { useWishlist } from '../Context/WishlistContext';
-import { useCart } from '../Context/CartContext';
-import { AuthContext } from '../Context/AuthContext';
+import { useWishlist } from '../contexttemp/WishlistContext';
+import { useCart } from '../contexttemp/CartContext';
+import { AuthContext } from '../contexttemp/AuthContext';
+;
 
 const Products = ({ products }) => {
   const [filteredProducts, setFilteredProducts] = useState([]);

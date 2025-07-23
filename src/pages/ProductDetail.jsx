@@ -2,9 +2,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { AiOutlineHeart, AiFillHeart, AiFillStar } from "react-icons/ai";
-import { useCart } from "../Context/CartContext";
-import { useWishlist } from "../Context/WishlistContext";
-import { AuthContext } from "../Context/AuthContext";
+import { useCart } from "../contexttemp/CartContext";
+import { useWishlist } from "../contexttemp/WishlistContext";
+import { AuthContext } from "../contexttemp/AuthContext";
 import { toast } from "react-hot-toast";
 
 const ProductDetail = () => {

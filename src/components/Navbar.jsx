@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useCart } from '../Context/CartContext';
-import { useWishlist } from '../Context/WishlistContext';
-import { AuthContext } from '../Context/AuthContext';
+import { useCart } from '../contexttemp/CartContext';
+import { useWishlist } from '../contexttemp/WishlistContext';
+import { AuthContext } from '../contexttemp/AuthContext';
 
 function Navbar() {
   const navigate = useNavigate();
