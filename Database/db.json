@@ -366,6 +366,30 @@
       "password": "ajay@gmail.com",
       "createdAt": "2025-07-22T08:01:32.484Z",
       "role": "user"
+    },
+    {
+      "id": "98e3",
+      "name": "Muhammed Rizal",
+      "email": "risal@gmail.com",
+      "password": "risal@gmail.com",
+      "createdAt": "2025-07-23T11:43:33.351Z",
+      "role": "user"
+    },
+    {
+      "id": "c647",
+      "name": "abc",
+      "email": "abc@gmail.com",
+      "password": "abc@gmail.com",
+      "createdAt": "2025-07-23T11:47:14.314Z",
+      "role": "user"
+    },
+    {
+      "id": "163b",
+      "name": "abcd",
+      "email": "abcd@gmail.com",
+      "password": "abcd@gmail.com",
+      "createdAt": "2025-07-23T11:51:34.574Z",
+      "role": "user"
     }
   ],
   "wishlist": [
@@ -407,6 +431,110 @@
       "discount": "",
       "productId": "2",
       "userId": "d783"
+    },
+    {
+      "id": "1",
+      "name": "Iphone 16 pro",
+      "price": 899.99,
+      "category": "mobile",
+      "stock": "2",
+      "image": "https://itronics.in/wp-content/uploads/2024/09/iPhone_16_Pro_Max_Black_Titanium_PDP_Image_Position_1__en-IN.png",
+      "brand": "Apple",
+      "color": "White",
+      "discount": "",
+      "productId": "1",
+      "userId": "risal@gmail.com"
+    },
+    {
+      "id": "3",
+      "name": "Wireless Headphones",
+      "price": 349.99,
+      "category": "headphones",
+      "stock": "2",
+      "image": "https://www.freeiconspng.com/thumbs/headphones-png/headphones-png-14.png",
+      "brand": "Sony",
+      "color": "Black",
+      "discount": "",
+      "productId": "3",
+      "userId": "risal@gmail.com"
+    },
+    {
+      "id": "2",
+      "name": "Ultra HD Smart TV",
+      "price": 1299.99,
+      "category": "tv",
+      "stock": "2",
+      "image": "https://images.samsung.com/is/image/samsung/assets/uk/tvs/tv-buying-guide/the-best-tv-picture-quality/uk_UE32K4100AKXXU-420x300.png?$420_300_PNG$",
+      "brand": "LG",
+      "color": "Black",
+      "discount": "",
+      "productId": "2",
+      "userId": "abc@gmail.com"
+    },
+    {
+      "id": "4",
+      "name": "Gaming Laptop Pro",
+      "price": 1599.99,
+      "category": "laptops",
+      "stock": 2,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/e/e4/AVANT-P870DMG-GAMING-LAPTOP.png",
+      "brand": "Asus",
+      "color": "",
+      "discount": "",
+      "productId": "4",
+      "userId": "abc@gmail.com"
+    },
+    {
+      "id": "7",
+      "name": "Pixel 7 Pro",
+      "price": 899.99,
+      "category": "mobile",
+      "stock": "2",
+      "image": "https://c.ndtvimg.com/2023-10/48eops4o_google-pixel-7_625x300_05_October_23.jpg?downsize=950:*",
+      "brand": "Google",
+      "color": "Black",
+      "discount": "",
+      "productId": "7",
+      "userId": "abc@gmail.com"
+    },
+    {
+      "id": "1",
+      "name": "Iphone 16 pro",
+      "price": 899.99,
+      "category": "mobile",
+      "stock": "2",
+      "image": "https://itronics.in/wp-content/uploads/2024/09/iPhone_16_Pro_Max_Black_Titanium_PDP_Image_Position_1__en-IN.png",
+      "brand": "Apple",
+      "color": "White",
+      "discount": "",
+      "productId": "1",
+      "userId": "abcd@gmail.com"
+    },
+    {
+      "id": "2",
+      "name": "Ultra HD Smart TV",
+      "price": 1299.99,
+      "category": "tv",
+      "stock": "2",
+      "image": "https://images.samsung.com/is/image/samsung/assets/uk/tvs/tv-buying-guide/the-best-tv-picture-quality/uk_UE32K4100AKXXU-420x300.png?$420_300_PNG$",
+      "brand": "LG",
+      "color": "Black",
+      "discount": "",
+      "productId": "2",
+      "userId": "abcd@gmail.com"
+    },
+    {
+      "id": "3",
+      "name": "Wireless Headphones",
+      "price": 349.99,
+      "category": "headphones",
+      "stock": "2",
+      "image": "https://www.freeiconspng.com/thumbs/headphones-png/headphones-png-14.png",
+      "brand": "Sony",
+      "color": "Black",
+      "discount": "",
+      "productId": "3",
+      "userId": "abcd@gmail.com"
     }
   ],
   "cart": [
@@ -421,15 +549,29 @@
       "color": "Black",
       "discount": "",
       "productId": "2",
+      "userId": "abcd@gmail.com",
+      "quantity": 1
+    },
+    {
+      "id": "11",
+      "name": "iPhone 14 Plus",
+      "price": 899.99,
+      "category": "mobile",
+      "stock": "2",
+      "image": "https://www.dxomark.com/wp-content/uploads/medias/post-132367/Apple-iPhone-14_Plus_FINAL_featured-image-packshot-review.jpg",
+      "brand": "Apple",
+      "color": "Black",
+      "discount": "",
+      "productId": "11",
       "quantity": 1,
-      "userId": "d783"
+      "userId": "abcd@gmail.com"
     }
   ],
   "orders": [
     {
       "id": "ORD-GNALS64P",
       "date": "2025-07-21T15:48:49.104Z",
-      "status": "Cancelled",
+      "status": "Shipped",
       "customerName": "RIFAS ALI N P",
       "shippingAddress": "C T House\nVazhayil parambu",
       "email": "user@gmail.com",
@@ -475,7 +617,7 @@
     {
       "id": "ORD-8PFPSTK4",
       "date": "2025-07-21T15:50:31.404Z",
-      "status": "Delivered",
+      "status": "Pending",
       "customerName": "Muhammed Rizal N P",
       "shippingAddress": "C T House\nVazhayil parambu west bazar po Nallalam",
       "email": "bridgeon@gmail.com",
@@ -531,84 +673,6 @@
       "total": 2049.97,
       "userId": "d783",
       "createdAt": "2025-07-21T15:50:31.404Z"
-    },
-    {
-      "id": "ORD-3WDQZ044",
-      "date": "2025-07-21T15:56:35.592Z",
-      "status": "Delivered",
-      "customerName": "Muhammed Rizal N P",
-      "shippingAddress": "C T House\nVazhayil parambu west bazar po Nallalam",
-      "email": "bridgeon@gmail.com",
-      "phone": "",
-      "paymentMethod": "cod",
-      "items": [
-        {
-          "id": "2",
-          "name": "Ultra HD Smart TV",
-          "price": 1299.99,
-          "category": "tv",
-          "stock": "2",
-          "image": "https://images.samsung.com/is/image/samsung/assets/uk/tvs/tv-buying-guide/the-best-tv-picture-quality/uk_UE32K4100AKXXU-420x300.png?$420_300_PNG$",
-          "brand": "LG",
-          "color": "Black",
-          "discount": "",
-          "productId": "2",
-          "quantity": 1,
-          "userId": "d783"
-        }
-      ],
-      "subtotal": 1299.99,
-      "shipping": 0,
-      "tax": 0,
-      "total": 1299.99,
-      "userId": "d783",
-      "createdAt": "2025-07-21T15:56:35.592Z"
-    },
-    {
-      "id": "ORD-1ABVVO18",
-      "date": "2025-07-21T16:04:18.347Z",
-      "status": "Delivered",
-      "customerName": "Nishad",
-      "shippingAddress": "Palarotta House Calicut Nallalam\n",
-      "email": "user@gmail.com",
-      "phone": "",
-      "paymentMethod": "cod",
-      "items": [
-        {
-          "id": "6",
-          "name": "iPhone 15 Pro",
-          "price": 999.99,
-          "category": "mobile",
-          "stock": "2",
-          "image": "https://itronics.in/wp-content/uploads/2024/09/iPhone_16_Pro_Max_Black_Titanium_PDP_Image_Position_1__en-IN.png",
-          "brand": "Apple",
-          "color": "Black",
-          "discount": "",
-          "productId": "6",
-          "userId": "9014",
-          "quantity": 1
-        },
-        {
-          "id": "7",
-          "name": "Pixel 7 Pro",
-          "price": 899.99,
-          "category": "mobile",
-          "stock": "2",
-          "image": "https://c.ndtvimg.com/2023-10/48eops4o_google-pixel-7_625x300_05_October_23.jpg?downsize=950:*",
-          "brand": "Google",
-          "color": "Black",
-          "discount": "",
-          "productId": "7",
-          "userId": "9014",
-          "quantity": 1
-        }
-      ],
-      "subtotal": 1899.98,
-      "shipping": 0,
-      "tax": 0,
-      "total": 1899.98,
-      "userId": "9014",
-      "createdAt": "2025-07-21T16:04:18.347Z"
     },
     {
       "id": "ORD-TMS5JDWF",
@@ -723,7 +787,7 @@
     {
       "id": "ORD-F0GQNPHB",
       "date": "2025-07-23T03:59:35.716Z",
-      "status": "Shipped",
+      "status": "Delivered",
       "customerName": "Samadev",
       "shippingAddress": "C T House\nVazhayil parambu west bazar po Nallalam",
       "email": "bridgeon@gmail.com",
@@ -1103,6 +1167,214 @@
       "total": 2549.97,
       "userId": "d783",
       "createdAt": "2025-07-23T05:09:47.298Z"
+    },
+    {
+      "id": "ORD-HV6EM0OL",
+      "date": "2025-07-23T11:44:24.551Z",
+      "status": "Pending",
+      "customerName": "Muhammed Rizal",
+      "shippingAddress": "Palarotta House Calicut Nallalam\n",
+      "email": "risal@gmail.com",
+      "phone": "+4 1234535342",
+      "paymentMethod": "cod",
+      "items": [
+        {
+          "id": "1",
+          "name": "Iphone 16 pro",
+          "price": 899.99,
+          "category": "mobile",
+          "stock": "2",
+          "image": "https://itronics.in/wp-content/uploads/2024/09/iPhone_16_Pro_Max_Black_Titanium_PDP_Image_Position_1__en-IN.png",
+          "brand": "Apple",
+          "color": "White",
+          "discount": "",
+          "productId": "1",
+          "quantity": 2,
+          "userId": "risal@gmail.com"
+        },
+        {
+          "id": "2",
+          "name": "Ultra HD Smart TV",
+          "price": 1299.99,
+          "category": "tv",
+          "stock": "2",
+          "image": "https://images.samsung.com/is/image/samsung/assets/uk/tvs/tv-buying-guide/the-best-tv-picture-quality/uk_UE32K4100AKXXU-420x300.png?$420_300_PNG$",
+          "brand": "LG",
+          "color": "Black",
+          "discount": "",
+          "productId": "2",
+          "quantity": 1,
+          "userId": "risal@gmail.com"
+        },
+        {
+          "id": "3",
+          "name": "Wireless Headphones",
+          "price": 349.99,
+          "category": "headphones",
+          "stock": "2",
+          "image": "https://www.freeiconspng.com/thumbs/headphones-png/headphones-png-14.png",
+          "brand": "Sony",
+          "color": "Black",
+          "discount": "",
+          "productId": "3",
+          "userId": "risal@gmail.com",
+          "quantity": 2
+        }
+      ],
+      "subtotal": 3799.95,
+      "shipping": 0,
+      "tax": 0,
+      "total": 3799.95,
+      "userId": "risal@gmail.com",
+      "createdAt": "2025-07-23T11:44:24.551Z"
+    },
+    {
+      "id": "ORD-ZVQBFGU9",
+      "date": "2025-07-23T11:48:02.583Z",
+      "status": "Pending",
+      "customerName": "abc",
+      "shippingAddress": "Palarotta House Calicut Nallalam\n",
+      "email": "abc@gmail.com",
+      "phone": "+91 1234567890",
+      "paymentMethod": "cod",
+      "items": [
+        {
+          "id": "1",
+          "name": "Iphone 16 pro",
+          "price": 899.99,
+          "category": "mobile",
+          "stock": "2",
+          "image": "https://itronics.in/wp-content/uploads/2024/09/iPhone_16_Pro_Max_Black_Titanium_PDP_Image_Position_1__en-IN.png",
+          "brand": "Apple",
+          "color": "White",
+          "discount": "",
+          "productId": "1",
+          "quantity": 1,
+          "userId": "abc@gmail.com"
+        },
+        {
+          "id": "3",
+          "name": "Wireless Headphones",
+          "price": 349.99,
+          "category": "headphones",
+          "stock": "2",
+          "image": "https://www.freeiconspng.com/thumbs/headphones-png/headphones-png-14.png",
+          "brand": "Sony",
+          "color": "Black",
+          "discount": "",
+          "productId": "3",
+          "quantity": 1,
+          "userId": "abc@gmail.com"
+        },
+        {
+          "id": "4",
+          "name": "Gaming Laptop Pro",
+          "price": 1599.99,
+          "category": "laptops",
+          "stock": 2,
+          "image": "https://upload.wikimedia.org/wikipedia/commons/e/e4/AVANT-P870DMG-GAMING-LAPTOP.png",
+          "brand": "Asus",
+          "color": "",
+          "discount": "",
+          "productId": "4",
+          "quantity": 1,
+          "userId": "abc@gmail.com"
+        },
+        {
+          "id": "7",
+          "name": "Pixel 7 Pro",
+          "price": 899.99,
+          "category": "mobile",
+          "stock": "2",
+          "image": "https://c.ndtvimg.com/2023-10/48eops4o_google-pixel-7_625x300_05_October_23.jpg?downsize=950:*",
+          "brand": "Google",
+          "color": "Black",
+          "discount": "",
+          "productId": "7",
+          "userId": "abc@gmail.com",
+          "quantity": 3
+        }
+      ],
+      "subtotal": 5549.94,
+      "shipping": 0,
+      "tax": 0,
+      "total": 5549.94,
+      "userId": "abc@gmail.com",
+      "createdAt": "2025-07-23T11:48:02.583Z"
+    },
+    {
+      "id": "ORD-O6JZK8NV",
+      "date": "2025-07-23T11:52:43.166Z",
+      "status": "Pending",
+      "customerName": "abcd",
+      "shippingAddress": "Palarotta House Calicut Nallalam\n",
+      "email": "abcd@gmail.com",
+      "phone": "+91 1234567980",
+      "paymentMethod": "cod",
+      "items": [
+        {
+          "id": "4",
+          "name": "Gaming Laptop Pro",
+          "price": 1599.99,
+          "category": "laptops",
+          "stock": 2,
+          "image": "https://upload.wikimedia.org/wikipedia/commons/e/e4/AVANT-P870DMG-GAMING-LAPTOP.png",
+          "brand": "Asus",
+          "color": "",
+          "discount": "",
+          "productId": "4",
+          "quantity": 1,
+          "userId": "abcd@gmail.com"
+        },
+        {
+          "id": "1",
+          "name": "Iphone 16 pro",
+          "price": 899.99,
+          "category": "mobile",
+          "stock": "2",
+          "image": "https://itronics.in/wp-content/uploads/2024/09/iPhone_16_Pro_Max_Black_Titanium_PDP_Image_Position_1__en-IN.png",
+          "brand": "Apple",
+          "color": "White",
+          "discount": "",
+          "productId": "1",
+          "userId": "abcd@gmail.com",
+          "quantity": 2
+        },
+        {
+          "id": "2",
+          "name": "Ultra HD Smart TV",
+          "price": 1299.99,
+          "category": "tv",
+          "stock": "2",
+          "image": "https://images.samsung.com/is/image/samsung/assets/uk/tvs/tv-buying-guide/the-best-tv-picture-quality/uk_UE32K4100AKXXU-420x300.png?$420_300_PNG$",
+          "brand": "LG",
+          "color": "Black",
+          "discount": "",
+          "productId": "2",
+          "userId": "abcd@gmail.com",
+          "quantity": 1
+        },
+        {
+          "id": "3",
+          "name": "Wireless Headphones",
+          "price": 349.99,
+          "category": "headphones",
+          "stock": "2",
+          "image": "https://www.freeiconspng.com/thumbs/headphones-png/headphones-png-14.png",
+          "brand": "Sony",
+          "color": "Black",
+          "discount": "",
+          "productId": "3",
+          "userId": "abcd@gmail.com",
+          "quantity": 1
+        }
+      ],
+      "subtotal": 5049.95,
+      "shipping": 0,
+      "tax": 0,
+      "total": 5049.95,
+      "userId": "abcd@gmail.com",
+      "createdAt": "2025-07-23T11:52:43.166Z"
     }
   ]
 }

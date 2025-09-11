@@ -4,6 +4,7 @@ import { Heart } from 'lucide-react';
 import { useWishlist } from '../contexttemp/WishlistContext';
 import { useCart } from '../contexttemp/CartContext';
 import { AuthContext } from '../contexttemp/AuthContext';
+import toast from 'react-hot-toast';
 
 function Wishlist() {
   const { wishlist, removeFromWishlist } = useWishlist();
