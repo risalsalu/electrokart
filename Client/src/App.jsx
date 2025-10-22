@@ -42,7 +42,7 @@ const AppContent = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3002/products')
+      .get('http://localhost:5173/api/products')
       .then((res) => setProducts(res.data))
       .catch((err) => console.error('Error loading products:', err));
   }, []);

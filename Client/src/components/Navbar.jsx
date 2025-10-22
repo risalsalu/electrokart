@@ -22,11 +22,8 @@ function Navbar() {
   };
 
   const handleProtectedRoute = (path) => {
-    if (!user) {
-      navigate('/login');
-    } else {
-      navigate(path);
-    }
+    if (!user) navigate('/login');
+    else navigate(path);
   };
 
   const handleLogoutClick = () => {
@@ -35,6 +32,10 @@ function Navbar() {
       navigate('/');
     });
   };
+
+  // ✅ Safely extract name initials and first name
+  const userName = user?.name || user?.username || 'User';
+  const userInitial = userName.charAt(0).toUpperCase();
 
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50 py-3 px-4 md:px-8 flex items-center justify-between font-sans">
@@ -126,17 +127,17 @@ function Navbar() {
           <div className="relative">
             <div onClick={() => setShowDropdown(!showDropdown)} className="flex items-center gap-2 cursor-pointer group">
               <div className="bg-blue-600 w-9 h-9 rounded-full flex items-center justify-center text-white font-bold group-hover:bg-blue-700">
-                {user.name.charAt(0).toUpperCase()}
+                {userInitial}
               </div>
               <span className="hidden lg:inline text-gray-700 group-hover:text-blue-600">
-                {user.name.split(' ')[0]}
+                {userName.split(' ')[0]}
               </span>
             </div>
             {showDropdown && (
               <div className="absolute right-0 top-12 bg-white rounded-lg shadow-lg w-48 overflow-hidden z-50 border border-gray-200">
                 <div className="p-4 border-b">
-                  <div className="font-semibold text-gray-800">{user.name}</div>
-                  <div className="text-gray-500 text-sm truncate">{user.email}</div>
+                  <div className="font-semibold text-gray-800">{userName}</div>
+                  <div className="text-gray-500 text-sm truncate">{user?.email || 'No email'}</div>
                 </div>
                 <div
                   onClick={() => { navigate('/orders'); setShowDropdown(false); }}

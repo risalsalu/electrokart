@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import { toast } from "react-hot-toast";
 import { AiOutlineHeart, AiFillHeart, AiFillStar } from "react-icons/ai";
+import { AuthContext } from "../contexttemp/AuthContext";
 import { useCart } from "../contexttemp/CartContext";
 import { useWishlist } from "../contexttemp/WishlistContext";
-import { AuthContext } from "../contexttemp/AuthContext";
-import { toast } from "react-hot-toast";
+import { getProductById } from "../services/productService";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -13,43 +13,33 @@ const ProductDetail = () => {
   const [mainImage, setMainImage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { user } = useContext(AuthContext);
+  const { isLoggedIn } = useContext(AuthContext);
   const { cart, addToCart } = useCart();
-  const { wishlist, addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
 
   const isInCart = cart?.some((item) => item.id === parseInt(id));
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3002/products/${id}`)
-      .then((res) => {
-        setProduct(res.data);
-        setMainImage(res.data.images?.[0] || res.data.image); // fallback to single image
+    getProductById(id)
+      .then((data) => {
+        setProduct(data);
+        setMainImage(data.images?.[0] || data.imageUrl || data.image);
       })
       .catch((err) => {
-        console.error("Failed to load product:", err);
-        toast.error("Failed to load product.");
+        console.error(err);
+        toast.error("Failed to load product details.");
       });
   }, [id]);
 
   const handleAddToCart = () => {
-    if (!user) {
-      toast.error("Please login to add items to cart.");
-      return;
-    }
-    if (isInCart) {
-      toast.error("Product already in cart.");
-      return;
-    }
+    if (!isLoggedIn) return toast.error("Please login to add items to cart.");
+    if (isInCart) return toast.error("Product already in cart.");
     addToCart(product);
+    toast.success("Product added to cart!");
   };
 
   const toggleWishlist = () => {
-    if (!user) {
-      toast.error("Please login to use wishlist.");
-      return;
-    }
-
+    if (!isLoggedIn) return toast.error("Please login to use wishlist.");
     if (isInWishlist(product.id)) {
       removeFromWishlist(product.id);
       toast.success("Removed from wishlist.");
@@ -59,14 +49,11 @@ const ProductDetail = () => {
     }
   };
 
-  if (!product)
-    return (
-      <div className="text-center mt-16 text-lg">Loading product details...</div>
-    );
+  if (!product) return <p className="text-center mt-16">Loading product...</p>;
 
   return (
     <>
-      {/* Modal for Image Preview */}
+      {/* Image Modal */}
       {isModalOpen && (
         <div
           className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center"
@@ -85,11 +72,9 @@ const ProductDetail = () => {
         </div>
       )}
 
-      {/* Main Product View */}
+      {/* Product Details */}
       <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-10 mt-10">
-        {/* Product Images */}
         <div className="space-y-4">
-          {/* Wishlist Icon */}
           <div
             className="relative rounded-xl overflow-hidden shadow-xl border hover:shadow-2xl transition-transform duration-300 cursor-pointer"
             onClick={() => setIsModalOpen(true)}
@@ -115,7 +100,6 @@ const ProductDetail = () => {
             />
           </div>
 
-          {/* Thumbnail Images */}
           {product.images && product.images.length > 1 && (
             <div className="flex gap-3">
               {product.images.map((img, idx) => (
@@ -133,10 +117,11 @@ const ProductDetail = () => {
           )}
         </div>
 
-        {/* Product Details */}
         <div className="space-y-4">
           <h2 className="text-4xl font-bold text-gray-800">{product.name}</h2>
-          <p className="text-2xl font-semibold text-green-600">${product.price}</p>
+          <p className="text-2xl font-semibold text-green-600">
+            ₹{product.price.toFixed(2)}
+          </p>
 
           <div className="flex items-center gap-2 text-yellow-400">
             {[...Array(5)].map((_, i) => (
@@ -149,19 +134,17 @@ const ProductDetail = () => {
             {product.description || "No detailed description available."}
           </p>
 
-          <div className="mt-6">
-            <button
-              onClick={handleAddToCart}
-              disabled={isInCart}
-              className={`${
-                isInCart
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-blue-600 hover:bg-blue-700"
-              } text-white px-6 py-3 rounded-lg font-medium transition`}
-            >
-              {isInCart ? "Already in Cart" : "Add to Cart"}
-            </button>
-          </div>
+          <button
+            onClick={handleAddToCart}
+            disabled={isInCart}
+            className={`${
+              isInCart
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700"
+            } text-white px-6 py-3 rounded-lg font-medium transition`}
+          >
+            {isInCart ? "Already in Cart" : "Add to Cart"}
+          </button>
 
           <div className="mt-8 border-t pt-6 text-sm text-gray-500 space-y-1">
             <p>🚚 Free Delivery within 3-5 business days</p>
