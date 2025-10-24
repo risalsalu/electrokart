@@ -1,8 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../contexttemp/CartContext';
 import { useWishlist } from '../contexttemp/WishlistContext';
-import { AuthContext } from '../contexttemp/AuthContext';
+import { useAuth } from '../contexttemp/AuthContext';
 
 function Navbar() {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ function Navbar() {
 
   const { cartItemCount } = useCart();
   const { wishlistItemCount } = useWishlist();
-  const { user, handleLogout } = useContext(AuthContext);
+  const { user, handleLogout } = useAuth();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -26,15 +26,13 @@ function Navbar() {
     else navigate(path);
   };
 
-  const handleLogoutClick = () => {
-    handleLogout(() => {
-      setShowDropdown(false);
-      navigate('/');
-    });
+  const handleLogoutClick = async () => {
+    await handleLogout();
+    setShowDropdown(false);
+    navigate('/');
   };
 
-  // ✅ Safely extract name initials and first name
-  const userName = user?.name || user?.username || 'User';
+  const userName = user?.username || "User";
   const userInitial = userName.charAt(0).toUpperCase();
 
   return (
@@ -80,10 +78,11 @@ function Navbar() {
 
       {/* Right Side */}
       <div className="flex items-center gap-4 md:gap-6">
+        {/* Navigation Links */}
         <div className="hidden md:flex gap-6">
           <Link to="/" className="text-gray-700 hover:text-blue-600 font-medium">Home</Link>
           <Link to="/products" className="text-gray-700 hover:text-blue-600 font-medium">Products</Link>
-          <Link to="/orders" className="text-gray-700 hover:text-blue-600 font-medium">Orders</Link>
+          {user && <Link to="/orders" className="text-gray-700 hover:text-blue-600 font-medium">Orders</Link>}
         </div>
 
         {/* Wishlist */}
@@ -122,11 +121,11 @@ function Navbar() {
           </div>
         )}
 
-        {/* User Menu or Login */}
+        {/* User Menu */}
         {user ? (
           <div className="relative">
             <div onClick={() => setShowDropdown(!showDropdown)} className="flex items-center gap-2 cursor-pointer group">
-              <div className="bg-blue-600 w-9 h-9 rounded-full flex items-center justify-center text-white font-bold group-hover:bg-blue-700">
+              <div className="bg-blue-600 w-9 h-9 rounded-full flex items-center justify-center text-white font-bold">
                 {userInitial}
               </div>
               <span className="hidden lg:inline text-gray-700 group-hover:text-blue-600">
@@ -137,7 +136,7 @@ function Navbar() {
               <div className="absolute right-0 top-12 bg-white rounded-lg shadow-lg w-48 overflow-hidden z-50 border border-gray-200">
                 <div className="p-4 border-b">
                   <div className="font-semibold text-gray-800">{userName}</div>
-                  <div className="text-gray-500 text-sm truncate">{user?.email || 'No email'}</div>
+                  <div className="text-gray-500 text-sm truncate">{user.email}</div>
                 </div>
                 <div
                   onClick={() => { navigate('/orders'); setShowDropdown(false); }}

@@ -1,53 +1,63 @@
-import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { toast } from 'react-hot-toast';
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import { useAuth } from "../contexttemp/AuthContext";
+import api from "../services/api"; // your axios instance
 
-function Login({ onLogin }) {
-  const location = useLocation();
+function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { handleLogin } = useAuth();
 
-  const [email, setEmail] = useState(location.state?.registeredEmail || '');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleLogin = async (e) => {
+  // Optional: pre-fill email if coming from registration
+  useEffect(() => {
+    if (location.state?.registeredEmail) {
+      setEmail(location.state.registeredEmail);
+    }
+  }, [location.state]);
+
+  const onSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     try {
-      const res = await axios.get(
-        `http://localhost:3002/users?email=${email}&password=${password}`
-      );
+      const response = await api.post("/Auth/Login", { email, password });
+      const data = response.data;
 
-      if (res.data.length > 0) {
-        const user = res.data[0];
-
-        const sessionUser = {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
+      if (data.success && data.data) {
+        // Update AuthContext
+        const user = {
+          username: data.data.username,
+          email: data.data.email,
+          role: data.data.role,
+          token: data.data.accessToken,
         };
 
-        if (user.role === 'admin') {
-          localStorage.setItem('admin', JSON.stringify(sessionUser));
-          toast.success('Admin login successful!');
-          navigate('/admin/dashboard');
-        } else {
-          localStorage.setItem('currentUser', JSON.stringify(sessionUser));
-          onLogin?.(sessionUser); 
-          toast.success('Login successful!');
-          navigate('/');
-        }
+        await handleLogin({ email, password }); // this will update context + localStorage
+
+        toast.success("Login successful!");
+
+        // Clear form fields
+        setEmail("");
+        setPassword("");
+
+        // Redirect based on role
+        if (user.role === "Admin") navigate("/admin/dashboard");
+        else navigate("/");
       } else {
-        toast.error('Invalid email or password.');
-        setError('Invalid email or password.');
+        const msg = data.message || "Invalid credentials";
+        setError(msg);
+        toast.error(msg);
       }
     } catch (err) {
-      console.error('Login error:', err);
-      toast.error('Login failed. Please try again later.');
-      setError('Something went wrong. Please try again later.');
+      const msg =
+        err.response?.data?.message || "Login failed. Please try again.";
+      setError(msg);
+      toast.error(msg);
     }
   };
 
@@ -59,7 +69,7 @@ function Login({ onLogin }) {
           <p className="text-blue-100 mt-1">Sign in to your account</p>
         </div>
 
-        <form onSubmit={handleLogin} className="p-6 space-y-5">
+        <form onSubmit={onSubmit} className="p-6 space-y-5">
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
               {error}
@@ -87,7 +97,9 @@ function Login({ onLogin }) {
               </label>
               <span
                 className="text-sm text-blue-600 hover:underline cursor-pointer"
-                onClick={() => toast('Forgot password feature not implemented.')}
+                onClick={() =>
+                  toast("Forgot password feature not implemented yet.")
+                }
               >
                 Forgot password?
               </span>
@@ -112,9 +124,9 @@ function Login({ onLogin }) {
 
         <div className="border-t border-gray-200 px-6 py-5 text-center">
           <p className="text-gray-600 text-sm">
-            Don&apos;t have an account?{' '}
+            Don&apos;t have an account?{" "}
             <button
-              onClick={() => navigate('/register')}
+              onClick={() => navigate("/register")}
               className="font-medium text-blue-600 hover:text-blue-800 hover:underline transition"
             >
               Create account
