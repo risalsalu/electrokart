@@ -84,32 +84,67 @@ const AppContent = () => {
               {/* Public Routes */}
               <Route path="/" element={<Home products={products} addToCart={addToCart} />} />
               <Route path="/search" element={<SearchResults products={products} />} />
-              <Route path="/products" element={<Products products={products} addToCart={addToCart} addToWishlist={addToWishlist} />} />
-              <Route path="/products/:id" element={<ProductDetail addToCart={addToCart} addToWishlist={addToWishlist} />} />
+              <Route
+                path="/products"
+                element={
+                  <Products
+                    products={products}
+                    addToCart={addToCart}
+                    addToWishlist={addToWishlist}
+                    wishlist={wishlist}
+                  />
+                }
+              />
+              <Route
+                path="/products/:id"
+                element={<ProductDetail addToCart={addToCart} addToWishlist={addToWishlist} />}
+              />
               <Route path="/login" element={<Login onLogin={handleLogin} />} />
               <Route path="/register" element={<Register onRegister={handleRegister} />} />
 
               {/* Protected Routes */}
-              <Route path="/cart" element={
-                <ProtectedRoute>
-                  <Cart cart={cart} removeFromCart={removeFromCart} updateQuantity={updateQuantity} user={user} />
-                </ProtectedRoute>
-              } />
-              <Route path="/wishlist" element={
-                <ProtectedRoute>
-                  <Wishlist wishlist={wishlist} removeFromWishlist={removeFromWishlist} addToCart={addToCart} user={user} />
-                </ProtectedRoute>
-              } />
-              <Route path="/orders" element={
-                <ProtectedRoute>
-                  <Orders />
-                </ProtectedRoute>
-              } />
-              <Route path="/checkout" element={
-                <ProtectedRoute>
-                  <Checkout cart={cart} user={user} clearCart={clearCart} placeOrder={placeOrder} />
-                </ProtectedRoute>
-              } />
+              <Route
+                path="/cart"
+                element={
+                  <ProtectedRoute>
+                    <Cart
+                      cart={cart}
+                      removeFromCart={removeFromCart}
+                      updateQuantity={updateQuantity}
+                      user={user}
+                    />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/wishlist"
+                element={
+                  <ProtectedRoute>
+                    <Wishlist
+                      wishlist={wishlist}
+                      removeFromWishlist={removeFromWishlist}
+                      addToCart={addToCart}
+                      user={user}
+                    />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/orders"
+                element={
+                  <ProtectedRoute>
+                    <Orders />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/checkout"
+                element={
+                  <ProtectedRoute>
+                    <Checkout cart={cart} user={user} clearCart={clearCart} placeOrder={placeOrder} />
+                  </ProtectedRoute>
+                }
+              />
 
               {/* Fallback */}
               <Route path="*" element={<Navigate to="/" replace />} />

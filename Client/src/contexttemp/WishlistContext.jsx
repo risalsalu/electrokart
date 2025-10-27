@@ -3,77 +3,109 @@ import axios from "axios";
 import { useAuth } from "./AuthContext"; 
 import { toast } from "react-hot-toast";
 
+// ---------------- Create Wishlist Context ----------------
 const WishlistContext = createContext();
 
+// ---------------- Wishlist Provider ----------------
 export const WishlistProvider = ({ children }) => {
   const [wishlist, setWishlist] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { user } = useAuth();
 
-  const baseURL = "http://localhost:3002/wishlist";
+  const baseURL = "http://localhost:7289/api/Wishlist"; // Backend API base
 
-  //  Fetch wishlist for the logged-in user
+  // ---------------- Fetch Wishlist ----------------
   const fetchWishlist = async () => {
-    try {
-      if (!user) {
-        setWishlist([]);
-        return;
-      }
+    if (!user) {
+      setWishlist([]);
+      return;
+    }
 
-      const res = await axios.get(`${baseURL}?userId=${user.id}`);
-      setWishlist(res.data);
+    setLoading(true);
+    try {
+      const res = await axios.get(baseURL, {
+        headers: { Authorization: `Bearer ${user.token}` },
+        timeout: 5000,
+      });
+
+      if (res.data?.success) {
+        setWishlist(res.data.data || []);
+      } else {
+        setWishlist([]);
+        toast.error(res.data?.message || "Failed to fetch wishlist");
+      }
     } catch (error) {
       console.error("Failed to fetch wishlist:", error);
-      toast.error("Failed to fetch wishlist");
+      setWishlist([]);
+      toast.error("Failed to fetch wishlist. Check your network or backend.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  //  Add product to wishlist
+  // ---------------- Add to Wishlist ----------------
   const addToWishlist = async (product) => {
-    try {
-      if (!user) {
-        toast.error("Login to add to wishlist");
-        return;
-      }
+    if (!user) {
+      toast.error("Login to add to wishlist");
+      return;
+    }
 
-      const alreadyInWishlist = wishlist.some(
-        (item) => item.productId === product.id && item.userId === user.id
+    if (wishlist.some((item) => item.productId === product.id)) {
+      toast.error("Product already in wishlist");
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        `${baseURL}/add`,
+        { productId: product.id },
+        { headers: { Authorization: `Bearer ${user.token}` }, timeout: 5000 }
       );
 
-      if (alreadyInWishlist) {
-        toast.error("Already in wishlist");
-        return;
+      if (res.data?.success) {
+        setWishlist((prev) => [...prev, res.data.data]);
+        toast.success(res.data?.message || "Added to wishlist");
+      } else {
+        toast.error(res.data?.message || "Failed to add to wishlist");
       }
-
-      const newItem = {
-        ...product,
-        productId: product.id,
-        userId: user.id,
-      };
-
-      const res = await axios.post(baseURL, newItem);
-      setWishlist((prev) => [...prev, res.data]);
     } catch (error) {
       console.error("Error adding to wishlist:", error);
-      toast.error("Error adding to wishlist");
+      toast.error("Error adding to wishlist. Check your network/backend.");
     }
   };
 
-  //  Remove from wishlist
-  const removeFromWishlist = async (wishlistItemId) => {
+  // ---------------- Remove from Wishlist ----------------
+  const removeFromWishlist = async (productId) => {
+    if (!user) {
+      toast.error("Login to remove from wishlist");
+      return;
+    }
+
     try {
-      await axios.delete(`${baseURL}/${wishlistItemId}`);
-      setWishlist((prev) => prev.filter((item) => item.id !== wishlistItemId));
+      const res = await axios.delete(`${baseURL}/${productId}`, {
+        headers: { Authorization: `Bearer ${user.token}` },
+        timeout: 5000,
+      });
+
+      if (res.data?.success) {
+        setWishlist((prev) => prev.filter((item) => item.productId !== productId));
+        toast.success(res.data?.message || "Removed from wishlist");
+      } else {
+        toast.error(res.data?.message || "Failed to remove from wishlist");
+      }
     } catch (error) {
       console.error("Error removing from wishlist:", error);
-      toast.error("Error removing from wishlist");
+      toast.error("Error removing from wishlist. Check your network/backend.");
     }
   };
 
+  // ---------------- Helpers ----------------
   const isInWishlist = (productId) =>
     wishlist.some((item) => item.productId === productId);
 
-  const clearWishlist = () => setWishlist([]); 
+  const clearWishlist = () => setWishlist([]);
 
+  // ---------------- Fetch on User Change ----------------
   useEffect(() => {
     fetchWishlist();
   }, [user]);
@@ -82,6 +114,7 @@ export const WishlistProvider = ({ children }) => {
     <WishlistContext.Provider
       value={{
         wishlist,
+        loading,
         addToWishlist,
         removeFromWishlist,
         isInWishlist,
@@ -94,4 +127,5 @@ export const WishlistProvider = ({ children }) => {
   );
 };
 
+// ---------------- Custom Hook ----------------
 export const useWishlist = () => useContext(WishlistContext);

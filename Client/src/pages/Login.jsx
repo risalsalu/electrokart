@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useAuth } from "../contexttemp/AuthContext";
-import api from "../services/api"; // your axios instance
 
 function Login() {
   const navigate = useNavigate();
@@ -13,7 +12,6 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // Optional: pre-fill email if coming from registration
   useEffect(() => {
     if (location.state?.registeredEmail) {
       setEmail(location.state.registeredEmail);
@@ -25,37 +23,15 @@ function Login() {
     setError("");
 
     try {
-      const response = await api.post("/Auth/Login", { email, password });
-      const data = response.data;
+      const user = await handleLogin({ email, password });
+      toast.success("Login successful!");
+      setEmail("");
+      setPassword("");
 
-      if (data.success && data.data) {
-        // Update AuthContext
-        const user = {
-          username: data.data.username,
-          email: data.data.email,
-          role: data.data.role,
-          token: data.data.accessToken,
-        };
-
-        await handleLogin({ email, password }); // this will update context + localStorage
-
-        toast.success("Login successful!");
-
-        // Clear form fields
-        setEmail("");
-        setPassword("");
-
-        // Redirect based on role
-        if (user.role === "Admin") navigate("/admin/dashboard");
-        else navigate("/");
-      } else {
-        const msg = data.message || "Invalid credentials";
-        setError(msg);
-        toast.error(msg);
-      }
+      if (user.role.toLowerCase() === "admin") navigate("/admin/dashboard");
+      else navigate("/");
     } catch (err) {
-      const msg =
-        err.response?.data?.message || "Login failed. Please try again.";
+      const msg = err.response?.data?.message || "Login failed. Try again.";
       setError(msg);
       toast.error(msg);
     }
@@ -95,14 +71,6 @@ function Login() {
               <label className="block text-sm font-medium text-gray-700">
                 Password
               </label>
-              <span
-                className="text-sm text-blue-600 hover:underline cursor-pointer"
-                onClick={() =>
-                  toast("Forgot password feature not implemented yet.")
-                }
-              >
-                Forgot password?
-              </span>
             </div>
             <input
               type="password"

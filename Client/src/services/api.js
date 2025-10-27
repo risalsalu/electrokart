@@ -4,28 +4,53 @@ const API_URL = "https://localhost:7289/api";
 
 const api = axios.create({
   baseURL: API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-  withCredentials: true, 
+  headers: { "Content-Type": "application/json" },
+  withCredentials: true,
 });
+
+let isRefreshing = false;
+let failedQueue = [];
+
+const processQueue = (error, token = null) => {
+  failedQueue.forEach((prom) => {
+    if (error) prom.reject(error);
+    else prom.resolve(token);
+  });
+  failedQueue = [];
+};
 
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response) {
-      const { status } = error.response;
+  async (error) => {
+    const originalRequest = error.config;
 
-      if (status === 401) {
-        console.warn("Unauthorized! Redirecting to login...");
-        window.location.href = "/login";
-      } else if (status >= 500) {
-        console.error("Server Error:", error.response.data);
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !originalRequest.url.includes("/Auth/Refresh")
+    ) {
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then(() => api(originalRequest))
+          .catch((err) => Promise.reject(err));
       }
-    } else if (error.request) {
-      console.error("No response from server:", error.request);
-    } else {
-      console.error("Axios Error:", error.message);
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      try {
+        await axios.post(`${API_URL}/Auth/Refresh`, {}, { withCredentials: true });
+        processQueue(null);
+        return api(originalRequest);
+      } catch (err) {
+        processQueue(err);
+        window.location.href = "/login";
+        return Promise.reject(err);
+      } finally {
+        isRefreshing = false;
+      }
     }
 
     return Promise.reject(error);
