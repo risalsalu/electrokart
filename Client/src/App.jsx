@@ -2,10 +2,8 @@ import React, { useEffect, useState, useContext } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import axios from "./services/api";
-
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-
 import Home from "./pages/Home";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
@@ -16,32 +14,27 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Checkout from "./pages/Checkout";
 import SearchResults from "./pages/SearchResults";
-
 import AdminDashboard from "./admin/AdminDashboard";
 import ProductManagement from "./admin/ProductManagement";
 import OrderManagement from "./admin/OrderManagement";
 import UserManagement from "./admin/UserManagement";
 import AdminLayout from "./components/admin/AdminLayout";
-
 import { CartProvider, useCart } from "./contexttemp/CartContext";
 import { WishlistProvider, useWishlist } from "./contexttemp/WishlistContext";
 import { OrdersProvider, useOrders } from "./contexttemp/OrdersContext";
 import AuthProvider, { AuthContext } from "./contexttemp/AuthContext";
 
-// ---------------- Protected Route ----------------
 const ProtectedRoute = ({ children }) => {
   const { user } = useContext(AuthContext);
   return user ? children : <Navigate to="/login" replace />;
 };
 
-// ---------------- App Content ----------------
 const AppContent = () => {
   const location = useLocation();
   const { user, handleLogin, handleLogout, handleRegister } = useContext(AuthContext);
   const { cart, removeFromCart, updateQuantity, clearCart, addToCart, cartItemCount } = useCart();
   const { wishlist, addToWishlist, removeFromWishlist, wishlistItemCount } = useWishlist();
   const { placeOrder } = useOrders();
-
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -57,7 +50,6 @@ const AppContent = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      {/* Admin Routes */}
       {isAdminRoute ? (
         <Routes>
           <Route path="/admin" element={<AdminLayout />}>
@@ -69,7 +61,6 @@ const AppContent = () => {
         </Routes>
       ) : (
         <>
-          {/* Navbar */}
           {!shouldHideLayout && (
             <Navbar
               user={user}
@@ -78,10 +69,8 @@ const AppContent = () => {
               wishlistItemCount={wishlistItemCount}
             />
           )}
-
           <main className="flex-grow">
             <Routes>
-              {/* Public Routes */}
               <Route path="/" element={<Home products={products} addToCart={addToCart} />} />
               <Route path="/search" element={<SearchResults products={products} />} />
               <Route
@@ -101,8 +90,6 @@ const AppContent = () => {
               />
               <Route path="/login" element={<Login onLogin={handleLogin} />} />
               <Route path="/register" element={<Register onRegister={handleRegister} />} />
-
-              {/* Protected Routes */}
               <Route
                 path="/cart"
                 element={
@@ -145,23 +132,17 @@ const AppContent = () => {
                   </ProtectedRoute>
                 }
               />
-
-              {/* Fallback */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>
-
-          {/* Footer */}
           {!shouldHideLayout && <Footer />}
         </>
       )}
-
       <Toaster position="top-center" toastOptions={{ duration: 2000 }} />
     </div>
   );
 };
 
-// ---------------- Main App ----------------
 const App = () => (
   <Router>
     <AuthProvider>
