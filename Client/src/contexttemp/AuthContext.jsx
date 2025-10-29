@@ -1,3 +1,4 @@
+// src/contexttemp/AuthContext.jsx
 import React, { createContext, useContext, useState, useEffect } from "react";
 import authService from "../services/authService";
 
@@ -8,42 +9,64 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("currentUser");
-    if (storedUser) {
-      try {
+  const loadUser = async () => {
+    try {
+      const storedUser = localStorage.getItem("currentUser");
+      if (storedUser) {
         setUser(JSON.parse(storedUser));
-      } catch {
-        localStorage.removeItem("currentUser");
+        return;
       }
+      const refreshed = await authService.refresh();
+      if (refreshed?.data?.accessToken) {
+        const newUser = {
+          username: refreshed.data.username,
+          email: refreshed.data.email,
+          role: refreshed.data.role,
+        };
+        setUser(newUser);
+        localStorage.setItem("currentUser", JSON.stringify(newUser));
+      }
+    } catch (error) {
+      console.error("Error loading user:", error);
+      localStorage.removeItem("currentUser");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
+  };
+
+  useEffect(() => {
+    loadUser();
   }, []);
 
   const handleLogin = async ({ email, password }) => {
     const res = await authService.login({ email, password });
-    const data = res.data;
+    const data = res?.data;
+    if (!data) return null;
 
-    const formattedUser = {
+    const userData = {
       username: data.username,
       email: data.email,
       role: data.role,
     };
-
-    setUser(formattedUser);
-    localStorage.setItem("currentUser", JSON.stringify(formattedUser));
-    return formattedUser;
+    setUser(userData);
+    localStorage.setItem("currentUser", JSON.stringify(userData));
+    return userData;
   };
 
   const handleRegister = async ({ username, email, password }) => {
-    const res = await authService.register({ username, email, password });
-    return res;
+    return await authService.register({ username, email, password });
   };
 
   const handleLogout = async () => {
-    await authService.logout();
+    try {
+      await authService.logout();
+    } catch (error) {
+      console.warn("Logout error:", error);
+    }
     setUser(null);
     localStorage.removeItem("currentUser");
+    document.cookie = "AccessToken=; Max-Age=0; path=/; secure; SameSite=None";
+    document.cookie = "RefreshToken=; Max-Age=0; path=/; secure; SameSite=None";
   };
 
   if (loading) return <div>Loading...</div>;

@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useCart } from '../contexttemp/CartContext';
-import { useWishlist } from '../contexttemp/WishlistContext';
-import { useAuth } from '../contexttemp/AuthContext';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useCart } from "../contexttemp/CartContext";
+import { useWishlist } from "../contexttemp/WishlistContext";
+import { useAuth } from "../contexttemp/AuthContext";
 
 function Navbar() {
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
 
   const { cartItemCount } = useCart();
@@ -17,30 +17,29 @@ function Navbar() {
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchQuery('');
+      setSearchQuery("");
     }
   };
 
   const handleProtectedRoute = (path) => {
-    if (!user) navigate('/login');
+    if (!user) navigate("/login");
     else navigate(path);
   };
 
   const handleLogoutClick = async () => {
     await handleLogout();
     setShowDropdown(false);
-    navigate('/');
+    navigate("/");
   };
 
-  const userName = user?.username || 'User';
+  const userName = user?.username || "User";
   const userInitial = userName.charAt(0).toUpperCase();
 
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50 py-3 px-4 md:px-8 flex items-center justify-between font-sans">
-      {/* Logo */}
       <div
         className="flex items-center gap-3 cursor-pointer group transition-all duration-300 hover:scale-[1.03]"
-        onClick={() => navigate('/')}
+        onClick={() => navigate("/")}
       >
         <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-900 shadow-lg flex items-center justify-center text-white text-2xl font-bold transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-[6deg]">
           ⚡
@@ -55,7 +54,6 @@ function Navbar() {
         </div>
       </div>
 
-      {/* Search Bar */}
       <div className="flex-grow max-w-xl mx-4 md:mx-8">
         <form onSubmit={handleSearch} className="relative">
           <input
@@ -87,27 +85,30 @@ function Navbar() {
         </form>
       </div>
 
-      {/* Right Side */}
       <div className="flex items-center gap-4 md:gap-6">
-        {/* Navigation Links */}
         <div className="hidden md:flex gap-6">
           <Link to="/" className="text-gray-700 hover:text-blue-600 font-medium">
             Home
           </Link>
-          <Link to="/products" className="text-gray-700 hover:text-blue-600 font-medium">
+          <Link
+            to="/products"
+            className="text-gray-700 hover:text-blue-600 font-medium"
+          >
             Products
           </Link>
           {user && (
-            <Link to="/orders" className="text-gray-700 hover:text-blue-600 font-medium">
+            <Link
+              to="/orders"
+              className="text-gray-700 hover:text-blue-600 font-medium"
+            >
               Orders
             </Link>
           )}
         </div>
 
-        {/* Wishlist */}
         {user && (
           <div
-            onClick={() => handleProtectedRoute('/wishlist')}
+            onClick={() => handleProtectedRoute("/wishlist")}
             className="relative cursor-pointer group"
             title="Wishlist"
           >
@@ -133,10 +134,9 @@ function Navbar() {
           </div>
         )}
 
-        {/* Cart */}
         {user && (
           <div
-            onClick={() => handleProtectedRoute('/cart')}
+            onClick={() => handleProtectedRoute("/cart")}
             className="relative cursor-pointer group"
             title="Cart"
           >
@@ -162,7 +162,6 @@ function Navbar() {
           </div>
         )}
 
-        {/* User Menu */}
         {user ? (
           <div className="relative">
             <div
@@ -173,18 +172,20 @@ function Navbar() {
                 {userInitial}
               </div>
               <span className="hidden lg:inline text-gray-700 group-hover:text-blue-600">
-                {userName.split(' ')[0]}
+                {userName.split(" ")[0]}
               </span>
             </div>
             {showDropdown && (
               <div className="absolute right-0 top-12 bg-white rounded-lg shadow-lg w-48 overflow-hidden z-50 border border-gray-200">
                 <div className="p-4 border-b">
                   <div className="font-semibold text-gray-800">{userName}</div>
-                  <div className="text-gray-500 text-sm truncate">{user.email}</div>
+                  <div className="text-gray-500 text-sm truncate">
+                    {user.email}
+                  </div>
                 </div>
                 <div
                   onClick={() => {
-                    navigate('/orders');
+                    navigate("/orders");
                     setShowDropdown(false);
                   }}
                   className="p-3 hover:bg-gray-50 cursor-pointer text-gray-700 hover:text-blue-600"

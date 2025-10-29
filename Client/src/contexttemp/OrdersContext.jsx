@@ -1,87 +1,81 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import axios from 'axios';
-import { useAuth } from './AuthContext';
+import { createContext, useContext, useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
+import orderService from "../services/orderService";
+import { useAuth } from "./AuthContext";
+import { useCart } from "./CartContext";
+import { useNavigate } from "react-router-dom";
 
 const OrdersContext = createContext();
-const baseURL = 'http://localhost:3002/orders';
 
 export const OrdersProvider = ({ children }) => {
   const [orders, setOrders] = useState([]);
-  const { user } = useAuth(); //  Get current user from AuthContext
+  const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
+  const { clearCart } = useCart();
+  const navigate = useNavigate();
 
-  // Fetch only current user's orders
-  useEffect(() => {
-    const fetchOrders = async () => {
-      if (!user?.id) {
-        setOrders([]);
+  const fetchOrders = async () => {
+    if (!user) return;
+    try {
+      setLoading(true);
+      const data = await orderService.getMyOrders();
+      setOrders(Array.isArray(data) ? data : []);
+    } catch {
+      toast.error("Failed to fetch orders");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const placeOrder = async (orderData) => {
+    try {
+      if (!orderData || !Array.isArray(orderData.items)) {
+        toast.error("Invalid order data");
         return;
       }
-
-      try {
-        const res = await axios.get(`${baseURL}?userId=${user.id}`);
-        setOrders(res.data);
-      } catch (err) {
-        console.error('Error fetching orders:', err);
+      const invalidItems = orderData.items.filter(
+        (item) => !item.productId || item.productId <= 0
+      );
+      if (invalidItems.length > 0) {
+        toast.error("Some items have invalid product IDs");
+        return;
       }
-    };
+      setLoading(true);
+      const createdOrder = await orderService.createOrder(orderData);
+      if (createdOrder) {
+        setOrders((prev) => [createdOrder, ...prev]);
+        clearCart();
+        toast.success("Order placed successfully");
+        navigate("/orders");
+      } else {
+        toast.error("Order creation failed");
+      }
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message || error.message || "Failed to place order"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchOrders();
   }, [user]);
 
-  // Place a new order with current user's ID
-  const placeOrder = async (newOrder) => {
-    if (!user?.id) return;
-
-    const orderWithUser = {
-      ...newOrder,
-      userId: user.id,
-      createdAt: new Date().toISOString(),
-    };
-
-    try {
-      const res = await axios.post(baseURL, orderWithUser);
-      setOrders((prevOrders) => [res.data, ...prevOrders]);
-    } catch (err) {
-      console.error('Failed to place order:', err);
-    }
-  };
-
-  // Remove item from a user's order
-  const removeItemFromOrder = async (orderId, itemIndex) => {
-    try {
-      const targetOrder = orders.find((order) => order.id === orderId);
-
-      // Only proceed if the order exists and belongs to current user
-      if (!targetOrder || targetOrder.userId !== user?.id) return;
-
-      const newItems = targetOrder.items.filter((_, idx) => idx !== itemIndex);
-      const newTotal = newItems.reduce(
-        (acc, item) => acc + item.price * item.quantity,
-        0
-      );
-
-      if (newItems.length === 0) {
-        //  No items left – delete the order
-        await axios.delete(`${baseURL}/${orderId}`);
-        setOrders((prev) => prev.filter((order) => order.id !== orderId));
-      } else {
-        const updatedOrder = { ...targetOrder, items: newItems, total: newTotal };
-        await axios.put(`${baseURL}/${orderId}`, updatedOrder);
-        setOrders((prev) =>
-          prev.map((order) => (order.id === orderId ? updatedOrder : order))
-        );
-      }
-    } catch (err) {
-      console.error('Failed to update or delete order:', err);
-    }
-  };
-
   return (
-    <OrdersContext.Provider value={{ orders, placeOrder, removeItemFromOrder }}>
+    <OrdersContext.Provider
+      value={{
+        orders,
+        loading,
+        fetchOrders,
+        placeOrder,
+        setOrders,
+      }}
+    >
       {children}
     </OrdersContext.Provider>
   );
 };
 
-//  Custom hook
 export const useOrders = () => useContext(OrdersContext);

@@ -1,3 +1,4 @@
+// src/services/api.js
 import axios from "axios";
 
 const API_URL = "https://localhost:7289/api";
@@ -18,27 +19,40 @@ function getCookie(name) {
   return null;
 }
 
-const processQueue = (error, token = null) => {
-  failedQueue.forEach((prom) => (error ? prom.reject(error) : prom.resolve(token)));
+function processQueue(error, token = null) {
+  failedQueue.forEach((prom) => {
+    if (error) prom.reject(error);
+    else prom.resolve(token);
+  });
   failedQueue = [];
-};
+}
 
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("accessToken");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
+api.interceptors.request.use(
+  (config) => {
+    const token = getCookie("AccessToken");
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 api.interceptors.response.use(
-  (res) => res,
+  (response) => response,
   async (error) => {
-    const originalRequest = error.config;
     if (!error.response) return Promise.reject(error);
+
+    const originalRequest = error.config;
     const status = error.response.status;
 
-    if (status === 401 && !originalRequest._retry && !originalRequest.url.includes("/Auth/Refresh")) {
+    if (
+      status === 401 &&
+      !originalRequest._retry &&
+      !originalRequest.url.includes("/Auth/Refresh")
+    ) {
       if (isRefreshing) {
-        return new Promise((resolve, reject) => failedQueue.push({ resolve, reject }))
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
           .then((token) => {
             originalRequest.headers.Authorization = `Bearer ${token}`;
             return api(originalRequest);
@@ -50,25 +64,30 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const oldAccess = localStorage.getItem("accessToken");
+        const access = getCookie("AccessToken");
         const refresh = getCookie("RefreshToken");
+
         const res = await axios.post(
           `${API_URL}/Auth/Refresh`,
-          { accessToken: oldAccess, refreshToken: refresh },
+          { accessToken: access, refreshToken: refresh },
           { withCredentials: true }
         );
 
         const newToken = res.data?.data?.accessToken || res.data?.accessToken;
-        if (newToken) {
-          localStorage.setItem("accessToken", newToken);
-          processQueue(null, newToken);
-          originalRequest.headers.Authorization = `Bearer ${newToken}`;
-          return api(originalRequest);
-        } else throw new Error("No access token returned");
+        if (!newToken) throw new Error("No new access token received");
+
+        document.cookie = `AccessToken=${newToken}; path=/; secure; SameSite=None`;
+
+        processQueue(null, newToken);
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        return api(originalRequest);
       } catch (err) {
         processQueue(err, null);
-        localStorage.removeItem("accessToken");
-        if (!window.location.pathname.includes("/login")) window.location.href = "/login";
+        document.cookie = "AccessToken=; Max-Age=0; path=/; secure; SameSite=None";
+        document.cookie = "RefreshToken=; Max-Age=0; path=/; secure; SameSite=None";
+        if (!window.location.pathname.includes("/login")) {
+          window.location.href = "/login";
+        }
         return Promise.reject(err);
       } finally {
         isRefreshing = false;
