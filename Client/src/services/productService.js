@@ -12,7 +12,6 @@ export const getProductById = async (id) => {
   return response.data;
 };
 
-// Create a product (for admin)
 export const createProduct = async (productData) => {
   const response = await api.post("/products", productData);
   return response.data;
