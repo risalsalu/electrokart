@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { toast } from "react-hot-toast";
+import adminService from "../services/adminService";
 import { Users, ShoppingCart, Package, Eye, DollarSign, BarChart3, Truck, CheckCircle, Clock, XCircle } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
 
@@ -16,20 +17,21 @@ const AdminDashboard = () => {
     setLoading(true);
     try {
       const [productsRes, usersRes, ordersRes] = await Promise.all([
-        axios.get('http://localhost:3002/products'),
-        axios.get('http://localhost:3002/users'),
-        axios.get('http://localhost:3002/orders')
+        adminService.getAllProducts(),
+        adminService.getAllUsers(),
+        adminService.getAllOrders()
       ]);
 
-      const products = productsRes.data;
-      const users = usersRes.data;
-      const orders = ordersRes.data;
+      const products = productsRes?.data || productsRes;
+      const users = usersRes?.data || usersRes;
+      const orders = ordersRes?.data || ordersRes;
 
       setData({ products, users, orders });
       calculateDailyStats(orders);
       calculateProductCategories(products);
     } catch (error) {
       console.error("Error fetching data:", error);
+      toast.error("Failed to load dashboard data");
     } finally {
       setLoading(false);
     }
@@ -48,7 +50,7 @@ const AdminDashboard = () => {
         };
       }
       dailyData[date].orders += 1;
-      dailyData[date].revenue += order.total || 0;
+      dailyData[date].revenue += (parseFloat(order.total || order.totalAmount || order.amount || 0));
     });
 
     const sortedDailyStats = Object.values(dailyData)
@@ -78,7 +80,6 @@ const AdminDashboard = () => {
 
   useEffect(() => { fetchData(); }, []);
 
-  // Calculate order status counts
   const orderStatusCounts = data.orders.reduce((acc, order) => {
     const status = order.status?.toLowerCase() || 'pending';
     acc[status] = (acc[status] || 0) + 1;
@@ -89,7 +90,10 @@ const AdminDashboard = () => {
     totalProducts: data.products.length,
     totalUsers: data.users.length,
     totalOrders: data.orders.length,
-    totalRevenue: data.orders.reduce((sum, order) => sum + (parseFloat(order.total) || 0), 0),
+    totalRevenue: data.orders.reduce(
+      (sum, order) => sum + (parseFloat(order.total || order.totalAmount || order.amount || 0)),
+      0
+    ),
     orderStatus: {
       pending: orderStatusCounts.pending || 0,
       shipped: orderStatusCounts.shipped || 0,
@@ -98,17 +102,6 @@ const AdminDashboard = () => {
     }
   };
 
-  // Color palette for charts
-  const colors = [
-    '#3B82F6', // blue
-    '#10B981', // green
-    '#F59E0B', // yellow
-    '#EF4444', // red
-    '#8B5CF6', // purple
-    '#EC4899', // pink
-  ];
-
-  // Revenue Bar Chart Component
   const RevenueBarChart = () => {
     if (!dailyStats.length) return <div className="text-center text-gray-500">No revenue data available</div>;
     
@@ -146,7 +139,14 @@ const AdminDashboard = () => {
     );
   };
 
-  // Order Status Pie Chart Component
+  // Color map for the order status pie chart
+  const statusColorsMap = {
+    pending: '#F59E0B', // yellow
+    shipped: '#3B82F6', // blue
+    delivered: '#10B981', // green
+    cancelled: '#EF4444', // red
+  };
+
   const OrderStatusPieChart = () => {
     const orderStatusData = [
       { name: 'Pending', value: metrics.orderStatus.pending },
@@ -174,7 +174,10 @@ const AdminDashboard = () => {
                 label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
               >
                 {orderStatusData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                  <Cell 
+                    key={`cell-${index}`} 
+                    fill={statusColorsMap[entry.name.toLowerCase()]} 
+                  />
                 ))}
               </Pie>
               <Tooltip 
@@ -188,9 +191,7 @@ const AdminDashboard = () => {
     );
   };
 
-  // New Chart Components for Analytics Page
   const UserGrowthChart = () => {
-    // Simulate user growth data
     const userGrowthData = [
       { month: 'Jan', users: 120 },
       { month: 'Feb', users: 180 },
@@ -253,7 +254,6 @@ const AdminDashboard = () => {
   };
 
   const AverageOrderValueChart = () => {
-    // Calculate average order value per day
     const avgOrderData = dailyStats.map(day => ({
       date: day.date,
       avgValue: day.orders > 0 ? (day.revenue / day.orders) : 0
@@ -371,7 +371,6 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Order Details Modal */}
       {showOrderDetails && selectedOrder && (
         <div className="fixed inset-0 backdrop-blur-sm bg-black/30 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -414,7 +413,7 @@ const AdminDashboard = () => {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {selectedOrder.items.map((item, index) => (
+                      {selectedOrder.items && selectedOrder.items.map((item, index) => (
                         <tr key={index}>
                           <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
                             {item.name}
@@ -579,7 +578,7 @@ const AdminDashboard = () => {
                             {order.customerName || 'Unknown'}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            ${(order.total || 0).toLocaleString()}
+                            ${(order.total || order.totalAmount || order.amount || 0).toLocaleString()}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {order.date ? new Date(order.date).toLocaleDateString() : 'N/A'}

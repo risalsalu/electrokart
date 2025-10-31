@@ -1,7 +1,23 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Search, ChevronDown, ChevronUp, Mail, Phone, User, ShoppingCart, Heart, Package, Sliders } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
+import userService from "../services/userService";
+import api from "../services/api";
+import {
+  Users,
+  Search,
+  ChevronDown,
+  ChevronUp,
+  Mail,
+  Phone,
+  User,
+  ShoppingCart,
+  Heart,
+  Package,
+  Sliders,
+  Loader2,
+  DollarSign,
+  Trash2,
+} from "lucide-react";
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -12,57 +28,58 @@ const UserManagement = () => {
   const [loading, setLoading] = useState(true);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
   const fetchUsers = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const res = await axios.get("http://localhost:3002/users");
-      setUsers(
-        await Promise.all(
-          res.data.map(async (u) => {
-            const [orders, cart, wishlist] = await Promise.all([
-              axios.get(`http://localhost:3002/orders?userId=${u.id}`),
-              axios.get(`http://localhost:3002/cart?userId=${u.id}`),
-              axios.get(`http://localhost:3002/wishlist?userId=${u.id}`),
-            ]);
-            const totalSpend = orders.data.reduce(
-              (sum, o) => sum + (parseFloat(o.total) || 0),
-              0
-            );
-            return {
-              ...u,
-              status: u.status || "active",
-              orders: orders.data,
-              cart: cart.data,
-              wishlist: wishlist.data,
-              totalSpend,
-              orderCount: orders.data.length,
-              cartCount: cart.data.length,
-              wishlistCount: wishlist.data.length,
-            };
-          })
-        )
-      );
+      const usersRes = await userService.getAllUsers();
+      const ordersRes = await api.get("/Orders/all-orders");
+
+      const usersWithStats = usersRes.data.map((user) => {
+        const userOrders = ordersRes.data.filter(
+          (o) => o.userId === user.id || o.applicationUserId === user.id
+        );
+        const totalSpend = userOrders.reduce(
+          (sum, o) => sum + (parseFloat(o.totalAmount || o.total || 0)),
+          0
+        );
+        return {
+          ...user,
+          status: user.isBlocked ? "blocked" : "active",
+          orders: userOrders,
+          orderCount: userOrders.length,
+          totalSpend,
+        };
+      });
+      setUsers(usersWithStats);
     } catch (err) {
-      toast.error("Failed to fetch users.");
+      toast.error("Failed to load users");
     } finally {
       setLoading(false);
     }
   };
 
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
   const toggleStatus = async (user) => {
-    const newStatus = user.status === "active" ? "blocked" : "active";
     try {
-      await axios.patch(`http://localhost:3002/users/${user.id}`, {
-        status: newStatus,
-      });
-      toast.success(`User ${newStatus === "blocked" ? "blocked" : "unblocked"}`);
+      await userService.toggleUserBlock(user.id);
+      toast.success("User status updated");
       fetchUsers();
-    } catch (err) {
+    } catch {
       toast.error("Failed to update user status.");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this user? This action cannot be undone.")) return;
+    try {
+      await userService.deleteUser(id);
+      toast.success("User deleted successfully");
+      fetchUsers();
+    } catch {
+      toast.error("Failed to delete user");
     }
   };
 
@@ -89,11 +106,13 @@ const UserManagement = () => {
   const filtered = sortedUsers.filter((u) => {
     const term = searchTerm.toLowerCase();
     const match =
-      u.name.toLowerCase().includes(term) ||
-      u.email.toLowerCase().includes(term) ||
+      (u.name || "").toLowerCase().includes(term) ||
+      (u.email || "").toLowerCase().includes(term) ||
       (u.phone || "").includes(term);
-    const roleOk = !roleFilter || u.role === roleFilter;
+    
+    const roleOk = !roleFilter || (u.role && u.role.toLowerCase() === roleFilter);
     const statusOk = !statusFilter || u.status === statusFilter;
+    
     return match && roleOk && statusOk;
   });
 
@@ -104,9 +123,10 @@ const UserManagement = () => {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">User Management</h1>
+      <h2 className="text-2xl font-semibold flex items-center gap-2 mb-6">
+        <Users className="w-6 h-6 text-blue-600" /> User Management
+      </h2>
       
-      {/* Filters and Search */}
       <div className="bg-white p-4 rounded-lg shadow mb-6">
         <div className="flex flex-wrap gap-4 items-end">
           <div className="flex-1 min-w-[250px]">
@@ -164,17 +184,15 @@ const UserManagement = () => {
         </div>
       </div>
 
-      {/* User Table */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
         {loading ? (
-          <div className="text-center py-10 text-gray-500">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <div className="flex justify-center items-center py-10 text-gray-500">
+            <Loader2 className="animate-spin w-8 h-8 text-blue-500 mr-3" />
             Loading users...
           </div>
         ) : (
           <>
-            {/* Table Header */}
-            <div className="grid grid-cols-12 bg-gray-100 p-4 font-medium text-gray-700 border-b">
+            <div className="grid grid-cols-12 bg-gray-100 p-4 font-medium text-gray-700 border-b hidden md:grid">
               <div className="col-span-1"></div>
               <div 
                 className="col-span-3 flex items-center cursor-pointer hover:text-blue-600"
@@ -183,7 +201,7 @@ const UserManagement = () => {
                 User {getSortIndicator('name')}
               </div>
               <div 
-                className="col-span-2 flex items-center cursor-pointer hover:text-blue-600"
+                className="col-span-3 flex items-center cursor-pointer hover:text-blue-600"
                 onClick={() => requestSort('email')}
               >
                 Email {getSortIndicator('email')}
@@ -201,10 +219,10 @@ const UserManagement = () => {
                 Status {getSortIndicator('status')}
               </div>
               <div 
-                className="col-span-2 flex items-center cursor-pointer hover:text-blue-600"
+                className="col-span-1 flex items-center cursor-pointer hover:text-blue-600"
                 onClick={() => requestSort('totalSpend')}
               >
-                Total Spend {getSortIndicator('totalSpend')}
+                Spend {getSortIndicator('totalSpend')}
               </div>
               <div className="col-span-2 text-right">Actions</div>
             </div>
@@ -216,9 +234,9 @@ const UserManagement = () => {
             ) : (
               filtered.map((u) => {
                 const isOpen = expanded[u.id];
+                const userRole = (u.role || "user").toLowerCase();
                 return (
                   <React.Fragment key={u.id}>
-                    {/* User Row */}
                     <div className="grid grid-cols-12 items-center p-4 border-b hover:bg-gray-50">
                       <div className="col-span-1">
                         <button
@@ -228,12 +246,12 @@ const UserManagement = () => {
                           {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                         </button>
                       </div>
-                      <div className="col-span-3 flex items-center">
-                        <div className="bg-blue-100 text-blue-600 rounded-full p-2 mr-3">
+                      <div className="col-span-11 md:col-span-3 flex items-center">
+                        <div className={`bg-blue-100 text-blue-600 rounded-full p-2 mr-3`}>
                           <User size={18} />
                         </div>
                         <div>
-                          <div className="font-medium">{u.name}</div>
+                          <div className="font-medium">{u.name || "N/A"}</div>
                           {u.phone && (
                             <div className="text-sm text-gray-500 flex items-center">
                               <Phone size={14} className="mr-1" /> {u.phone}
@@ -241,20 +259,20 @@ const UserManagement = () => {
                           )}
                         </div>
                       </div>
-                      <div className="col-span-2 flex items-center text-sm">
-                        <Mail size={16} className="mr-2 text-gray-400" />
+                      <div className="col-span-12 mt-2 md:mt-0 md:col-span-3 flex items-center text-sm">
+                        <Mail size={16} className="mr-2 text-gray-400 hidden md:block" />
                         {u.email}
                       </div>
-                      <div className="col-span-1">
+                      <div className="col-span-4 mt-2 md:mt-0 md:col-span-1">
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          u.role === 'admin' 
+                          userRole === 'admin' 
                             ? 'bg-purple-100 text-purple-800' 
                             : 'bg-blue-100 text-blue-800'
                         }`}>
-                          {u.role}
+                          {userRole}
                         </span>
                       </div>
-                      <div className="col-span-1">
+                      <div className="col-span-4 mt-2 md:mt-0 md:col-span-1">
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                           u.status === 'active' 
                             ? 'bg-green-100 text-green-800' 
@@ -263,13 +281,13 @@ const UserManagement = () => {
                           {u.status === 'blocked' ? 'Blocked' : 'Active'}
                         </span>
                       </div>
-                      <div className="col-span-2">
-                        <div className="font-medium">${u.totalSpend.toFixed(2)}</div>
+                      <div className="col-span-4 mt-2 md:mt-0 md:col-span-1">
+                        <div className="font-medium">₹{u.totalSpend.toFixed(2)}</div>
                         <div className="text-xs text-gray-500">
                           {u.orderCount} order{u.orderCount !== 1 ? 's' : ''}
                         </div>
                       </div>
-                      <div className="col-span-2 flex justify-end space-x-2">
+                      <div className="col-span-12 mt-4 md:mt-0 md:col-span-2 flex justify-end space-x-2">
                         <button
                           onClick={() => toggleStatus(u)}
                           className={`px-3 py-1 rounded-md text-sm font-medium ${
@@ -280,14 +298,19 @@ const UserManagement = () => {
                         >
                           {u.status === "active" ? "Block" : "Unblock"}
                         </button>
+                        <button
+                          onClick={() => handleDelete(u.id)}
+                          className="p-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200"
+                          title="Delete User"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </div>
                     </div>
 
-                    {/* Expanded Details */}
                     {isOpen && (
                       <div className="bg-gray-50 p-4 border-b">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                          {/* User Details */}
                           <div className="bg-white p-4 rounded-lg shadow-sm">
                             <h3 className="font-medium text-gray-700 mb-3 flex items-center">
                               <User size={18} className="mr-2" /> User Details
@@ -298,22 +321,17 @@ const UserManagement = () => {
                                 {new Date(u.createdAt || Date.now()).toLocaleDateString()}
                               </div>
                               <div>
-                                <span className="text-gray-500">Last Active:</span>{' '}
-                                {new Date(u.lastActive || Date.now()).toLocaleDateString()}
-                              </div>
-                              <div>
                                 <span className="text-gray-500">Email Verified:</span>{' '}
                                 {u.emailVerified ? 'Yes' : 'No'}
                               </div>
                             </div>
                           </div>
 
-                          {/* Activity Summary */}
                           <div className="bg-white p-4 rounded-lg shadow-sm">
                             <h3 className="font-medium text-gray-700 mb-3 flex items-center">
                               <Sliders size={18} className="mr-2" /> Activity Summary
                             </h3>
-                            <div className="grid grid-cols-3 gap-2 text-center">
+                            <div className="grid grid-cols-2 gap-2 text-center">
                               <div className="p-2">
                                 <div className="bg-blue-50 text-blue-600 rounded-full p-3 mx-auto w-12 h-12 flex items-center justify-center mb-1">
                                   <Package size={20} />
@@ -322,23 +340,15 @@ const UserManagement = () => {
                                 <div className="text-xs text-gray-500">Orders</div>
                               </div>
                               <div className="p-2">
-                                <div className="bg-yellow-50 text-yellow-600 rounded-full p-3 mx-auto w-12 h-12 flex items-center justify-center mb-1">
-                                  <ShoppingCart size={20} />
+                                <div className="bg-green-50 text-green-600 rounded-full p-3 mx-auto w-12 h-12 flex items-center justify-center mb-1">
+                                  <DollarSign size={20} />
                                 </div>
-                                <div className="font-medium">{u.cartCount}</div>
-                                <div className="text-xs text-gray-500">Cart Items</div>
-                              </div>
-                              <div className="p-2">
-                                <div className="bg-pink-50 text-pink-600 rounded-full p-3 mx-auto w-12 h-12 flex items-center justify-center mb-1">
-                                  <Heart size={20} />
-                                </div>
-                                <div className="font-medium">{u.wishlistCount}</div>
-                                <div className="text-xs text-gray-500">Wishlist</div>
+                                <div className="font-medium">₹{u.totalSpend.toFixed(2)}</div>
+                                <div className="text-xs text-gray-500">Total Spend</div>
                               </div>
                             </div>
                           </div>
 
-                          {/* Recent Orders */}
                           <div className="bg-white p-4 rounded-lg shadow-sm">
                             <h3 className="font-medium text-gray-700 mb-3 flex items-center">
                               <Package size={18} className="mr-2" /> Recent Orders
@@ -349,10 +359,10 @@ const UserManagement = () => {
                                   <div key={o.id} className="border-b pb-2 last:border-0 last:pb-0">
                                     <div className="flex justify-between">
                                       <span className="font-medium">Order #{o.id}</span>
-                                      <span className="text-blue-600">${o.total}</span>
+                                      <span className="text-blue-600">₹{o.totalAmount || o.total}</span>
                                     </div>
                                     <div className="text-gray-500 text-xs">
-                                      {new Date(o.date).toLocaleDateString()}
+                                      {new Date(o.date || o.createdAt).toLocaleDateString()}
                                     </div>
                                   </div>
                                 ))}
