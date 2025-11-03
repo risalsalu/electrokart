@@ -1,4 +1,3 @@
-// src/services/api.js
 import axios from "axios";
 
 const API_URL = "https://localhost:7289/api";
@@ -12,20 +11,20 @@ const api = axios.create({
 let isRefreshing = false;
 let failedQueue = [];
 
-function getCookie(name) {
+const getCookie = (name) => {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop().split(";").shift();
   return null;
-}
+};
 
-function processQueue(error, token = null) {
+const processQueue = (error, token = null) => {
   failedQueue.forEach((prom) => {
     if (error) prom.reject(error);
     else prom.resolve(token);
   });
   failedQueue = [];
-}
+};
 
 api.interceptors.request.use(
   (config) => {

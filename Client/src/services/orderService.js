@@ -20,6 +20,25 @@ const orderService = {
     const response = await api.delete(`/Orders/${orderId}`);
     return response.data?.data;
   },
+
+  getAllOrders: async () => {
+    const response = await api.get("/Orders/all-orders");
+    return response.data?.data || [];
+  },
+
+  updateOrderStatus: async (orderId, status) => {
+    const response = await api.patch(
+      `/Orders/${orderId}/status`,
+      JSON.stringify(status),
+      { headers: { "Content-Type": "application/json" } }
+    );
+    return response.data?.data;
+  },
+
+  deleteOrder: async (orderId) => {
+    const response = await api.delete(`/Orders/${orderId}`);
+    return response.data?.data;
+  },
 };
 
 export default orderService;
