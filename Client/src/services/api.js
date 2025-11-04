@@ -11,19 +11,19 @@ const api = axios.create({
 let isRefreshing = false;
 let failedQueue = [];
 
-const getCookie = (name) => {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(";").shift();
-  return null;
-};
-
 const processQueue = (error, token = null) => {
   failedQueue.forEach((prom) => {
     if (error) prom.reject(error);
     else prom.resolve(token);
   });
   failedQueue = [];
+};
+
+const getCookie = (name) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(";").shift();
+  return null;
 };
 
 api.interceptors.request.use(
@@ -62,20 +62,15 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const access = getCookie("AccessToken");
         const refresh = getCookie("RefreshToken");
-
         const res = await axios.post(
           `${API_URL}/Auth/Refresh`,
-          { accessToken: access, refreshToken: refresh },
+          { refreshToken: refresh },
           { withCredentials: true }
         );
-
         const newToken = res.data?.data?.accessToken || res.data?.accessToken;
         if (!newToken) throw new Error("No new access token received");
-
         document.cookie = `AccessToken=${newToken}; path=/; secure; SameSite=None`;
-
         processQueue(null, newToken);
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
         return api(originalRequest);

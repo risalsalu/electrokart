@@ -186,7 +186,7 @@ const OrderManagement = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                        ${order.total.toFixed(2)}
+                        ₹{order.total.toFixed(2)}
                       </td>
                       <td className="px-6 py-4">
                         <select
@@ -243,7 +243,7 @@ const OrderManagement = () => {
             <h2 className="text-xl font-bold mb-4">Order #{selectedOrder.id}</h2>
             <p className="text-gray-700">Customer: {selectedOrder.customerName}</p>
             <p className="text-gray-700">Email: {selectedOrder.customerEmail}</p>
-            <p className="text-gray-700">Total: ${selectedOrder.total.toFixed(2)}</p>
+            <p className="text-gray-700">Total: ₹{selectedOrder.total.toFixed(2)}</p>
             <div className="text-right mt-6">
               <button
                 onClick={closeOrderDetails}

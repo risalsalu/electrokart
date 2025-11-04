@@ -53,6 +53,23 @@ function Orders() {
     );
   }
 
+  const getStatusStyle = (status) => {
+    switch (status) {
+      case "Delivered":
+        return "bg-green-100 text-green-700 border border-green-300";
+      case "Cancelled":
+        return "bg-red-100 text-red-700 border border-red-300";
+      case "Processing":
+        return "bg-yellow-100 text-yellow-700 border border-yellow-300";
+      case "Shipped":
+        return "bg-blue-100 text-blue-700 border border-blue-300";
+      case "Pending":
+        return "bg-orange-100 text-orange-700 border border-orange-300";
+      default:
+        return "bg-gray-100 text-gray-700 border border-gray-300";
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Your Orders</h1>
@@ -61,7 +78,7 @@ function Orders() {
           {orders.map((order) => (
             <div
               key={order.orderId}
-              className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow"
+              className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow border border-gray-100"
             >
               <div className="flex justify-between items-center pb-4 mb-4 border-b border-gray-100">
                 <div>
@@ -74,13 +91,9 @@ function Orders() {
                   </div>
                 </div>
                 <span
-                  className={`inline-block px-4 py-1 rounded-full font-medium ${
-                    order.status === "Delivered"
-                      ? "bg-green-50 text-green-600"
-                      : order.status === "Cancelled"
-                      ? "bg-red-50 text-red-600"
-                      : "bg-yellow-50 text-yellow-700"
-                  }`}
+                  className={`inline-block px-4 py-1 rounded-full font-medium text-sm ${getStatusStyle(
+                    order.status
+                  )}`}
                 >
                   {order.status || "Processing"}
                 </span>
@@ -137,7 +150,7 @@ function Orders() {
           ))}
         </div>
         <div className="w-full lg:w-96">
-          <div className="bg-white rounded-xl shadow-sm p-6 sticky top-8">
+          <div className="bg-white rounded-xl shadow-sm p-6 sticky top-8 border border-gray-100">
             <h2 className="text-xl font-semibold text-gray-800 mb-6">
               Order Summary
             </h2>

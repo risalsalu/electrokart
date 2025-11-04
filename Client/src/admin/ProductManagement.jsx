@@ -17,7 +17,6 @@ const ProductManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
-
   const [formData, setFormData] = useState({
     Name: "",
     Description: "",
@@ -26,10 +25,8 @@ const ProductManagement = () => {
     IsActive: true,
     Image: null,
   });
-
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
-
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [confirmModalData, setConfirmModalData] = useState({
     id: null,
@@ -76,7 +73,6 @@ const ProductManagement = () => {
 
   const handleInputChange = (e) => {
     const { name, value, type } = e.target;
-
     if (type === "select-one" && name === "IsActive") {
       setFormData((prev) => ({
         ...prev,
@@ -99,22 +95,15 @@ const ProductManagement = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!formData.Name || !formData.Price || !formData.CategoryId) {
       toast.error("Please fill in Name, Price, and Category.");
       return;
     }
-    if (
-      isNaN(formData.Price) ||
-      parseFloat(formData.Price) < 0
-    ) {
+    if (isNaN(formData.Price) || parseFloat(formData.Price) < 0) {
       toast.error("Price must be a non-negative number.");
       return;
     }
-    if (
-      isNaN(formData.CategoryId) ||
-      parseInt(formData.CategoryId) <= 0
-    ) {
+    if (isNaN(formData.CategoryId) || parseInt(formData.CategoryId) <= 0) {
       toast.error("Please select a valid category.");
       return;
     }
@@ -122,13 +111,14 @@ const ProductManagement = () => {
       toast.error("Please provide an image for the new product.");
       return;
     }
-
     const productData = {
-      ...formData,
+      Name: formData.Name,
+      Description: formData.Description,
       Price: parseFloat(formData.Price),
       CategoryId: parseInt(formData.CategoryId),
+      IsActive: formData.IsActive,
+      Image: formData.Image,
     };
-
     try {
       if (editingProduct) {
         productData.Id = editingProduct.id;
@@ -138,7 +128,6 @@ const ProductManagement = () => {
         await productService.createProduct(productData);
         toast.success("Product added successfully");
       }
-
       fetchProducts();
       setShowForm(false);
       setEditingProduct(null);
@@ -162,7 +151,7 @@ const ProductManagement = () => {
       Name: product.name,
       Description: product.description || "",
       Price: product.price,
-      CategoryId: product.categoryId,
+      CategoryId: product.categoryId?.toString(),
       IsActive: product.isActive ?? true,
       Image: null,
     });
@@ -191,7 +180,6 @@ const ProductManagement = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
-
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
   const paginate = (pageNumber) => {
@@ -212,10 +200,8 @@ const ProductManagement = () => {
     }
   }, [filteredProducts, itemsPerPage, currentPage]);
 
-
   const ConfirmModal = ({ show, title, message, onConfirm, onCancel }) => {
     if (!show) return null;
-
     return (
       <div className="fixed inset-0 bg-white/10 backdrop-blur-md flex items-center justify-center z-50 p-4 font-sans">
         <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm">
@@ -259,7 +245,6 @@ const ProductManagement = () => {
             Add Product
           </button>
         </div>
-
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-2">
@@ -310,7 +295,6 @@ const ProductManagement = () => {
             </div>
           </div>
         </div>
-
         <div className="bg-white shadow overflow-hidden sm:rounded-lg">
           {loading ? (
             <div className="flex justify-center items-center h-64">
@@ -340,34 +324,19 @@ const ProductManagement = () => {
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Product
                       </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Category
                       </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Price
                       </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Status
                       </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Actions
                       </th>
                     </tr>
@@ -411,7 +380,7 @@ const ProductManagement = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm font-medium text-gray-900">
-                            ${parseFloat(product.price).toFixed(2)}
+                            ₹{parseFloat(product.price).toFixed(2)}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -430,14 +399,12 @@ const ProductManagement = () => {
                             <button
                               onClick={() => openEditForm(product)}
                               className="text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1 rounded-md hover:bg-indigo-100 transition-colors shadow-sm"
-                              title="Edit product"
                             >
                               <Edit className="h-4 w-4" />
                             </button>
                             <button
                               onClick={() => handleDeleteClick(product.id)}
                               className="text-red-600 hover:text-red-900 bg-red-50 px-3 py-1 rounded-md hover:bg-red-100 transition-colors shadow-sm"
-                              title="Delete product"
                             >
                               <Trash2 className="h-4 w-4" />
                             </button>
@@ -460,7 +427,7 @@ const ProductManagement = () => {
                   <button
                     onClick={() => paginate(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Next
                   </button>
@@ -499,12 +466,11 @@ const ProductManagement = () => {
                           key={i + 1}
                           onClick={() => paginate(i + 1)}
                           aria-current={currentPage === i + 1 ? "page" : undefined}
-                          className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium
-                            ${
-                              currentPage === i + 1
-                                ? "z-10 bg-indigo-50 border-indigo-500 text-indigo-600"
-                                : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
-                            }`}
+                          className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
+                            currentPage === i + 1
+                              ? "z-10 bg-indigo-50 border-indigo-500 text-indigo-600"
+                              : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+                          }`}
                         >
                           {i + 1}
                         </button>
@@ -525,7 +491,6 @@ const ProductManagement = () => {
           )}
         </div>
       </div>
-
       {showForm && (
         <div className="fixed inset-0 bg-white/10 backdrop-blur-md flex items-center justify-center z-50 p-4 font-sans overflow-y-auto">
           <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-2xl my-8">
@@ -594,7 +559,6 @@ const ProductManagement = () => {
                   />
                 </div>
               </div>
-
               <div>
                 <label
                   htmlFor="Description"
@@ -611,7 +575,6 @@ const ProductManagement = () => {
                   onChange={handleInputChange}
                 ></textarea>
               </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label
@@ -629,9 +592,9 @@ const ProductManagement = () => {
                     required
                   >
                     <option value="">Select a category</option>
-                    <option value="1">Mobile</option>
-                    <option value="2">TV</option>
-                    <option value="3">Laptops</option>
+                    <option value="2">Mobile</option>
+                    <option value="3">TV</option>
+                    <option value="1">Laptops</option>
                     <option value="4">Headphones</option>
                   </select>
                 </div>
@@ -654,7 +617,6 @@ const ProductManagement = () => {
                   </select>
                 </div>
               </div>
-
               <div>
                 <label
                   htmlFor="Image"
@@ -672,16 +634,10 @@ const ProductManagement = () => {
                   id="Image"
                   name="Image"
                   accept="image/*"
-                  className="w-full border border-gray-300 px-4 py-2 rounded-md focus:ring-indigo-500 focus:border-indigo-500
-                                file:mr-4 file:py-1 file:px-2
-                                file:rounded-md file:border-0
-                                file:text-sm file:font-semibold
-                                file:bg-indigo-50 file:text-indigo-700
-                                hover:file:bg-indigo-100"
+                  className="w-full border border-gray-300 px-4 py-2 rounded-md focus:ring-indigo-500 focus:border-indigo-500 file:mr-4 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
                   onChange={handleFileChange}
                 />
               </div>
-
               <div className="flex justify-end gap-3 pt-2">
                 <button
                   type="button"
@@ -704,7 +660,6 @@ const ProductManagement = () => {
           </div>
         </div>
       )}
-
       <ConfirmModal
         show={showConfirmModal}
         title={confirmModalData.title}
