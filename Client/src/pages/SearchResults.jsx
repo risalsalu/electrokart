@@ -1,48 +1,59 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState, useEffect, useContext } from "react";
+import { useLocation, Link, useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import { Heart } from "lucide-react";
+import { useWishlist } from "../contexttemp/WishlistContext";
+import { useCart } from "../contexttemp/CartContext";
+import { AuthContext } from "../contexttemp/AuthContext";
+import api from "../services/api";
 
 const SearchResults = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [modalImage, setModalImage] = useState(null);
+  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
+  const { addToCart } = useCart();
+  const { isLoggedIn } = useContext(AuthContext);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const searchParams = new URLSearchParams(location.search);
-  const query = searchParams.get('q')?.trim() || '';
+  const query = searchParams.get("q")?.trim() || "";
 
   useEffect(() => {
     if (!query) {
-      navigate('/products');
+      navigate("/products");
       return;
     }
 
     const fetchResults = async () => {
       try {
         setLoading(true);
-        setSuggestions([]);
-        const response = await axios.get(`http://localhost:3002/products?q=${query}`);
-        const results = response.data.filter(p =>
-          p.name.toLowerCase().includes(query.toLowerCase())
+        setError(null);
+        const res = await api.get("/Products");
+        const data = res.data?.data || res.data;
+        const filtered = (Array.isArray(data) ? data : []).filter(
+          (p) =>
+            p.name?.toLowerCase().includes(query.toLowerCase()) ||
+            p.description?.toLowerCase().includes(query.toLowerCase()) ||
+            p.categoryName?.toLowerCase().includes(query.toLowerCase())
         );
-        setProducts(results);
-
-        if (results.length === 0) {
-          const fallbackCategories = ['mobile', 'laptop', 'tv', 'headphone'];
+        setProducts(filtered);
+        if (filtered.length === 0) {
+          const fallbackCategories = ["mobile", "laptop", "tv", "headphones"];
           const fallbackResponses = await Promise.all(
-            fallbackCategories.map(cat =>
-              axios.get(`http://localhost:3002/products?category=${cat}`)
-            )
+            fallbackCategories.map(async (cat) => {
+              const res = await api.get(`/Products/category/${cat}`);
+              return res.data.slice(0, 2);
+            })
           );
-          const fallbackProducts = fallbackResponses.flatMap(res => res.data.slice(0, 1));
+          const fallbackProducts = fallbackResponses.flat();
           setSuggestions(fallbackProducts);
         }
-
-      } catch (err) {
-        console.error("Search error:", err);
-        setError("Failed to load search results.");
+      } catch {
+        setError("Failed to load search results. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -51,72 +62,83 @@ const SearchResults = () => {
     fetchResults();
   }, [query, navigate]);
 
-  const renderCard = (product) => (
-    <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-      <div className="h-48 bg-gray-100 flex items-center justify-center">
-        <img
-          src={product.image}
-          alt={product.name}
-          className="h-full object-contain p-4"
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = '/images/placeholder.jpg';
-          }}
-        />
-      </div>
-      <div className="p-4">
-        <h3 className="font-semibold text-lg mb-1 hover:text-blue-600 transition-colors">
-          {product.name}
-        </h3>
-        <p className="text-gray-600 text-sm mb-2 line-clamp-2">
-          {product.description}
-        </p>
-        <div className="flex justify-between items-center mt-4">
-          <span className="font-bold text-blue-600">${product.price.toFixed(2)}</span>
-          <span className="text-xs bg-gray-100 px-2 py-1 rounded capitalize">
-            {product.category}
-          </span>
+  const handleAddToCart = (p) => {
+    if (!isLoggedIn) return toast.error("Please log in to add products.");
+    addToCart(p);
+  };
+
+  const toggleWishlist = (p) => {
+    if (!isLoggedIn) return toast.error("Please log in to use wishlist.");
+    const exists = wishlist.some((i) => i.productId === p.id || i.id === p.id);
+    exists ? removeFromWishlist(p.id) : addToWishlist(p);
+  };
+
+  const renderCard = (p) => {
+    const isWishlisted = wishlist.some(
+      (i) => i.productId === p.id || i.id === p.id
+    );
+    return (
+      <div
+        key={p.id}
+        className="relative border rounded-xl overflow-hidden shadow hover:shadow-lg transition"
+      >
+        <button
+          onClick={() => toggleWishlist(p)}
+          className="absolute top-3 right-3 bg-white rounded-full p-1.5 shadow hover:scale-110 transition"
+        >
+          <Heart
+            size={22}
+            className={
+              isWishlisted ? "text-red-500 fill-red-500" : "text-gray-500"
+            }
+          />
+        </button>
+        <div
+          className="h-48 bg-gray-100 flex items-center justify-center cursor-pointer"
+          onClick={() =>
+            setModalImage(p.imageUrl || "/images/placeholder.jpg")
+          }
+        >
+          <img
+            src={p.imageUrl || "/images/placeholder.jpg"}
+            alt={p.name}
+            className="h-full object-contain"
+            onError={(e) => (e.target.src = "/images/placeholder.jpg")}
+          />
+        </div>
+        <div className="p-4">
+          <Link to={`/products/${p.id}`}>
+            <h3 className="font-semibold text-lg mb-1 hover:text-blue-600">
+              {p.name}
+            </h3>
+          </Link>
+          <p className="text-gray-600 mb-2">₹{Number(p.price).toFixed(2)}</p>
+          <button
+            onClick={() => handleAddToCart(p)}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+          >
+            Add to Cart
+          </button>
         </div>
       </div>
-    </div>
-  );
-
-  if (loading) {
-    return (
-      <div className="p-8 text-center">
-        <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mb-2"></div>
-        <p>Searching products...</p>
-      </div>
     );
-  }
+  };
 
-  if (error) {
-    return (
-      <div className="p-8 text-center">
-        <div className="text-red-500 mb-2 font-semibold"> Error</div>
-        <p>{error}</p>
-        <button
-          onClick={() => window.location.reload()}
-          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
-        >
-          Retry
-        </button>
-      </div>
-    );
-  }
+  if (loading)
+    return <p className="text-center py-12">Loading search results...</p>;
+  if (error)
+    return <p className="text-center py-12 text-red-600">{error}</p>;
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-6">
-        {products.length} result{products.length !== 1 && 's'} for "{query}"
+        {products.length} result{products.length !== 1 && "s"} for "{query}"
       </h1>
-
       {products.length === 0 ? (
         <div className="text-center py-12">
           <img src="/no-results.png" className="mx-auto w-40 mb-4" alt="No results" />
           <h3 className="text-xl font-medium">No products found</h3>
           <p className="text-gray-500">Try keywords like "laptop", "tv", or "mobile"</p>
-
           {suggestions.length > 0 && (
             <>
               <h4 className="text-lg font-semibold mt-8 mb-4">You may like:</h4>
@@ -129,6 +151,23 @@ const SearchResults = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {products.map(renderCard)}
+        </div>
+      )}
+      {modalImage && (
+        <div
+          className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+          onClick={() => setModalImage(null)}
+        >
+          <div
+            className="bg-white p-4 rounded-xl shadow-2xl max-w-[90%] max-h-[90%]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={modalImage}
+              alt="Preview"
+              className="max-h-[70vh] max-w-full object-contain"
+            />
+          </div>
         </div>
       )}
     </div>
