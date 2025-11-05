@@ -22,7 +22,6 @@ const AdminLayout = () => {
   };
 
   const handleLogout = () => {
-    // Perform logout actions (clear tokens, etc.)
     localStorage.removeItem("authToken");
     localStorage.removeItem("userRole");
     

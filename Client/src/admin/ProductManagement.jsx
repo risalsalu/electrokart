@@ -289,7 +289,7 @@ const ProductManagement = () => {
                 <option value="">All Categories</option>
                 <option value="Mobile">Mobile</option>
                 <option value="TV">TV</option>
-                <option value="Laptops">Laptops</option>
+                <option value="Laptop">Laptop</option>
                 <option value="Headphones">Headphones</option>
               </select>
             </div>

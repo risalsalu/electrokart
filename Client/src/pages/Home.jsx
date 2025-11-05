@@ -47,7 +47,7 @@ function Home({ products = [] }) {
 
   const categories = [
     { name: 'Smartphones', icon: '📱', category: 'mobile' },
-    { name: 'Laptops', icon: '💻', category: 'laptops' },
+    { name: 'Laptop', icon: '💻', category: 'laptops' },
     { name: 'TVs', icon: '📺', category: 'tv' },
     { name: 'Audio', icon: '🎧', category: 'headphones' }
   ]
