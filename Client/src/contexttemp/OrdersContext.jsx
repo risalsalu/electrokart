@@ -1,9 +1,9 @@
+// src/contexttemp/OrdersContext.js
 import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import orderService from "../services/orderService";
 import { useAuth } from "./AuthContext";
 import { useCart } from "./CartContext";
-import { useNavigate } from "react-router-dom";
 
 const OrdersContext = createContext();
 
@@ -12,7 +12,6 @@ export const OrdersProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
   const { clearCart } = useCart();
-  const navigate = useNavigate();
 
   const fetchOrders = async () => {
     if (!user) return;
@@ -31,29 +30,31 @@ export const OrdersProvider = ({ children }) => {
     try {
       if (!orderData || !Array.isArray(orderData.items)) {
         toast.error("Invalid order data");
-        return;
+        return null;
       }
       const invalidItems = orderData.items.filter(
         (item) => !item.productId || item.productId <= 0
       );
       if (invalidItems.length > 0) {
         toast.error("Some items have invalid product IDs");
-        return;
+        return null;
       }
+
       setLoading(true);
       const createdOrder = await orderService.createOrder(orderData);
-      if (createdOrder) {
-        setOrders((prev) => [createdOrder, ...prev]);
-        clearCart();
-        toast.success("Order placed successfully");
-        navigate("/orders");
+
+      if (createdOrder?.data) {
+        setOrders((prev) => [createdOrder.data, ...prev]);
+        return createdOrder.data;
       } else {
         toast.error("Order creation failed");
+        return null;
       }
     } catch (error) {
       toast.error(
         error?.response?.data?.message || error.message || "Failed to place order"
       );
+      return null;
     } finally {
       setLoading(false);
     }

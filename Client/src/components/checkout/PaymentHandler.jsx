@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import paymentService from "../../services/paymentService";
+import paymentService from "../services/paymentService";
 
 const PaymentHandler = ({ orderId, amount, onSuccess }) => {
   const navigate = useNavigate();
@@ -15,8 +15,15 @@ const PaymentHandler = ({ orderId, amount, onSuccess }) => {
         description: "ElectroKart Order",
       });
 
+      console.log("Initiate response:", initiate);
+
       if (!initiate?.success) {
         toast.error(initiate?.message || "Failed to initiate payment");
+        return;
+      }
+
+      if (!window.Razorpay) {
+        toast.error("Razorpay SDK not loaded");
         return;
       }
 
@@ -26,11 +33,14 @@ const PaymentHandler = ({ orderId, amount, onSuccess }) => {
         currency: initiate.data.currency || "INR",
         name: "ElectroKart",
         description: initiate.data.description || "Order Payment",
-        order_id: initiate.data.paymentId,
+        order_id: initiate.data.orderId || initiate.data.paymentId || initiate.data.id,
         handler: async (response) => {
+          console.log("Razorpay response:", response);
           try {
             const confirm = await paymentService.confirmPayment({
               paymentId: response.razorpay_payment_id,
+              razorpayOrderId: response.razorpay_order_id,
+              razorpaySignature: response.razorpay_signature,
               orderId,
             });
             if (confirm?.success) {
@@ -44,11 +54,7 @@ const PaymentHandler = ({ orderId, amount, onSuccess }) => {
             toast.error("Payment confirmation failed");
           }
         },
-        prefill: {
-          name: initiate.data.prefill?.name || "",
-          email: initiate.data.prefill?.email || "",
-          contact: initiate.data.prefill?.contact || "",
-        },
+        prefill: initiate.data.prefill || {},
         theme: { color: "#2B6CB0" },
       };
 

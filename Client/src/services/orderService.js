@@ -1,9 +1,10 @@
+// src/services/orderService.js
 import api from "./api";
 
 const orderService = {
   createOrder: async (orderData) => {
     const response = await api.post("/Orders/checkout", orderData);
-    return response.data?.data;
+    return response.data; 
   },
 
   getMyOrders: async () => {

@@ -19,34 +19,30 @@ const OrderManagement = () => {
       setLoading(true);
       const data = await orderService.getAllOrders();
       if (!Array.isArray(data)) throw new Error("Invalid response");
-
       const formatted = data.map((order) => ({
         id: order.id || order.orderId || "",
-        customerName: order.customerName || order.userName || "Guest",
-        customerEmail: order.customerEmail || order.email || "N/A",
+        customerName:
+          order.userName ||
+          order.user?.userName ||
+          order.user?.name ||
+          order.customerName ||
+          "Unknown User",
+        customerEmail:
+          order.userEmail ||
+          order.user?.email ||
+          order.customerEmail ||
+          order.email ||
+          "N/A",
         items: order.items || [],
         total: order.total || order.totalAmount || 0,
         status: order.status || "Pending",
         date: order.date || order.createdAt || new Date().toISOString(),
       }));
-
       setOrders(formatted);
-    } catch (err) {
-      console.error("❌ Order fetch error:", err);
+    } catch {
       toast.error("Failed to load orders");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleDelete = async (orderId) => {
-    if (!orderId) return toast.error("Invalid order ID");
-    try {
-      await orderService.deleteOrder(orderId);
-      setOrders((prev) => prev.filter((o) => o.id !== orderId));
-      toast.success("Order deleted successfully");
-    } catch {
-      toast.error("Failed to delete order");
     }
   };
 
@@ -71,8 +67,7 @@ const OrderManagement = () => {
         return updated;
       });
       toast.success("Order status updated");
-    } catch (err) {
-      console.error("❌ Status update error:", err);
+    } catch {
       toast.error("Failed to update status");
     }
   };
@@ -181,8 +176,12 @@ const OrderManagement = () => {
                           {order.items.length} item{order.items.length !== 1 ? "s" : ""}
                         </div>
                         <div className="text-sm text-gray-500">
-                          {order.items[0]?.name}
-                          {order.items.length > 1 ? ` + ${order.items.length - 1} more` : ""}
+                          {order.items[0]?.productName ||
+                            order.items[0]?.name ||
+                            ""}
+                          {order.items.length > 1
+                            ? ` + ${order.items.length - 1} more`
+                            : ""}
                         </div>
                       </td>
                       <td className="px-6 py-4 text-sm font-medium text-gray-900">
@@ -194,7 +193,9 @@ const OrderManagement = () => {
                             editingStatus[order.id] || order.status
                           )}`}
                           value={editingStatus[order.id] || order.status}
-                          onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                          onChange={(e) =>
+                            handleStatusChange(order.id, e.target.value)
+                          }
                         >
                           <option value="Pending">Pending</option>
                           <option value="Processing">Processing</option>
@@ -213,12 +214,6 @@ const OrderManagement = () => {
                             className="text-indigo-600 bg-indigo-50 px-3 py-1 rounded-md hover:bg-indigo-100"
                           >
                             ✓
-                          </button>
-                          <button
-                            onClick={() => handleDelete(order.id)}
-                            className="text-red-600 bg-red-50 px-3 py-1 rounded-md hover:bg-red-100"
-                          >
-                            🗑
                           </button>
                           <button
                             onClick={() => viewOrderDetails(order)}
@@ -240,10 +235,30 @@ const OrderManagement = () => {
       {selectedOrder && (
         <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/50 z-50">
           <div className="bg-white p-8 rounded-xl max-w-xl w-full shadow-lg">
-            <h2 className="text-xl font-bold mb-4">Order #{selectedOrder.id}</h2>
-            <p className="text-gray-700">Customer: {selectedOrder.customerName}</p>
-            <p className="text-gray-700">Email: {selectedOrder.customerEmail}</p>
-            <p className="text-gray-700">Total: ₹{selectedOrder.total.toFixed(2)}</p>
+            <h2 className="text-xl font-bold mb-4">
+              Order #{selectedOrder.id}
+            </h2>
+            <p className="text-gray-700 mb-1">
+              <span className="font-semibold">Customer:</span>{" "}
+              {selectedOrder.customerName}
+            </p>
+            <p className="text-gray-700 mb-1">
+              <span className="font-semibold">Email:</span>{" "}
+              {selectedOrder.customerEmail}
+            </p>
+            <p className="text-gray-700 mb-3">
+              <span className="font-semibold">Total:</span> ₹
+              {selectedOrder.total.toFixed(2)}
+            </p>
+            <h3 className="font-semibold text-gray-800 mb-2">Items:</h3>
+            <ul className="list-disc list-inside text-gray-600 mb-4">
+              {selectedOrder.items.map((item, index) => (
+                <li key={index}>
+                  {item.productName || item.name} × {item.quantity} – ₹
+                  {(item.unitPrice || 0) * (item.quantity || 1)}
+                </li>
+              ))}
+            </ul>
             <div className="text-right mt-6">
               <button
                 onClick={closeOrderDetails}

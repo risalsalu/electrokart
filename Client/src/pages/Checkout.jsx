@@ -37,7 +37,7 @@ const Checkout = () => {
     0
   );
   const shippingFee = cartTotal > 1000 ? 0 : 49;
-  const tax = cartTotal * 0.00;
+  const tax = 0;
   const grandTotal = cartTotal + shippingFee + tax;
 
   const handlePlaceOrder = async (e) => {
@@ -55,33 +55,38 @@ const Checkout = () => {
       toast.error("Cart is empty");
       return;
     }
+
     try {
       setProcessing(true);
+
       const orderData = {
         shippingAddress,
-        paymentMethod,
+        paymentMethod: paymentMethod === "Razorpay" ? "Online" : "COD",
         items: cart.map((item) => ({
           productId: item.product?.id || item.productId,
           quantity: item.quantity,
         })),
       };
-      const created = await placeOrder(orderData);
-      const createdOrder = created?.data ?? created;
-      const orderId = createdOrder?.orderId ?? createdOrder?.id;
+
+      const createdOrder = await placeOrder(orderData);
+      const orderId = createdOrder?.orderId;
       if (!orderId) {
         toast.error("Failed to create order");
         return;
       }
+
       if (paymentMethod === "COD") {
         toast.success("Order placed successfully (COD)");
         clearCart();
         navigate("/orders", { state: { orderPlaced: true } });
         return;
       }
+
       if (!razorLoaded || !window.Razorpay) {
         toast.error("Payment gateway not loaded");
         return;
       }
+
       const amount = createdOrder?.totalAmount ?? grandTotal;
       const payRes = await paymentService.initiatePayment({
         orderId,
@@ -89,16 +94,19 @@ const Checkout = () => {
         currency: "INR",
         description: `Payment for Order #${orderId}`,
       });
+
       if (!payRes?.success || !payRes?.data) {
         toast.error("Payment initiation failed");
         return;
       }
+
       const payData = payRes.data;
       const razorOrderId =
-        payData.paymentId ||
         payData.razorpayOrderId ||
+        payData.paymentId ||
         payData.id ||
         payData.orderId;
+
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_RSuBsN4XbXHsUI",
         amount: (Number(amount) || 0) * 100,
@@ -108,18 +116,23 @@ const Checkout = () => {
         order_id: razorOrderId,
         handler: async (response) => {
           try {
+            // ✅ Send Razorpay ORDER ID to backend (not payment id)
             const confirm = await paymentService.confirmPayment({
-              paymentId: response.razorpay_payment_id,
-              orderId,
+              paymentId: response.razorpay_order_id,
+              orderId: orderId.toString(),
             });
+
             if (confirm?.success) {
-              toast.success("Payment successful");
+              toast.success("✅ Payment successful! Redirecting to orders...");
               clearCart();
-              navigate("/orders", { state: { orderPlaced: true } });
+              setTimeout(() => {
+                navigate("/orders", { state: { orderPlaced: true } });
+              }, 1200);
             } else {
-              toast.error("Payment confirmation failed");
+              toast.error(confirm?.message || "Payment confirmation failed");
             }
-          } catch {
+          } catch (err) {
+            console.error("Payment confirm error:", err);
             toast.error("Payment confirmation error");
           }
         },
@@ -129,10 +142,12 @@ const Checkout = () => {
         },
         theme: { color: "#0d6efd" },
       };
+
       const rzp = new window.Razorpay(options);
       rzp.on("payment.failed", () => toast.error("Payment failed or cancelled"));
       rzp.open();
     } catch (err) {
+      console.error("Checkout error:", err);
       toast.error(err?.message || "Something went wrong");
     } finally {
       setProcessing(false);
@@ -220,6 +235,7 @@ const Checkout = () => {
                 : `Pay Online – ₹${grandTotal.toFixed(2)}`}
             </button>
           </div>
+
           <div className="bg-white p-6 rounded-xl shadow h-fit">
             <h2 className="text-xl font-semibold mb-4 text-gray-800">
               Order Summary
@@ -242,6 +258,7 @@ const Checkout = () => {
                 </div>
               ))}
             </div>
+
             <div className="mt-4 space-y-2 text-gray-700">
               <div className="flex justify-between">
                 <span>Subtotal</span>
